@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# eXobe E-commerce Platform
 
-## Getting Started
+A comprehensive, professional e-commerce platform built with Next.js 15, featuring a modern marketplace design with seller and service provider capabilities.
 
-First, run the development server:
+## 🚀 Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+eXobe is a full-featured e-commerce platform designed for the South African market, offering:
+
+- **Multi-vendor Marketplace** - Support for both product sellers and service providers
+- **Mobile-First Design** - Responsive, touch-friendly interface optimized for mobile users
+- **Professional UI/UX** - Modern, attractive design with eXobe branding and color scheme
+- **Complete Shopping Experience** - Cart, wishlist, checkout, order management, and user authentication
+- **Comprehensive Help System** - Help center, FAQ, contact support, and detailed policies
+
+## ✨ Key Features
+
+### 🛒 **E-commerce Core**
+- Product catalog with categories, filtering, and search
+- Shopping cart with persistent storage and real-time updates
+- Wishlist functionality with easy management
+- Advanced product pages with variants, reviews, and sharing
+- Multi-step checkout process with order confirmation
+
+### 👥 **Multi-Platform Support**
+- **Marketplace for Sellers** - Complete seller onboarding and application system
+- **Service Provider Platform** - Dedicated service provider registration and management
+- **Customer Portal** - User accounts, order tracking, and profile management
+
+### 📱 **Mobile-Optimized Experience**
+- Touch-friendly navigation and interactions
+- Responsive design across all screen sizes
+- Mobile-specific features like swipe gestures
+- Optimized mobile menus and modals
+
+### 🎨 **Professional Design System**
+- Consistent eXobe branding (#C8102E primary color)
+- Reusable component library
+- Modern UI patterns and animations
+- South African localization (ZAR currency, local phone formats)
+
+### 🔧 **Advanced Functionality**
+- Real-time search with suggestions and filters
+- Dynamic cart drawer with shipping calculations
+- WhatsApp integration for customer support
+- Comprehensive form validation and error handling
+- Toast notifications and confirmation modals
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **State Management**: React Context API
+- **Storage**: localStorage for cart/wishlist persistence
+- **Fonts**: Google Fonts (Noto Sans)
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── auth/              # Authentication pages (login, register, etc.)
+│   ├── cart/              # Shopping cart page
+│   ├── categories/        # Category browsing
+│   ├── category/[slug]/   # Individual category pages
+│   ├── checkout/          # Checkout process
+│   ├── contact/           # Contact page
+│   ├── faq/               # FAQ page
+│   ├── help-center/       # Help center with articles
+│   ├── order/             # Order success/failure pages
+│   ├── product/[id]/      # Product detail pages
+│   ├── search/            # Search results page
+│   ├── sell/              # Seller marketplace pages
+│   ├── service-providers/ # Service provider pages
+│   ├── wishlist/          # Wishlist management
+│   └── page.tsx           # Homepage
+├── components/            # Reusable UI components
+├── context/              # React Context providers
+└── globals.css           # Global styles and theme
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
+- Node.js 18+ (recommended: 20+)
+- npm, yarn, or pnpm
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
 
-## Learn More
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Build for Production
 
-## Deploy on Vercel
+```bash
+npm run build
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎯 Target Market
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Primary Market**: South Africa
+- **Currency**: South African Rand (ZAR)
+- **Compliance**: POPIA (Protection of Personal Information Act)
+- **Language**: English
+- **Mobile-First**: Optimized for mobile commerce
+
+## 🔒 Privacy & Compliance
+
+- POPIA-compliant privacy policy
+- Comprehensive terms and conditions
+- Secure data handling practices
+- User consent management
+
+## 📞 Support Features
+
+- Comprehensive help center with searchable articles
+- FAQ section with categorized questions
+- Contact forms with department routing
+- WhatsApp integration for instant support
+- Multiple contact methods (phone, email, live chat)
+
+## 🚀 Deployment
+
+The application is optimized for deployment on:
+- **Vercel** (recommended for Next.js)
+- **Netlify**
+- **AWS Amplify**
+- Any Node.js hosting provider
+
+## 📄 License
+
+This project is proprietary software developed for eXobe.
+
+## 🤝 Contributing
+
+This is a private project. For development team members, please follow the established coding standards and component patterns.
