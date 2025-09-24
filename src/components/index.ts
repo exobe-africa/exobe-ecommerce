@@ -18,3 +18,7 @@ export { default as PageHeader } from './PageHeader';
 export { default as QuickStats } from './QuickStats';
 export { default as CategoryFilter } from './CategoryFilter';
 export { default as ScrollToTop } from './ScrollToTop';
+export { default as AuthFooter } from './AuthFooter';
+export { default as SocialButtons } from './SocialButtons';
+export { default as BackToHomeLink } from './BackToHomeLink';
+export { default as BackToLoginLink } from './BackToLoginLink';
