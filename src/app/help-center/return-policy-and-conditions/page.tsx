@@ -15,7 +15,7 @@ export default function ReturnPolicyPage() {
           <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
             <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Center</Link>
+            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Centre</Link>
             <span>/</span>
             <span className="text-[#000000] font-medium">Return policy and conditions</span>
           </div>
@@ -23,7 +23,7 @@ export default function ReturnPolicyPage() {
           {/* Back Button */}
           <Link href="/help-center" className="inline-flex items-center text-[#C8102E] hover:text-[#A00E26] transition-colors mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Help Center
+            Back to Help Centre
           </Link>
 
           {/* Title */}
@@ -95,7 +95,7 @@ export default function ReturnPolicyPage() {
                     <ul className="space-y-2 text-red-700">
                       <li>• Personal care and hygiene products</li>
                       <li>• Underwear and swimwear</li>
-                      <li>• Customized or personalized items</li>
+                      <li>• Customised or personalised items</li>
                       <li>• Digital downloads and gift cards</li>
                       <li>• Items damaged by misuse</li>
                     </ul>
@@ -189,7 +189,7 @@ export default function ReturnPolicyPage() {
                 
                 <div className="p-6 rounded-xl border border-gray-200">
                   <p className="text-[#4A4A4A] mb-4">
-                    We offer exchanges for different sizes, colors, or styles of the same product, subject to availability.
+                    We offer exchanges for different sizes, colours, or styles of the same product, subject to availability.
                   </p>
                   <ul className="space-y-2 text-[#4A4A4A]">
                     <li>• Same product category exchanges only</li>

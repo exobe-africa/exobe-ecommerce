@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Shield, Calendar, FileText, Tool, MessageCircle, CheckCircle, AlertTriangle, Clock } from 'lucide-react';
+import { ArrowLeft, Shield, FileText, Wrench, MessageCircle, CheckCircle, AlertTriangle, Clock } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 
@@ -8,25 +8,21 @@ export default function ProductWarrantyPage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
             <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Center</Link>
+            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Centre</Link>
             <span>/</span>
             <span className="text-[#000000] font-medium">Product warranty information</span>
           </div>
 
-          {/* Back Button */}
           <Link href="/help-center" className="inline-flex items-center text-[#C8102E] hover:text-[#A00E26] transition-colors mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Help Center
+            Back to Help Centre
           </Link>
 
-          {/* Title */}
           <div className="flex items-center space-x-4 mb-6">
             <div className="w-16 h-16 bg-[#F6E2E0] rounded-xl flex items-center justify-center">
               <Shield className="h-8 w-8 text-[#C8102E]" />
@@ -39,13 +35,11 @@ export default function ProductWarrantyPage() {
         </div>
       </section>
 
-      {/* Content */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-8 lg:p-12">
               
-              {/* Introduction */}
               <div className="mb-10">
                 <p className="text-lg text-[#4A4A4A] leading-relaxed">
                   At eXobe, we stand behind the quality of our products. All items come with manufacturer warranties, 
@@ -53,12 +47,10 @@ export default function ProductWarrantyPage() {
                 </p>
               </div>
 
-              {/* Warranty Types */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-8">Types of Warranty Coverage</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Manufacturer Warranty */}
                   <div className="p-6 rounded-xl border border-gray-200 hover:border-[#C8102E] transition-colors">
                     <div className="w-12 h-12 bg-[#C8102E] rounded-lg flex items-center justify-center mb-4">
                       <Shield className="h-6 w-6 text-white" />
@@ -75,7 +67,6 @@ export default function ProductWarrantyPage() {
                     </ul>
                   </div>
 
-                  {/* eXobe Guarantee */}
                   <div className="p-6 rounded-xl border border-green-200 bg-green-50 hover:border-green-400 transition-colors">
                     <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
                       <CheckCircle className="h-6 w-6 text-white" />
@@ -94,7 +85,6 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* Warranty Periods by Category */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">Warranty Periods by Product Category</h2>
                 
@@ -158,12 +148,10 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* What's Covered */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">What's Covered Under Warranty</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Covered */}
                   <div className="p-6 rounded-xl border border-green-200 bg-green-50">
                     <div className="flex items-center space-x-3 mb-4">
                       <CheckCircle className="h-6 w-6 text-green-500" />
@@ -179,7 +167,6 @@ export default function ProductWarrantyPage() {
                     </ul>
                   </div>
 
-                  {/* Not Covered */}
                   <div className="p-6 rounded-xl border border-red-200 bg-red-50">
                     <div className="flex items-center space-x-3 mb-4">
                       <AlertTriangle className="h-6 w-6 text-red-500" />
@@ -190,14 +177,13 @@ export default function ProductWarrantyPage() {
                       <li>• Water damage (unless waterproof)</li>
                       <li>• Normal wear and tear</li>
                       <li>• Misuse or abuse</li>
-                      <li>• Unauthorized repairs</li>
+                      <li>• Unauthorised repairs</li>
                       <li>• Cosmetic damage that doesn't affect function</li>
                     </ul>
                   </div>
                 </div>
               </div>
 
-              {/* How to Claim Warranty */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">How to Make a Warranty Claim</h2>
                 
@@ -219,7 +205,7 @@ export default function ProductWarrantyPage() {
                       step: 3,
                       title: 'Assessment & Diagnosis',
                       description: 'Our team will assess the issue and determine the best solution.',
-                      icon: Tool
+                      icon: Wrench
                     },
                     {
                       step: 4,
@@ -247,7 +233,6 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* Required Documentation */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">Required Documentation</h2>
                 
@@ -280,7 +265,6 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* Processing Times */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">Warranty Claim Processing Times</h2>
                 
@@ -293,7 +277,7 @@ export default function ProductWarrantyPage() {
                   </div>
                   
                   <div className="p-6 rounded-xl border border-gray-200 text-center">
-                    <Tool className="h-8 w-8 text-[#C8102E] mx-auto mb-3" />
+                    <Wrench className="h-8 w-8 text-[#C8102E] mx-auto mb-3" />
                     <h3 className="font-semibold text-[#000000] mb-2">Assessment</h3>
                     <p className="text-2xl font-bold text-[#C8102E] mb-1">2-5 days</p>
                     <p className="text-[#4A4A4A] text-sm">Technical evaluation and decision</p>
@@ -308,7 +292,6 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* Extended Warranty */}
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-[#000000] mb-6">Extended Warranty Options</h2>
                 
@@ -345,7 +328,6 @@ export default function ProductWarrantyPage() {
                 </div>
               </div>
 
-              {/* Contact Support */}
               <div className="bg-gradient-to-r from-[#F6E2E0] to-[#FFF5F5] rounded-xl p-8">
                 <h2 className="text-2xl font-bold text-[#000000] mb-4">Warranty Support</h2>
                 <p className="text-[#4A4A4A] mb-6">

@@ -41,7 +41,7 @@ const contactMethods = [
   {
     title: 'Phone Support',
     subtitle: 'Speak to an expert',
-    description: 'Call us for personalized help and detailed product information',
+    description: 'Call us for personalised help and detailed product information',
     availability: 'Mon-Fri: 8AM-8PM, Sat-Sun: 9AM-5PM',
     icon: Phone,
     color: 'bg-blue-500',
@@ -478,7 +478,7 @@ export default function ContactPage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-[#000000] mb-4">Department Directory</h2>
               <p className="text-lg text-[#4A4A4A] max-w-3xl mx-auto">
-                Connect directly with the right team for faster, more specialized assistance
+                Connect directly with the right team for faster, more specialised assistance
               </p>
             </div>
 

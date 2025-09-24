@@ -767,7 +767,7 @@ export default function ServiceProviderApplicationPage() {
                   onChange={handleInputChange}
                   rows={3}
                   className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-                  placeholder="List any relevant certifications, licenses, or professional memberships..."
+                  placeholder="List any relevant certifications, licences, or professional memberships..."
                 />
               </div>
 

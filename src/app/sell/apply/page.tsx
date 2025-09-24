@@ -718,7 +718,7 @@ export default function SellerApplicationPage() {
                     onChange={handleInputChange}
                     rows={3}
                     className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-                    placeholder="List brand names you resell or are licensed to use"
+                    placeholder="List brand names you resell or are licenced to use"
                   />
                 </div>
               </div>

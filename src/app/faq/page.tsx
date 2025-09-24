@@ -71,7 +71,7 @@ const faqCategories = [
       },
       {
         question: "Why was my payment declined?",
-        answer: "Common reasons include insufficient funds, incorrect card details, or bank restrictions on online purchases. Contact your bank to authorize online transactions, or try a different payment method."
+        answer: "Common reasons include insufficient funds, incorrect card details, or bank restrictions on online purchases. Contact your bank to authorise online transactions, or try a different payment method."
       },
       {
         question: "How long do EFT payments take to process?",
@@ -103,7 +103,7 @@ const faqCategories = [
       },
       {
         question: "What items cannot be returned?",
-        answer: "Personal care items, underwear, swimwear, customized products, digital downloads, and gift cards cannot be returned for hygiene and policy reasons. Items damaged by misuse are also not eligible."
+        answer: "Personal care items, underwear, swimwear, customised products, digital downloads, and gift cards cannot be returned for hygiene and policy reasons. Items damaged by misuse are also not eligible."
       },
       {
         question: "How long do refunds take?",
@@ -111,7 +111,7 @@ const faqCategories = [
       },
       {
         question: "Can I exchange an item instead of returning it?",
-        answer: "Yes, we offer exchanges for different sizes, colors, or styles of the same product, subject to availability. Price differences will be charged or refunded accordingly."
+        answer: "Yes, we offer exchanges for different sizes, colours, or styles of the same product, subject to availability. Price differences will be charged or refunded accordingly."
       },
       {
         question: "Who pays for return shipping?",
@@ -175,7 +175,7 @@ const faqCategories = [
       },
       {
         question: "How do I know if a product is authentic?",
-        answer: "We only sell authentic products from authorized suppliers and official brand partners. All items come with proper documentation and warranties. Counterfeit products are never tolerated."
+        answer: "We only sell authentic products from authorised suppliers and official brand partners. All items come with proper documentation and warranties. Counterfeit products are never tolerated."
       },
       {
         question: "What if I receive a damaged or defective item?",
@@ -199,7 +199,7 @@ const faqCategories = [
       },
       {
         question: "Can I shop on mobile devices?",
-        answer: "Yes! Our website is fully optimized for mobile devices and tablets. For the best experience, use the latest version of your mobile browser or consider using our mobile app when available."
+        answer: "Yes! Our website is fully optimised for mobile devices and tablets. For the best experience, use the latest version of your mobile browser or consider using our mobile app when available."
       },
       {
         question: "Do you have a mobile app?",
@@ -261,7 +261,7 @@ export default function FAQPage() {
           <div className="flex items-center justify-center space-x-2 text-sm text-gray-300 mb-6">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/help-center" className="hover:text-white transition-colors">Help Center</Link>
+            <Link href="/help-center" className="hover:text-white transition-colors">Help Centre</Link>
             <span>/</span>
             <span className="text-white">FAQ</span>
           </div>
@@ -488,7 +488,7 @@ export default function FAQPage() {
             <div className="text-center mt-10">
               <Link href="/help-center">
                 <button className="bg-[#000000] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#4A4A4A] transition-colors flex items-center justify-center mx-auto group">
-                  Browse Help Center
+                  Browse Help Centre
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>

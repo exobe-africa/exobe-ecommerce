@@ -290,7 +290,7 @@ export default function TermsAndConditions() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">19. Intellectual Property</h2>
               <p className="text-[#4A4A4A] mb-4">
-                All content on the Platform is owned or licensed by eXobe. You may not reproduce or 
+                All content on the Platform is owned or licenced by eXobe. You may not reproduce or 
                 distribute any part of the Platform without written permission.
               </p>
             </section>

@@ -209,7 +209,7 @@ export default function HelpCenterPage() {
           <div className="flex items-center justify-center space-x-2 text-sm text-gray-300 mb-6">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="h-4 w-4" />
-            <span className="text-white">Help Center</span>
+            <span className="text-white">Help Centre</span>
           </div>
 
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">

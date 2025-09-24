@@ -683,7 +683,7 @@ function SearchContent() {
             </div>
             
             <div className="p-4 space-y-6">
-              {/* Same filter content as desktop, but mobile optimized */}
+              {/* Same filter content as desktop, but mobile optimised */}
               {/* Categories */}
               <div>
                 <h3 className="font-medium text-[#000000] mb-3">Categories</h3>

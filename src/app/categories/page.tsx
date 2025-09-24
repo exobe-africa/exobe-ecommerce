@@ -190,7 +190,7 @@ export default function CategoriesPage() {
               </div>
               <h3 className="font-semibold text-[#000000] mb-2">Easy Navigation</h3>
               <p className="text-[#4A4A4A] text-sm">
-                Find what you need quickly with our organized categories
+                Find what you need quickly with our organised categories
               </p>
             </div>
             
@@ -210,7 +210,7 @@ export default function CategoriesPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-[#000000] mb-8">Popular Right Now</h2>
           <div className="flex flex-wrap justify-center gap-4">
-            {['New Arrivals', 'Best Sellers', 'On Sale', 'Premium Collection', 'Customer Favorites'].map((tag, index) => (
+            {['New Arrivals', 'Best Sellers', 'On Sale', 'Premium Collection', 'Customer Favourites'].map((tag, index) => (
               <Link
                 key={index}
                 href={`/category/electronics?filter=${tag.toLowerCase().replace(' ', '-')}`}

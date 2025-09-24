@@ -48,7 +48,7 @@ export default function ApplicationHelpSection({
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/help-center">
             <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors">
-              Visit Help Center
+              Visit Help Centre
             </button>
           </Link>
           <Link href="/contact">

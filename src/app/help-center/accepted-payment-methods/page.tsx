@@ -15,7 +15,7 @@ export default function PaymentMethodsPage() {
           <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
             <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Center</Link>
+            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Centre</Link>
             <span>/</span>
             <span className="text-[#000000] font-medium">Accepted payment methods</span>
           </div>
@@ -23,7 +23,7 @@ export default function PaymentMethodsPage() {
           {/* Back Button */}
           <Link href="/help-center" className="inline-flex items-center text-[#C8102E] hover:text-[#A00E26] transition-colors mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Help Center
+            Back to Help Centre
           </Link>
 
           {/* Title */}
@@ -236,7 +236,7 @@ export default function PaymentMethodsPage() {
                     <ul className="space-y-1 text-yellow-700">
                       <li>• Check your card details are correct</li>
                       <li>• Ensure you have sufficient funds</li>
-                      <li>• Contact your bank to authorize online purchases</li>
+                      <li>• Contact your bank to authorise online purchases</li>
                       <li>• Try a different payment method</li>
                     </ul>
                   </div>
@@ -257,9 +257,9 @@ export default function PaymentMethodsPage() {
                   <div className="p-6 rounded-lg border border-red-200 bg-red-50">
                     <div className="flex items-center space-x-3 mb-3">
                       <AlertCircle className="h-6 w-6 text-red-500" />
-                      <h3 className="font-semibold text-red-800">Unauthorized Transactions</h3>
+                      <h3 className="font-semibold text-red-800">Unauthorised Transactions</h3>
                     </div>
-                    <p className="text-red-700 mb-3">If you notice unauthorized charges:</p>
+                    <p className="text-red-700 mb-3">If you notice unauthorised charges:</p>
                     <ul className="space-y-1 text-red-700">
                       <li>• Contact us immediately at +27 11 123 4567</li>
                       <li>• Notify your bank or card issuer</li>

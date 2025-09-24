@@ -15,7 +15,7 @@ export default function CreateAccountPage() {
           <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
             <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Center</Link>
+            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Centre</Link>
             <span>/</span>
             <span className="text-[#000000] font-medium">How to create an account</span>
           </div>
@@ -23,7 +23,7 @@ export default function CreateAccountPage() {
           {/* Back Button */}
           <Link href="/help-center" className="inline-flex items-center text-[#C8102E] hover:text-[#A00E26] transition-colors mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Help Center
+            Back to Help Centre
           </Link>
 
           {/* Title */}
@@ -72,7 +72,7 @@ export default function CreateAccountPage() {
                       color: 'text-blue-500'
                     },
                     {
-                      title: 'Wishlist & Favorites',
+                      title: 'Wishlist & Favourites',
                       description: 'Save items you love for later purchase',
                       icon: User,
                       color: 'text-purple-500'

@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">How We Use Your Information</h2>
               <ul className="list-disc pl-6 text-[#4A4A4A] space-y-2">
                 <li>Process orders and provide customer service</li>
-                <li>Personalize your shopping experience</li>
+                <li>Personalise your shopping experience</li>
                 <li>Send order confirmations and updates</li>
                 <li>Improve our platform and services</li>
                 <li>Prevent fraud and ensure security</li>
@@ -87,7 +87,7 @@ export default function PrivacyPolicy() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Data Security</h2>
               <p className="text-[#4A4A4A] mb-4">
-                We implement appropriate technical and organizational measures to protect your personal information, including:
+                We implement appropriate technical and organisational measures to protect your personal information, including:
               </p>
               <ul className="list-disc pl-6 text-[#4A4A4A] space-y-2">
                 <li>Encryption of sensitive data</li>
@@ -119,7 +119,7 @@ export default function PrivacyPolicy() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Cookies and Tracking</h2>
               <p className="text-[#4A4A4A] mb-4">
-                We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. 
+                We use cookies and similar technologies to enhance your experience, analyse usage, and provide personalised content. 
                 You can manage your cookie preferences through your browser settings.
               </p>
             </section>

@@ -38,7 +38,7 @@ export default function SellOnExobePage() {
     {
       icon: BarChart3,
       title: "Analytics & Insights",
-      description: "Track your performance with detailed analytics and insights to optimize your sales strategy."
+      description: "Track your performance with detailed analytics and insights to optimise your sales strategy."
     },
     {
       icon: MessageCircle,
@@ -169,7 +169,7 @@ export default function SellOnExobePage() {
               </div>
               <h3 className="text-xl font-semibold text-[#000000] mb-4">Set Up Your Store</h3>
               <p className="text-[#4A4A4A] mb-6">
-                Upload your products, set prices, and customize your store profile to attract customers.
+                Upload your products, set prices, and customise your store profile to attract customers.
               </p>
               <Upload className="h-12 w-12 text-[#C8102E] mx-auto" />
             </div>

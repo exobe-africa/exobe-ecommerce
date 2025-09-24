@@ -671,7 +671,7 @@ export default function ProductPage() {
                 {Object.entries(product.variants).map(([variantType, options]) => (
                   <div key={variantType} className="space-y-3">
                     <h3 className="text-lg font-semibold text-[#000000] capitalize">
-                      {variantType === 'colors' ? 'Color' : 
+                      {variantType === 'colors' ? 'Colour' : 
                        variantType === 'sizes' ? 'Size' : 
                        variantType === 'storage' ? 'Storage' :
                        variantType === 'bands' ? 'Band' : variantType}
