@@ -9,7 +9,6 @@ import {
   SlidersHorizontal, 
   X,
 } from 'lucide-react';
-import Toast from '../../../components/common/Toast';
 import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components/common';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
@@ -70,7 +69,6 @@ export default function CategoryPage() {
   // Use scroll position preservation for category pages
   const { clearScrollPosition } = useScrollPosition();
   
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
@@ -128,10 +126,7 @@ export default function CategoryPage() {
 
   const handleAddToCart = (product: typeof allProducts[0]) => {
     if (!product.inStock) {
-      setToast({
-        message: 'This product is currently out of stock',
-        type: 'error'
-      });
+      console.warn('This product is currently out of stock');
       return;
     }
 
@@ -144,19 +139,12 @@ export default function CategoryPage() {
       category: product.category,
     });
     
-    setToast({
-      message: `${product.name} added to cart!`,
-      type: 'success'
-    });
+    // Toast removed - cart drawer opens automatically
   };
 
   const handleWishlistToggle = (product: typeof allProducts[0]) => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
-      setToast({
-        message: `${product.name} removed from wishlist`,
-        type: 'info'
-      });
     } else {
       addToWishlist({
         id: product.id,
@@ -168,10 +156,6 @@ export default function CategoryPage() {
         rating: product.rating,
         reviews: product.reviews,
         inStock: product.inStock,
-      });
-      setToast({
-        message: `${product.name} added to wishlist!`,
-        type: 'success'
       });
     }
   };
@@ -382,13 +366,6 @@ export default function CategoryPage() {
       )}
 
       
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 }

@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Helper function to format variant display
 const formatVariant = (variant?: { [key: string]: string | undefined }) => {
   if (!variant) return null;
   
@@ -25,7 +24,6 @@ export default function CartDrawer() {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Prevent body scroll when cart is open
   useEffect(() => {
     if (state.isOpen) {
       document.body.style.overflow = 'hidden';
@@ -39,7 +37,6 @@ export default function CartDrawer() {
       document.body.style.height = 'unset';
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
       document.body.style.position = 'unset';
@@ -48,29 +45,24 @@ export default function CartDrawer() {
     };
   }, [state.isOpen]);
 
-  // Handle animation states
   useEffect(() => {
     if (state.isOpen) {
-      // Start opening animation
       setIsVisible(true);
       setIsAnimating(true);
-      // Trigger the slide-in animation after mounting
       const timer = setTimeout(() => {
         setIsAnimating(false);
       }, 50);
       return () => clearTimeout(timer);
     } else {
-      // Start closing animation
       setIsAnimating(true);
       const timer = setTimeout(() => {
         setIsVisible(false);
         setIsAnimating(false);
-      }, 300); // Match the transition duration
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [state.isOpen]);
 
-  // Close cart drawer on browser navigation (back/forward buttons)
   useEffect(() => {
     const handleRouteChange = () => {
       if (state.isOpen) {
@@ -78,7 +70,6 @@ export default function CartDrawer() {
       }
     };
 
-    // Listen for browser navigation events (back/forward buttons)
     const handlePopState = () => {
       handleRouteChange();
     };
@@ -94,7 +85,6 @@ export default function CartDrawer() {
 
   return (
     <>
-      {/* Overlay */}
       <div 
         className={`fixed inset-0 z-40 transition-all duration-300 cursor-pointer ${
           state.isOpen && !isAnimating ? 'opacity-100' : 'opacity-0'
@@ -107,7 +97,6 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
 
-      {/* Cart Drawer */}
       <div 
         className={`fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 transform transition-all duration-300 ease-in-out shadow-xl flex flex-col ${
           state.isOpen && !isAnimating ? 'translate-x-0' : 'translate-x-full'
@@ -125,7 +114,6 @@ export default function CartDrawer() {
           }
         }}
       >
-        {/* Header */}
         <div className={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0 transition-all duration-300 delay-100 ${
           state.isOpen && !isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
         }`}>
@@ -143,12 +131,10 @@ export default function CartDrawer() {
           </button>
         </div>
 
-        {/* Cart Content */}
         <div className={`flex flex-col flex-1 min-h-0 transition-all duration-300 delay-200 ${
           state.isOpen && !isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}>
           {state.items.length === 0 ? (
-            /* Empty State */
             <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-8 text-center">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#F6E2E0] rounded-full flex items-center justify-center mb-4 sm:mb-6">
                 <ShoppingBag className="h-10 w-10 sm:h-12 sm:w-12 text-[#C8102E]" />
@@ -169,7 +155,6 @@ export default function CartDrawer() {
             </div>
           ) : (
             <>
-              {/* Cart Items */}
               <div 
                 className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4 pb-4" 
                 data-scrollable="true"
@@ -191,7 +176,6 @@ export default function CartDrawer() {
                       </button>
                     </div>
 
-                    {/* Product Info */}
                     <div className="flex-1 min-w-0">
                       <Link href={`/product/${item.id}`} className="block hover:text-[#C8102E] transition-colors" onClick={closeCart}>
                         <h4 className="font-semibold text-[#000000] text-sm leading-tight cursor-pointer mb-1">
@@ -199,7 +183,6 @@ export default function CartDrawer() {
                         </h4>
                       </Link>
                       
-                      {/* Variant Info - More Prominent */}
                       {formatVariant(item.variant) && (
                         <div className="flex flex-wrap gap-1 mb-2">
                           {Object.entries(item.variant || {})
@@ -215,7 +198,6 @@ export default function CartDrawer() {
                       
                       <p className="text-xs text-[#4A4A4A] mb-1">{item.category}</p>
                       
-                      {/* Price */}
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-[#C8102E]">
                           R{item.price.toFixed(2)}
@@ -228,7 +210,6 @@ export default function CartDrawer() {
                       </div>
                     </div>
 
-                    {/* Quantity Controls */}
                     <div className="flex items-center space-x-1 sm:space-x-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1, item.variant)}
@@ -252,9 +233,7 @@ export default function CartDrawer() {
                 ))}
               </div>
 
-              {/* Cart Summary - Fixed Position */}
               <div className="border-t border-gray-200 p-4 sm:p-4 bg-white shadow-lg flex-shrink-0">
-                {/* Free Delivery Progress */}
                 <div className="mb-4 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
                   {(() => {
                     const freeDeliveryThreshold = 499;
@@ -265,7 +244,6 @@ export default function CartDrawer() {
 
                     return (
                       <div>
-                        {/* Header */}
                         <div className="flex items-center justify-between mb-2 sm:mb-3">
                           <div className="flex items-center space-x-2">
                             <div className={`p-1.5 sm:p-2 rounded-full ${isEligible ? 'bg-green-500' : 'bg-blue-500'}`}>
@@ -292,7 +270,6 @@ export default function CartDrawer() {
                           </span>
                         </div>
 
-                        {/* Progress Bar */}
                         <div className="mb-2 sm:mb-3">
                           <div className="flex justify-between items-center mb-1 sm:mb-2">
                             <span className="text-xs sm:text-sm text-gray-600">R0</span>
@@ -314,7 +291,6 @@ export default function CartDrawer() {
                           </div>
                         </div>
 
-                        {/* Message */}
                         <div className="text-center">
                           {isEligible ? (
                             <p className="text-xs sm:text-sm text-green-700 font-medium">
@@ -332,7 +308,6 @@ export default function CartDrawer() {
                   })()}
                 </div>
 
-                {/* Total */}
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <span className="text-base sm:text-lg font-semibold text-[#000000]">Total:</span>
                   <span className="text-xl sm:text-2xl font-bold text-[#C8102E]">

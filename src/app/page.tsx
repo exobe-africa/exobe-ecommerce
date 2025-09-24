@@ -1,7 +1,6 @@
 "use client";
 
 import Newsletter from "../components/common/Newsletter";
-import Toast from "../components/common/Toast";
 import { HeroSection, FeaturesSection, CategoriesSection, FeaturedProductsSection } from "../components/pages/home";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
@@ -10,7 +9,6 @@ import { useState } from "react";
 export default function Home() {
   const { addItem } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   const products = [
     { id: '1', name: 'Premium Headphones', price: 79.99, originalPrice: 99.99, image: '🎧', category: 'Electronics' },
@@ -24,8 +22,6 @@ export default function Home() {
   ];
 
   const handleAddToCart = (product: typeof products[0]) => {
-    // Example: Add product with variant information
-    // In a real app, this would come from product selection UI
     const exampleVariants = {
       '1': { size: 'Large', color: 'Black' },
       '2': { size: 'Medium', color: 'Blue' },
@@ -47,25 +43,12 @@ export default function Home() {
       variant: exampleVariants[product.id as keyof typeof exampleVariants],
     });
     
-    const variantText = exampleVariants[product.id as keyof typeof exampleVariants] 
-      ? ` (${Object.entries(exampleVariants[product.id as keyof typeof exampleVariants])
-          .map(([key, value]) => `${key}: ${value}`)
-          .join(', ')})`
-      : '';
-    
-    setToast({
-      message: `${product.name}${variantText} added to cart!`,
-      type: 'success'
-    });
+    // Toast removed - cart drawer opens automatically
   };
 
   const handleWishlistToggle = (product: typeof products[0]) => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
-      setToast({
-        message: `${product.name} removed from wishlist`,
-        type: 'info'
-      });
     } else {
       addToWishlist({
         id: product.id,
@@ -77,10 +60,6 @@ export default function Home() {
         rating: 4.8,
         reviews: 124,
         inStock: true,
-      });
-      setToast({
-        message: `${product.name} added to wishlist!`,
-        type: 'success'
       });
     }
   };
@@ -101,13 +80,6 @@ export default function Home() {
 
       <Newsletter />
       
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 }

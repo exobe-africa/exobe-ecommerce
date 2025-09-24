@@ -30,7 +30,6 @@ interface ProductVariants {
   bands?: VariantOption[];
   [key: string]: VariantOption[] | undefined;
 }
-import Toast from '../../../components/common/Toast';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
@@ -191,7 +190,6 @@ export default function ProductPage() {
   const router = useRouter();
   const { addItem } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [quantity, setQuantity] = useState(1);
   
   // Variant state management
@@ -307,15 +305,12 @@ export default function ProductPage() {
   const handleAddToCart = () => {
     const availableStock = currentStock || product.stockCount;
     if (availableStock === 0) {
-      setToast({
-        message: 'This variant is currently out of stock',
-        type: 'error'
-      });
+      console.warn('This variant is currently out of stock');
       return;
     }
 
     if (quantity > availableStock) {
-      setToast({ message: `Only ${availableStock} items in stock!`, type: 'error' });
+      console.warn(`Only ${availableStock} items in stock!`);
       return;
     }
 
@@ -345,10 +340,7 @@ export default function ProductPage() {
       });
     }
     
-    setToast({
-      message: `${quantity} ${variantName}${quantity > 1 ? 's' : ''} added to cart!`,
-      type: 'success'
-    });
+    // Toast removed - cart drawer opens automatically
   };
 
   const handleWishlistToggle = () => {
@@ -356,10 +348,6 @@ export default function ProductPage() {
     
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
-      setToast({
-        message: `${product.name} removed from wishlist`,
-        type: 'info'
-      });
     } else {
       addToWishlist({
         id: product.id,
@@ -371,10 +359,6 @@ export default function ProductPage() {
         rating: product.rating,
         reviews: product.reviews,
         inStock: (currentStock || product.stockCount) > 0,
-      });
-      setToast({
-        message: `${product.name} added to wishlist!`,
-        type: 'success'
       });
     }
   };
@@ -392,24 +376,15 @@ export default function ProductPage() {
       } else {
         // Fallback: copy to clipboard
         await navigator.clipboard.writeText(window.location.href);
-        setToast({
-          message: 'Product link copied to clipboard!',
-          type: 'success'
-        });
+        console.log('Product link copied to clipboard!');
       }
     } catch (err) {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
-        setToast({
-          message: 'Product link copied to clipboard!',
-          type: 'success'
-        });
+        console.log('Product link copied to clipboard!');
       } catch (clipboardErr) {
-        setToast({
-          message: 'Unable to share product',
-          type: 'error'
-        });
+        console.error('Unable to share product');
       }
     }
   };
@@ -463,10 +438,7 @@ export default function ProductPage() {
   // Review functions
   const handleWriteReview = () => {
     if (!isLoggedIn) {
-      setToast({
-        message: 'Redirecting to login...',
-        type: 'info'
-      });
+      console.log('Redirecting to login...');
       // Navigate to login page using Next.js router
       router.push('/auth/login');
       return;
@@ -476,18 +448,12 @@ export default function ProductPage() {
 
   const handleSubmitReview = () => {
     if (!reviewText.trim() || reviewRating === 0) {
-      setToast({
-        message: 'Please provide both a rating and review text',
-        type: 'error'
-      });
+      console.warn('Please provide both a rating and review text');
       return;
     }
 
     // In a real app, this would submit to an API
-    setToast({
-      message: 'Thank you for your review! It will be published after moderation.',
-      type: 'success'
-    });
+    console.log('Thank you for your review! It will be published after moderation.');
 
     // Reset form
     setShowReviewForm(false);
@@ -574,14 +540,6 @@ export default function ProductPage() {
       </div>
 
       
-      {/* Toast Notifications */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 }
