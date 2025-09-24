@@ -98,7 +98,6 @@ export default function PrivacyPolicy() {
               </ul>
             </section>
 
-            {/* Your Rights */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Your Rights</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -115,7 +114,6 @@ export default function PrivacyPolicy() {
               </ul>
             </section>
 
-            {/* Cookies */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Cookies and Tracking</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -124,7 +122,6 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Data Retention */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Data Retention</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -133,7 +130,6 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Third-Party Links */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Third-Party Links</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -142,7 +138,6 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Children's Privacy */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Children's Privacy</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -151,7 +146,6 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Changes to Privacy Policy */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Changes to This Privacy Policy</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -160,7 +154,6 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Contact Information */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Contact Us</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -173,7 +166,6 @@ export default function PrivacyPolicy() {
               </div>
             </section>
 
-            {/* Information Regulator */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">Information Regulator</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -186,7 +178,6 @@ export default function PrivacyPolicy() {
               </div>
             </section>
 
-            {/* Footer */}
             <div className="mt-12 pt-8 border-t border-gray-200">
               <p className="text-sm text-[#4A4A4A] text-center">
                 Last updated: July 16, 2025

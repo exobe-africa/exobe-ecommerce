@@ -13,7 +13,6 @@ export default function TermsAndConditions() {
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white">
-          {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl lg:text-4xl font-bold text-[#000000] mb-4">eXobe Terms & Conditions</h1>
             <div className="text-sm text-[#4A4A4A] space-y-1">
@@ -24,10 +23,8 @@ export default function TermsAndConditions() {
             </div>
           </div>
 
-          {/* Content */}
           <div className="prose prose-lg max-w-none">
             
-            {/* 1. Introduction */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">1. Introduction</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -45,7 +42,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 2. Definitions */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">2. Definitions</h2>
               <ul className="list-disc pl-6 text-[#4A4A4A] space-y-2">
@@ -60,7 +56,6 @@ export default function TermsAndConditions() {
               </ul>
             </section>
 
-            {/* 3. Platform Access and User Eligibility */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">3. Platform Access and User Eligibility</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -74,7 +69,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 4. Use of Platform */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">4. Use of Platform</h2>
               <p className="text-[#4A4A4A] mb-2">You may not:</p>
@@ -89,7 +83,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 5. Platform Access Limitations */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">5. Platform Access Limitations</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -99,7 +92,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 6. Orders and Bookings */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">6. Orders and Bookings</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -116,7 +108,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 7. Prohibited Products & Services */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">7. Prohibited Products & Services</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -128,7 +119,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 8. Product Listings, Pricing, and Stock */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">8. Product Listings, Pricing, and Stock</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -143,7 +133,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 9. Payment Terms */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">9. Payment Terms</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -161,7 +150,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 10. Television Purchases */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">10. Television Purchases</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -172,7 +160,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 11. Delivery */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">11. Delivery</h2>
               <ul className="list-disc pl-6 text-[#4A4A4A] space-y-2">
@@ -189,7 +176,6 @@ export default function TermsAndConditions() {
               </ul>
             </section>
 
-            {/* 12. Service Levels & Timelines */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">12. Service Levels & Timelines</h2>
               <p className="text-[#4A4A4A] mb-2">We aim to:</p>
@@ -204,7 +190,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 13. Returns and Refunds */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">13. Returns and Refunds</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -225,7 +210,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 14. eXobe Coins */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">14. eXobe Coins</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -235,7 +219,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 15. Subscriptions */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">15. Subscriptions</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -245,7 +228,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 16. Cancellations */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">16. Cancellations</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -254,7 +236,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 17. Third Party Vendors and Trust Score */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">17. Third Party Vendors and Trust Score</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -268,7 +249,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 18. Account Suspension, Review, and Approval */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">18. Account Suspension, Review, and Approval</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -286,7 +266,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 19. Intellectual Property */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">19. Intellectual Property</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -295,7 +274,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 20. Platform Modifications and Availability */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">20. Platform Modifications and Availability</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -304,7 +282,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 21. Limitation of Liability */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">21. Limitation of Liability</h2>
               <ul className="list-disc pl-6 text-[#4A4A4A] space-y-2">
@@ -317,7 +294,6 @@ export default function TermsAndConditions() {
               </ul>
             </section>
 
-            {/* 22. Data Protection and Privacy */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">22. Data Protection and Privacy</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -326,7 +302,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 23. Termination */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">23. Termination</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -335,7 +310,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 24. Governing Law and Dispute Resolution */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">24. Governing Law and Dispute Resolution</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -344,7 +318,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 25. Force Majeure */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">25. Force Majeure</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -356,7 +329,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 26. Warranties & Defects */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">26. Warranties & Defects</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -374,7 +346,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 27. Deals & Promotions */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">27. Deals & Promotions</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -386,7 +357,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 28. User Content & Reviews */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">28. User Content & Reviews</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -404,7 +374,6 @@ export default function TermsAndConditions() {
               </ul>
             </section>
 
-            {/* 29. Third-Party Content */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">29. Third-Party Content</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -418,7 +387,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 30. Customer Support */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">30. Customer Support</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -428,7 +396,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 31. Fraud & Abuse */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">31. Fraud & Abuse</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -443,7 +410,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 32. Mobile App Usage */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">32. Mobile App Usage</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -453,7 +419,6 @@ export default function TermsAndConditions() {
               </p>
             </section>
 
-            {/* 33. Contact Information */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">33. Contact Information</h2>
               <div className="text-[#4A4A4A] space-y-2">
@@ -462,7 +427,6 @@ export default function TermsAndConditions() {
               </div>
             </section>
 
-            {/* 34. Complaints and Consumer Rights */}
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-[#000000] mb-4">34. Complaints and Consumer Rights</h2>
               <p className="text-[#4A4A4A] mb-4">
@@ -476,7 +440,6 @@ export default function TermsAndConditions() {
               </div>
             </section>
 
-            {/* Footer */}
             <div className="mt-12 pt-8 border-t border-gray-200">
               <p className="text-sm text-[#4A4A4A] text-center">
                 Last updated: July 16, 2025
