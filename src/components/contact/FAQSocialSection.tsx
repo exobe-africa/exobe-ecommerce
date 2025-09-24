@@ -1,14 +1,15 @@
 "use client";
 
 import Link from 'next/link';
-import { ArrowRight, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from '../icons';
 
 const socialLinks = [
-  { name: 'Facebook', icon: Facebook, url: '#', color: 'hover:text-blue-600' },
-  { name: 'Twitter', icon: Twitter, url: '#', color: 'hover:text-blue-400' },
-  { name: 'Instagram', icon: Instagram, url: '#', color: 'hover:text-pink-500' },
-  { name: 'LinkedIn', icon: Linkedin, url: '#', color: 'hover:text-blue-700' },
-  { name: 'YouTube', icon: Youtube, url: '#', color: 'hover:text-red-500' }
+  { name: 'Facebook', icon: FacebookIcon, url: '#', color: 'hover:text-blue-600' },
+  { name: 'Twitter', icon: TwitterIcon, url: '#', color: 'hover:text-blue-400' },
+  { name: 'Instagram', icon: InstagramIcon, url: '#', color: 'hover:text-pink-500' },
+  { name: 'LinkedIn', icon: LinkedInIcon, url: '#', color: 'hover:text-blue-700' },
+  { name: 'YouTube', icon: YouTubeIcon, url: '#', color: 'hover:text-red-500' }
 ];
 
 const FAQSocialSection = () => {

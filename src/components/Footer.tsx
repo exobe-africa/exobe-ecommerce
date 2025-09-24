@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Twitter, Youtube, Instagram, Linkedin } from "lucide-react";
+import { FacebookIcon, TwitterIcon, YouTubeIcon, InstagramIcon, LinkedInIcon } from "./icons";
 
 export default function Footer() {
   return (
@@ -22,16 +22,16 @@ export default function Footer() {
             {/* Social Media Icons */}
             <div className="flex space-x-4 mb-4">
               <a href="https://www.linkedin.com/company/exobeafrica" className="text-gray-300 hover:text-[#C8102E] transition-colors" aria-label="LinkedIn">
-                <Linkedin className="h-6 w-6" />
+                <LinkedInIcon className="h-6 w-6" />
               </a>
               <a href="https://x.com/exobeafrica" className="text-gray-300 hover:text-[#C8102E] transition-colors" aria-label="Twitter">
-                <Twitter className="h-6 w-6" />
+                <TwitterIcon className="h-6 w-6" />
               </a>
               <a href="https://www.youtube.com/@exobeafrica" className="text-gray-300 hover:text-[#C8102E] transition-colors" aria-label="YouTube">
-                <Youtube className="h-6 w-6" />
+                <YouTubeIcon className="h-6 w-6" />
               </a>
               <a href="https://www.instagram.com/exobeafrica" className="text-gray-300 hover:text-[#C8102E] transition-colors" aria-label="Instagram">
-                <Instagram className="h-6 w-6" />
+                <InstagramIcon className="h-6 w-6" />
               </a>
             </div>
             
