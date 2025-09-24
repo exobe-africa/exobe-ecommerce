@@ -24,7 +24,35 @@ const allProducts = [
   { id: '11', name: 'Wireless Charger', price: 299.99, originalPrice: 399.99, image: '🔋', category: 'electronics', brand: 'Samsung', rating: 4.4, reviews: 73, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town'] },
   
   // Fashion
-  { id: '2', name: 'Cotton T-Shirt', price: 299.99, originalPrice: 399.99, image: '👕', category: 'fashion', brand: 'Nike', rating: 4.6, reviews: 89, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town'] },
+  { 
+    id: '2', 
+    name: 'Cotton T-Shirt', 
+    price: 299.99, 
+    originalPrice: 399.99, 
+    image: '👕', 
+    category: 'fashion', 
+    brand: 'Nike', 
+    rating: 4.6, 
+    reviews: 89, 
+    inStock: true, 
+    isNew: false, 
+    isBestSeller: true, 
+    availableLocations: ['Johannesburg', 'Cape Town'],
+    description: 'Premium 100% organic cotton t-shirt with a comfortable fit.',
+    variants: {
+      colors: [
+        { name: 'Classic White', value: 'white', image: '👕', price: 299.99, stock: 20, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Jet Black', value: 'black', image: '🖤', price: 299.99, stock: 15, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Navy Blue', value: 'navy', image: '💙', price: 299.99, stock: 12, availableLocations: ['Cape Town'] }
+      ],
+      sizes: [
+        { name: 'S', value: 's', stock: 15, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'M', value: 'm', stock: 20, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'L', value: 'l', stock: 18, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'XL', value: 'xl', stock: 12, availableLocations: ['Johannesburg'] }
+      ]
+    }
+  },
   { id: '6', name: 'Designer Jacket', price: 2499.99, originalPrice: 3299.99, image: '🧥', category: 'fashion', brand: 'Adidas', rating: 4.8, reviews: 67, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban'] },
   { id: '12', name: 'Denim Jeans', price: 899.99, originalPrice: 1199.99, image: '👖', category: 'fashion', brand: 'Levi\'s', rating: 4.5, reviews: 156, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
   { id: '13', name: 'Summer Dress', price: 699.99, originalPrice: 999.99, image: '👗', category: 'fashion', brand: 'Zara', rating: 4.7, reviews: 92, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban'] },
@@ -141,6 +169,27 @@ export default function CategoryPage() {
     });
     
     // Toast removed - cart drawer opens automatically
+  };
+
+  // Open-modal add to cart handler used by ProductCard quick view
+  const handleQuickViewAddToCart = (
+    product: any,
+    selectedVariants: Record<string, string>,
+    quantity: number,
+    currentLocations: string[]
+  ) => {
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.image,
+        category: product.category,
+        variant: selectedVariants,
+        availableLocations: currentLocations,
+      });
+    }
   };
 
   const handleWishlistToggle = (product: typeof allProducts[0]) => {
@@ -330,8 +379,12 @@ export default function CategoryPage() {
                     variant="category"
                     viewMode={viewMode}
                     onAddToCart={handleAddToCart}
+                    onQuickViewAddToCart={handleQuickViewAddToCart}
                     onWishlistToggle={handleWishlistToggle}
                     isInWishlist={isInWishlist(product.id)}
+                    description={product.description}
+                    variants={product.variants}
+                    availableLocations={product.availableLocations}
                   />
                 ))}
               </div>

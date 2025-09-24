@@ -7,22 +7,28 @@ interface Product {
   id: string;
   name: string;
   price: number;
-  originalPrice: number;
+  originalPrice?: number;
   image: string;
   category: string;
   availableLocations: string[];
+  description?: string;
+  rating?: number;
+  reviews?: number;
+  variants?: any;
 }
 
 interface FeaturedProductsSectionProps {
   products: Product[];
-  onAddToCart: (product: Product) => void;
-  onWishlistToggle: (product: Product) => void;
+  onAddToCart: (product: any) => void;
+  onQuickViewAddToCart?: (product: any, selectedVariants: Record<string, string>, quantity: number, currentLocations: string[]) => void;
+  onWishlistToggle: (product: any) => void;
   isInWishlist: (productId: string) => boolean;
 }
 
 const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({
   products,
   onAddToCart,
+  onQuickViewAddToCart,
   onWishlistToggle,
   isInWishlist
 }) => {
@@ -46,10 +52,16 @@ const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({
               originalPrice={product.originalPrice}
               image={product.image}
               category={product.category}
+              rating={product.rating}
+              reviews={product.reviews}
               variant="default"
               onAddToCart={() => onAddToCart(product)}
+              onQuickViewAddToCart={onQuickViewAddToCart}
               onWishlistToggle={() => onWishlistToggle(product)}
               isInWishlist={isInWishlist(product.id)}
+              description={product.description}
+              variants={product.variants}
+              availableLocations={product.availableLocations}
             />
           ))}
         </div>

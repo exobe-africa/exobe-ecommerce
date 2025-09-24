@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { Star, Heart, ShoppingCart, Eye, Share2, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { ProductQuickViewModal } from './index';
 
 export interface ProductCardProps {
   id: string | number;
@@ -22,9 +24,15 @@ export interface ProductCardProps {
   viewMode?: 'grid' | 'list';
   
   onAddToCart?: (product: any) => void;
+  onQuickViewAddToCart?: (product: any, selectedVariants: Record<string, string>, quantity: number, currentLocations: string[]) => void;
   onWishlistToggle?: (product: any) => void;
   onRemoveFromWishlist?: (product: any) => void;
   isInWishlist?: boolean;
+  
+  // Product details for quick view
+  description?: string;
+  variants?: any;
+  availableLocations?: string[];
   
   showWishlistDate?: boolean;
   showQuickActions?: boolean;
@@ -48,16 +56,22 @@ const ProductCard = ({
   variant = 'default',
   viewMode = 'grid',
   onAddToCart,
+  onQuickViewAddToCart,
   onWishlistToggle,
   onRemoveFromWishlist,
   isInWishlist = false,
+  description,
+  variants,
+  availableLocations,
   showWishlistDate = false,
   showQuickActions = false,
   className = ''
 }: ProductCardProps) => {
+  const [showQuickView, setShowQuickView] = useState(false);
   
   const product = {
-    id, name, price, originalPrice, image, category, brand, rating, reviews, inStock, isNew, isBestSeller, addedAt
+    id, name, price, originalPrice, image, category, brand, rating, reviews, inStock, isNew, isBestSeller, addedAt,
+    description, variants, availableLocations
   };
 
   const formatDate = (date: Date) => {
@@ -71,8 +85,19 @@ const ProductCard = ({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onAddToCart) {
+    
+    // If product has variants or we have quick view handler, show modal
+    if (variants || onQuickViewAddToCart) {
+      setShowQuickView(true);
+    } else if (onAddToCart) {
+      // Fallback to direct add to cart for simple products
       onAddToCart(product);
+    }
+  };
+
+  const handleQuickViewAddToCart = (product: any, selectedVariants: Record<string, string>, quantity: number, currentLocations: string[]) => {
+    if (onQuickViewAddToCart) {
+      onQuickViewAddToCart(product, selectedVariants, quantity, currentLocations);
     }
   };
 
@@ -334,6 +359,7 @@ const ProductCard = ({
   if (variant === 'category') {
     if (viewMode === 'list') {
       return (
+        <>
         <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 ${className}`}>
           <Link href={`/product/${id}`}>
             <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 relative cursor-pointer touch-manipulation">
@@ -433,11 +459,23 @@ const ProductCard = ({
             </div>
           </div>
         </div>
+
+        {/* Quick View Modal */}
+        <ProductQuickViewModal
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+          product={product}
+          onAddToCart={handleQuickViewAddToCart}
+          onWishlistToggle={onWishlistToggle}
+          isInWishlist={isInWishlist}
+        />
+        </>
       );
     }
 
     // Category grid view
     return (
+      <>
       <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${className}`}>
         <Link href={`/product/${id}`}>
           <div className="relative cursor-pointer touch-manipulation">
@@ -537,6 +575,17 @@ const ProductCard = ({
           </div>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+        product={product}
+        onAddToCart={handleQuickViewAddToCart}
+        onWishlistToggle={onWishlistToggle}
+        isInWishlist={isInWishlist}
+      />
+      </>
     );
   }
 
@@ -732,12 +781,24 @@ const ProductCard = ({
   }
 
   return (
-    <div className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${className}`}>
-      <div className="p-4">
-        <h3 className="font-semibold text-[#000000]">{name}</h3>
-        <p className="text-[#C8102E] font-bold">R{price.toFixed(2)}</p>
+    <>
+      <div className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${className}`}>
+        <div className="p-4">
+          <h3 className="font-semibold text-[#000000]">{name}</h3>
+          <p className="text-[#C8102E] font-bold">R{price.toFixed(2)}</p>
+        </div>
       </div>
-    </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+        product={product}
+        onAddToCart={handleQuickViewAddToCart}
+        onWishlistToggle={onWishlistToggle}
+        isInWishlist={isInWishlist}
+      />
+    </>
   );
 };
 
