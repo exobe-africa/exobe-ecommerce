@@ -206,6 +206,9 @@ export default function CategoryPage() {
         rating: product.rating,
         reviews: product.reviews,
         inStock: product.inStock,
+        description: product.description,
+        variants: product.variants,
+        availableLocations: product.availableLocations,
       });
     }
   };
@@ -322,7 +325,7 @@ export default function CategoryPage() {
 
               <div className="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-4">
                 <SortDropdown
-                  value={sortBy}
+                    value={sortBy}
                   onChange={setSortBy}
                   options={sortOptions}
                   variant="full-width"

@@ -200,9 +200,12 @@ export default function Home() {
         originalPrice: product.originalPrice,
         image: product.image,
         category: product.category,
-        rating: 4.8,
-        reviews: 124,
+        rating: product.rating || 4.8,
+        reviews: product.reviews || 124,
         inStock: true,
+        description: product.description,
+        variants: product.variants,
+        availableLocations: product.availableLocations,
       });
     }
   };
