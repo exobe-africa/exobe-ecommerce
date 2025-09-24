@@ -45,7 +45,6 @@ export default function WishlistPage() {
   const [sortBy, setSortBy] = useState('newest');
   const [filterBy, setFilterBy] = useState('all');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -88,34 +87,15 @@ export default function WishlistPage() {
       image: item.image,
       category: item.category,
     });
-    
-    setToast({
-      message: `${item.name} added to cart!`,
-      type: 'success'
-    });
-
-    // Auto-hide toast after 3 seconds
-    setTimeout(() => setToast(null), 3000);
   };
 
   const handleRemoveFromWishlist = (item: typeof wishlistState.items[0]) => {
     removeItem(item.id);
-    setToast({
-      message: `${item.name} removed from wishlist`,
-      type: 'info'
-    });
-    setTimeout(() => setToast(null), 3000);
   };
 
   const handleAddAllToCart = () => {
     const inStockItems = sortedAndFilteredItems.filter(item => item.inStock !== false);
     inStockItems.forEach(item => handleAddToCart(item));
-    
-    setToast({
-      message: `${inStockItems.length} items added to cart!`,
-      type: 'success'
-    });
-    setTimeout(() => setToast(null), 3000);
   };
 
   const handleClearWishlist = () => {
@@ -125,11 +105,6 @@ export default function WishlistPage() {
   const confirmClearWishlist = () => {
     clearWishlist();
     setShowClearConfirm(false);
-    setToast({
-      message: 'Wishlist cleared successfully',
-      type: 'info'
-    });
-    setTimeout(() => setToast(null), 3000);
   };
 
   const formatDate = (dateString: string) => {
@@ -283,15 +258,6 @@ export default function WishlistPage() {
         confirmButtonHoverColor="hover:bg-red-600"
       />
 
-      {/* Toast Notification */}
-      {toast && (
-        <div className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 ${
-          toast.type === 'success' ? 'bg-green-500' : 
-          toast.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-        }`}>
-          {toast.message}
-        </div>
-      )}
     </div>
   );
 }

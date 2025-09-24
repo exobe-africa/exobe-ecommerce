@@ -64,13 +64,11 @@ export default function ProductQuickViewModal({
   const [currentStock, setCurrentStock] = useState(0);
   const [currentLocations, setCurrentLocations] = useState<string[]>(product.availableLocations || []);
 
-  // Calculate current available locations based on selected variants
   const calculateCurrentLocations = (variants: Record<string, string>) => {
     if (!product.variants) return product.availableLocations || [];
     
     const selectedOptions: VariantOption[] = [];
     
-    // Get all selected variant options
     Object.entries(variants).forEach(([variantType, selectedValue]) => {
       const variantOptions = product.variants?.[variantType];
       if (variantOptions) {
@@ -81,12 +79,10 @@ export default function ProductQuickViewModal({
       }
     });
     
-    // If no variants selected, return product-level locations
     if (selectedOptions.length === 0) {
       return product.availableLocations || [];
     }
     
-    // Find intersection of all selected variant locations
     let commonLocations = selectedOptions[0]?.availableLocations || [];
     
     for (let i = 1; i < selectedOptions.length; i++) {
@@ -99,7 +95,6 @@ export default function ProductQuickViewModal({
     return commonLocations;
   };
 
-  // Initialize variants and pricing
   useEffect(() => {
     if (product.variants) {
       const initialVariants: Record<string, string> = {};
@@ -107,7 +102,6 @@ export default function ProductQuickViewModal({
       let baseStock = 0;
       let baseImage = product.image;
 
-      // Set default selections for each variant type
       Object.entries(product.variants).forEach(([variantType, options]) => {
         if (options && options.length > 0) {
           initialVariants[variantType] = options[0].value;
@@ -131,18 +125,16 @@ export default function ProductQuickViewModal({
     } else {
       setCurrentImage(product.image);
       setCurrentPrice(product.price);
-      setCurrentStock(100); // Default stock for products without variants
+      setCurrentStock(100);
       setCurrentLocations(product.availableLocations || []);
     }
     setQuantity(1);
   }, [product]);
 
-  // Handle variant selection
   const handleVariantChange = (variantType: string, value: string) => {
     const newVariants = { ...selectedVariants, [variantType]: value };
     setSelectedVariants(newVariants);
 
-    // Find the selected variant option
     const variantOptions = product.variants?.[variantType];
     const variantOption = variantOptions?.find(option => option.value === value);
     
@@ -151,7 +143,6 @@ export default function ProductQuickViewModal({
         setCurrentImage(variantOption.image);
       }
       
-      // Calculate new price based on all selected variants
       let newPrice = product.price;
       Object.entries(newVariants).forEach(([type, val]) => {
         const typeOptions = product.variants?.[type];
@@ -161,7 +152,6 @@ export default function ProductQuickViewModal({
         }
       });
       
-      // Add band price for watches
       if (variantType === 'bands' && variantOption.price) {
         newPrice += variantOption.price;
       }
@@ -173,7 +163,6 @@ export default function ProductQuickViewModal({
       }
     }
     
-    // Update current locations
     setCurrentLocations(calculateCurrentLocations(newVariants));
   };
 
@@ -204,15 +193,12 @@ export default function ProductQuickViewModal({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
-        {/* Backdrop */}
         <div 
           className="fixed inset-0 bg-black/20 backdrop-blur-sm transition-all duration-300"
           onClick={onClose}
         />
         
-        {/* Modal */}
         <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-          {/* Header */}
           <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
             <h2 className="text-lg sm:text-xl font-bold text-[#000000] truncate pr-4">
               Quick View
@@ -225,16 +211,13 @@ export default function ProductQuickViewModal({
             </button>
           </div>
 
-          {/* Content */}
           <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-              {/* Product Image */}
               <div className="space-y-4">
                 <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
                   <span className="text-6xl sm:text-8xl">{currentImage}</span>
                 </div>
                 
-                {/* Action Buttons */}
                 <div className="flex items-center justify-center space-x-3">
                   {onWishlistToggle && (
                     <button
@@ -260,9 +243,7 @@ export default function ProductQuickViewModal({
                 </div>
               </div>
 
-              {/* Product Details */}
               <div className="space-y-6">
-                {/* Title and Rating */}
                 <div>
                   <h1 className="text-xl sm:text-2xl font-bold text-[#000000] mb-2">{product.name}</h1>
                   {product.rating && product.reviews && (
@@ -289,7 +270,6 @@ export default function ProductQuickViewModal({
                   )}
                 </div>
 
-                {/* Location Availability */}
                 {currentLocations.length > 0 && (
                   <LocationChips 
                     locations={currentLocations} 
@@ -298,7 +278,6 @@ export default function ProductQuickViewModal({
                   />
                 )}
 
-                {/* Price */}
                 <div className="flex items-center gap-3">
                   <span className="text-2xl sm:text-3xl font-bold text-[#C8102E]">
                     R{currentPrice.toFixed(2)}
@@ -315,7 +294,6 @@ export default function ProductQuickViewModal({
                   )}
                 </div>
 
-                {/* Variant Selection */}
                 {product.variants && Object.entries(product.variants).map(([variantType, options]) => (
                   <div key={variantType} className="space-y-3">
                     <h3 className="font-semibold text-[#000000] capitalize">
@@ -379,7 +357,6 @@ export default function ProductQuickViewModal({
                   </button>
                 </div>
 
-                {/* Stock Info */}
                 {currentStock > 0 && (
                   <p className="text-sm text-green-600 font-medium">
                     ✓ {currentStock} items in stock
