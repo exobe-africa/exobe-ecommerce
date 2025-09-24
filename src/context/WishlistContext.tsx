@@ -1,7 +1,6 @@
 "use client";
 import React, { createContext, useReducer, useContext, useEffect, useState, ReactNode } from 'react';
 
-// Types
 export interface WishlistItem {
   id: string;
   name: string;
@@ -26,20 +25,17 @@ type WishlistAction =
   | { type: 'CLEAR_WISHLIST' }
   | { type: 'LOAD_WISHLIST'; payload: WishlistState };
 
-// Initial state
 const initialWishlistState: WishlistState = {
   items: [],
   totalItems: 0,
 };
 
-// Reducer
 const wishlistReducer = (state: WishlistState, action: WishlistAction): WishlistState => {
   switch (action.type) {
     case 'ADD_ITEM':
-      // Check if item already exists
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
-        return state; // Item already in wishlist, don't add again
+        return state;
       }
       
       const newItems = [...state.items, action.payload];
@@ -69,7 +65,6 @@ const wishlistReducer = (state: WishlistState, action: WishlistAction): Wishlist
   }
 };
 
-// Context
 interface WishlistContextType {
   state: WishlistState;
   addItem: (item: Omit<WishlistItem, 'addedAt'>) => void;
@@ -80,12 +75,10 @@ interface WishlistContextType {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
-// Provider
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(wishlistReducer, initialWishlistState);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load wishlist from localStorage on initial mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedWishlist = localStorage.getItem('exobeWishlist');
@@ -100,7 +93,6 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Save wishlist to localStorage whenever state changes
   useEffect(() => {
     if (typeof window !== 'undefined' && isLoaded) {
       localStorage.setItem('exobeWishlist', JSON.stringify(state));

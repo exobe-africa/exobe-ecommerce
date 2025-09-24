@@ -15,7 +15,6 @@ export const useScrollPosition = (key?: string) => {
   const scrollKey = key || pathname;
   const isRestoringRef = useRef(false);
 
-  // Save scroll position before component unmounts
   useEffect(() => {
     const saveScrollPosition = () => {
       if (!isRestoringRef.current) {
@@ -26,10 +25,8 @@ export const useScrollPosition = (key?: string) => {
       }
     };
 
-    // Save on beforeunload
     window.addEventListener('beforeunload', saveScrollPosition);
 
-    // Save on visibility change (when user switches tabs)
     document.addEventListener('visibilitychange', saveScrollPosition);
 
     return () => {
@@ -39,14 +36,12 @@ export const useScrollPosition = (key?: string) => {
     };
   }, [scrollKey]);
 
-  // Restore scroll position when component mounts
   useEffect(() => {
     const savedPosition = scrollPositions.get(scrollKey);
     
     if (savedPosition) {
       isRestoringRef.current = true;
       
-      // Use requestAnimationFrame to ensure DOM is ready
       requestAnimationFrame(() => {
         window.scrollTo(savedPosition.x, savedPosition.y);
         isRestoringRef.current = false;
@@ -54,7 +49,6 @@ export const useScrollPosition = (key?: string) => {
     }
   }, [scrollKey]);
 
-  // Clear scroll position when navigating away from the page
   const clearScrollPosition = () => {
     scrollPositions.delete(scrollKey);
   };
