@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { ShoppingBag, CreditCard, RotateCcw, User, Star, Shield, Truck, Clock, MessageCircle, Phone, Mail } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import {
