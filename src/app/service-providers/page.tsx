@@ -18,7 +18,6 @@ import {
   Dumbbell,
   ChefHat
 } from 'lucide-react';
-import { Navbar, Footer } from '../../components/common';
 import {
   ServiceProvidersHeroSection,
   BenefitsSection,
@@ -138,7 +137,7 @@ export default function ServiceProvidersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+
       
       <ServiceProvidersHeroSection stats={stats} />
 
@@ -155,8 +154,6 @@ export default function ServiceProvidersPage() {
       <RequirementsSection />
 
       <CTASection />
-
-      <Footer />
     </div>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import { 
   FAQHeroSection, 
   QuickAccessSection, 
@@ -17,7 +15,6 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <FAQHeroSection 
         searchQuery={searchQuery}
@@ -47,7 +44,6 @@ export default function FAQPage() {
         />
       </div>
 
-      <Footer />
     </div>
   );
 }

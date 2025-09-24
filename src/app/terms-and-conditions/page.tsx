@@ -1,5 +1,3 @@
-import Navbar from "../../components/common/Navbar";
-import Footer from "../../components/common/Footer";
 
 export const metadata = {
   title: "Terms & Conditions - eXobe",
@@ -9,7 +7,7 @@ export const metadata = {
 export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white">
@@ -450,7 +448,7 @@ export default function TermsAndConditions() {
         </div>
       </div>
       
-      <Footer />
+
     </div>
   );
 }

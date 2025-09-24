@@ -1,7 +1,5 @@
 "use client";
 
-import Navbar from "../components/common/Navbar";
-import Footer from "../components/common/Footer";
 import Newsletter from "../components/common/Newsletter";
 import Toast from "../components/common/Toast";
 import { HeroSection, FeaturesSection, CategoriesSection, FeaturedProductsSection } from "../components/pages/home";
@@ -68,8 +66,6 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
-
       <HeroSection />
 
       <FeaturesSection />
@@ -84,8 +80,6 @@ export default function Home() {
       />
 
       <Newsletter />
-
-      <Footer />
       
       {toast && (
         <Toast

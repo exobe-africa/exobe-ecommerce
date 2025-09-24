@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   TrackOrderHeader,
   TrackOrderIntroduction,
@@ -12,7 +10,6 @@ import {
 export default function TrackOrderPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <TrackOrderHeader />
 
@@ -35,7 +32,6 @@ export default function TrackOrderPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

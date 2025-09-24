@@ -9,8 +9,6 @@ import {
   DollarSign,
   SortAsc
 } from 'lucide-react';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
 import { Breadcrumb, PageHeader } from '../../components/common';
 import { 
@@ -151,7 +149,7 @@ export default function WishlistPage() {
   if (!isClient) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
@@ -170,14 +168,14 @@ export default function WishlistPage() {
             </div>
           </div>
         </div>
-        <Footer />
+
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+
       
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
@@ -294,8 +292,6 @@ export default function WishlistPage() {
           {toast.message}
         </div>
       )}
-
-      <Footer />
     </div>
   );
 }

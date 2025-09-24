@@ -30,8 +30,6 @@ interface ProductVariants {
   bands?: VariantOption[];
   [key: string]: VariantOption[] | undefined;
 }
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import Toast from '../../../components/common/Toast';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
@@ -292,7 +290,6 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className="min-h-screen bg-white">
-        <Navbar />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-[#000000] mb-4">Product Not Found</h1>
           <p className="text-[#4A4A4A] mb-8">The product you're looking for doesn't exist.</p>
@@ -303,7 +300,6 @@ export default function ProductPage() {
             Go Back
           </button>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -505,7 +501,6 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb */}
@@ -578,7 +573,6 @@ export default function ProductPage() {
         />
       </div>
 
-      <Footer />
       
       {/* Toast Notifications */}
       {toast && (

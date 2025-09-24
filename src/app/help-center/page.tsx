@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { ShoppingBag, CreditCard, RotateCcw, User, Star, Shield, Truck, Clock, MessageCircle, Phone, Mail } from 'lucide-react';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import {
   HelpCenterHero,
   PopularArticles,
@@ -177,7 +175,7 @@ export default function HelpCenterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+
       
       <HelpCenterHero 
         searchQuery={searchQuery}
@@ -198,8 +196,6 @@ export default function HelpCenterPage() {
 
         <FAQPreview />
       </div>
-
-      <Footer />
     </div>
   );
 }

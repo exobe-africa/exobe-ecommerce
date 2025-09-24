@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   DeliveryHeader,
   DeliveryIntroduction,
@@ -13,7 +11,6 @@ import {
 export default function DeliveryTimesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <DeliveryHeader />
 
@@ -38,7 +35,6 @@ export default function DeliveryTimesPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

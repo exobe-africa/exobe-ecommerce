@@ -1,4 +1,3 @@
-import { Navbar, Footer } from '../../components/common';
 import {
   SellHeroSection,
   BenefitsSection,
@@ -15,11 +14,9 @@ export default function SellOnExobePage() {
     { number: "R2B+", label: "Annual Sales" },
     { number: "99.8%", label: "Uptime" }
   ];
-
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+
       
       <SellHeroSection stats={stats} />
       <BenefitsSection />
@@ -27,8 +24,6 @@ export default function SellOnExobePage() {
       <SuccessStoriesSection />
       <PricingSection />
       <CTASection />
-
-      <Footer />
     </div>
   );
 }

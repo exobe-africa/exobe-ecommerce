@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   AccountCreationHeader,
   AccountIntroduction,
@@ -13,7 +11,6 @@ import {
 export default function CreateAccountPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <AccountCreationHeader />
 
@@ -38,7 +35,6 @@ export default function CreateAccountPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

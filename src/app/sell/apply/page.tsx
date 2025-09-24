@@ -10,7 +10,6 @@ import {
   FileText,
   CheckCircle
 } from 'lucide-react';
-import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components/common';
 import {
   ApplicationHeader,
   ProgressSteps,
@@ -244,7 +243,6 @@ export default function SellerApplicationPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <ApplicationHeader 
         currentStep={currentStep} 
@@ -286,7 +284,6 @@ export default function SellerApplicationPage() {
         backButtonText="Back to Sell Page"
       />
 
-      <Footer />
     </div>
   );
 }

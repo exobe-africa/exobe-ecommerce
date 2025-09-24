@@ -10,7 +10,6 @@ import {
   CheckCircle,
   Award
 } from 'lucide-react';
-import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components/common';
 import {
   ApplicationHeader,
   ProgressSteps,
@@ -274,7 +273,6 @@ export default function ServiceProviderApplicationPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <ApplicationHeader
         currentStep={currentStep}
@@ -316,7 +314,6 @@ export default function ServiceProviderApplicationPage() {
         responseTime="3-5 business days"
       />
 
-      <Footer />
     </div>
   );
 } 

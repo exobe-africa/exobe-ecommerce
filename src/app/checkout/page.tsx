@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Navbar, Footer } from '../../components/common';
 import { 
   OrderSuccessSection, 
   CheckoutHeader, 
@@ -83,7 +82,6 @@ export default function CheckoutPage() {
     const newErrors: Record<string, string> = {};
     
     if (step === 1) {
-      // Shipping information validation
       if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
       if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
       if (!formData.email.trim()) newErrors.email = 'Email is required';
@@ -94,7 +92,6 @@ export default function CheckoutPage() {
       if (!formData.province.trim()) newErrors.province = 'Province is required';
       if (!formData.postalCode.trim()) newErrors.postalCode = 'Postal code is required';
     } else if (step === 2) {
-      // Payment validation
       if (formData.paymentMethod === 'card') {
         if (!formData.cardNumber.trim()) newErrors.cardNumber = 'Card number is required';
         if (!formData.expiryDate.trim()) newErrors.expiryDate = 'Expiry date is required';
@@ -122,7 +119,6 @@ export default function CheckoutPage() {
     
     setIsProcessing(true);
     
-    // Simulate order processing
     await new Promise(resolve => setTimeout(resolve, 3000));
     
     setOrderComplete(true);
@@ -143,7 +139,7 @@ export default function CheckoutPage() {
 
   const subtotal = state.totalPrice;
   const shipping = subtotal >= 499 ? 0 : 99;
-  const tax = subtotal * 0.15; // 15% VAT
+  const tax = subtotal * 0.15;
   const total = subtotal + shipping + tax;
 
   const provinces = [
@@ -154,22 +150,18 @@ export default function CheckoutPage() {
   if (orderComplete) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
         <OrderSuccessSection />
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <CheckoutHeader currentStep={currentStep} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Form */}
           <div className="lg:col-span-2 space-y-6">
             {currentStep === 1 && (
               <ShippingForm
@@ -221,7 +213,6 @@ export default function CheckoutPage() {
         </div>
       </div>
       
-      <Footer />
     </div>
   );
 }

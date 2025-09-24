@@ -1,7 +1,5 @@
 "use client";
 
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import { 
   ContactHeroSection, 
   ContactMethodsSection, 
@@ -15,7 +13,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <ContactHeroSection />
 
@@ -34,8 +31,6 @@ export default function ContactPage() {
 
         <FAQSocialSection />
       </div>
-
-      <Footer />
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { XCircle, AlertTriangle, CreditCard } from 'lucide-react';
-import { Navbar, Footer } from '../../../components/common';
 import {
   FailedOrderHeader,
   ErrorDetailsCard,
@@ -72,7 +71,6 @@ export default function OrderFailedPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <Navbar />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <FailedOrderHeader errorDetails={errorDetails} />
@@ -100,7 +98,6 @@ export default function OrderFailedPage() {
         </div>
       </div>
       
-      <Footer />
     </div>
   );
 }

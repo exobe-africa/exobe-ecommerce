@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   WarrantyHeader,
   WarrantyIntroduction,
@@ -16,7 +14,6 @@ import {
 export default function ProductWarrantyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <WarrantyHeader />
 
@@ -47,7 +44,6 @@ export default function ProductWarrantyPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

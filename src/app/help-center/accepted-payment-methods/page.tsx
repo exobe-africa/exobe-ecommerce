@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   PaymentMethodsHeader,
   PaymentIntroduction,
@@ -14,7 +12,6 @@ import {
 export default function PaymentMethodsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <PaymentMethodsHeader />
 
@@ -41,7 +38,6 @@ export default function PaymentMethodsPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

@@ -5,7 +5,6 @@ import {
   ForgotPasswordForm,
   SuccessMessage,
 } from '../../../components/pages/auth/forgot-password';
-import { AuthFooter, BackToLoginLink } from '../../../components/common';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');

@@ -9,8 +9,6 @@ import {
   SlidersHorizontal, 
   X,
 } from 'lucide-react';
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import Toast from '../../../components/common/Toast';
 import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components/common';
 import { useCart } from '../../../context/CartContext';
@@ -86,7 +84,6 @@ export default function CategoryPage() {
 
   const categorySlug = params.slug as string;
   
-  // Clear scroll position when component unmounts (navigating away)
   useEffect(() => {
     return () => {
       clearScrollPosition();
@@ -202,7 +199,6 @@ export default function CategoryPage() {
   if (!category) {
     return (
       <div className="min-h-screen bg-white">
-        <Navbar />
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-[#000000] mb-4">Category Not Found</h1>
           <p className="text-[#4A4A4A] mb-8">The category you're looking for doesn't exist.</p>
@@ -213,7 +209,6 @@ export default function CategoryPage() {
             Browse All Categories
           </Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -221,7 +216,6 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Breadcrumb 
@@ -233,7 +227,6 @@ export default function CategoryPage() {
           className="mb-6"
         />
 
-        {/* Category Header */}
         <PageHeader
           title={category.name}
           description={category.description}
@@ -388,7 +381,6 @@ export default function CategoryPage() {
         </div>
       )}
 
-      <Footer />
       
       {toast && (
         <Toast

@@ -1,5 +1,3 @@
-import Navbar from '../../../components/common/Navbar';
-import Footer from '../../../components/common/Footer';
 import {
   ReturnPolicyHeader,
   ReturnIntroduction,
@@ -15,7 +13,6 @@ import {
 export default function ReturnPolicyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <ReturnPolicyHeader />
 
@@ -45,7 +42,6 @@ export default function ReturnPolicyPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

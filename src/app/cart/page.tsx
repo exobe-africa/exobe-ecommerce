@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { Navbar, Footer, ConfirmationModal } from '../../components/common';
+import { ConfirmationModal } from '../../components/common';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { 
@@ -37,7 +37,7 @@ export default function CartPage() {
 
   const subtotal = state.totalPrice;
   const shipping = subtotal >= 499 ? 0 : 99;
-  const tax = subtotal * 0.15; // 15% VAT
+  const tax = subtotal * 0.15;
   const total = subtotal + shipping + tax;
 
   const suggestedProducts = [
@@ -50,28 +50,21 @@ export default function CartPage() {
   if (state.items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
         <EmptyCartSection suggestedProducts={suggestedProducts} />
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
-      {/* Header */}
       <CartHeader totalItems={state.totalItems} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Free Shipping Progress */}
             <ShippingProgressBar subtotal={subtotal} />
 
-            {/* Cart Items List */}
             <CartItemsList
               items={state.items}
               onUpdateQuantity={updateQuantity}
@@ -80,11 +73,9 @@ export default function CartPage() {
               onClearCart={() => setShowClearConfirm(true)}
             />
 
-            {/* Suggested Add-ons */}
             <SuggestedProducts products={suggestedProducts} />
           </div>
 
-          {/* Order Summary */}
           <div className="lg:col-span-1">
             <OrderSummary
               subtotal={subtotal}
@@ -97,7 +88,6 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Clear Cart Confirmation Modal */}
       <ConfirmationModal
         isOpen={showClearConfirm}
         onClose={() => setShowClearConfirm(false)}
@@ -113,7 +103,6 @@ export default function CartPage() {
         confirmButtonHoverColor="hover:bg-red-600"
       />
       
-      <Footer />
     </div>
   );
 }

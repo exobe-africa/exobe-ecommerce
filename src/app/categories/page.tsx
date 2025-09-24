@@ -1,7 +1,5 @@
 "use client";
 
-import Navbar from "../../components/common/Navbar";
-import Footer from "../../components/common/Footer";
 import { 
   CategoriesHeader, 
   CategoriesGrid, 
@@ -95,7 +93,6 @@ const popularTags = [
 export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <CategoriesHeader />
@@ -107,7 +104,6 @@ export default function CategoriesPage() {
         <PopularTagsSection tags={popularTags} />
       </div>
 
-      <Footer />
     </div>
   );
 }
