@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer } from '../../components/common';
 import { 
   OrderSuccessSection, 
   CheckoutHeader, 
@@ -11,7 +11,7 @@ import {
   OrderReview, 
   CheckoutSummary, 
   CheckoutNavigation 
-} from '../../components/checkout';
+} from '../../components/pages/checkout';
 import { useCart } from '../../context/CartContext';
 
 export default function CheckoutPage() {

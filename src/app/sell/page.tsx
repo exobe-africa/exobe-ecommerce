@@ -1,4 +1,4 @@
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer } from '../../components/common';
 import {
   SellHeroSection,
   BenefitsSection,
@@ -6,7 +6,7 @@ import {
   SuccessStoriesSection,
   PricingSection,
   CTASection
-} from '../../components/sell';
+} from '../../components/pages/sell';
 
 export default function SellOnExobePage() {
   const stats = [

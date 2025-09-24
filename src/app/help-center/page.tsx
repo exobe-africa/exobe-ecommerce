@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { ShoppingBag, CreditCard, RotateCcw, User, Star, Shield, Truck, Clock, MessageCircle, Phone, Mail } from 'lucide-react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import Navbar from '../../components/common/Navbar';
+import Footer from '../../components/common/Footer';
 import {
   HelpCenterHero,
   PopularArticles,
@@ -11,7 +11,7 @@ import {
   ContactSupport,
   QuickLinks,
   FAQPreview
-} from '../../components/help-center';
+} from '../../components/pages/help-center';
 
 const helpCategories = [
   {

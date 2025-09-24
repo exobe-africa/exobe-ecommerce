@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import Navbar from '../../components/common/Navbar';
+import Footer from '../../components/common/Footer';
 import { 
   ContactHeroSection, 
   ContactMethodsSection, 
@@ -9,7 +9,7 @@ import {
   OfficeLocationsSection, 
   DepartmentDirectorySection, 
   FAQSocialSection 
-} from '../../components/contact';
+} from '../../components/pages/contact';
 
 export default function ContactPage() {
 

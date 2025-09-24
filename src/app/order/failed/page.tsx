@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { XCircle, AlertTriangle, CreditCard } from 'lucide-react';
-import { Navbar, Footer } from '../../../components';
+import { Navbar, Footer } from '../../../components/common';
 import {
   FailedOrderHeader,
   ErrorDetailsCard,
@@ -12,7 +12,7 @@ import {
   QuickActionsSidebar,
   CartStatusCard,
   AlternativePaymentMethods
-} from '../../../components/order/failed';
+} from '../../../components/pages/order/failed';
 
 export default function OrderFailedPage() {
   const router = useRouter();

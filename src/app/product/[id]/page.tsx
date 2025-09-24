@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Breadcrumb } from '../../../components';
+import { Breadcrumb } from '../../../components/common';
 import {
   ProductImageGallery,
   ProductDetails,
@@ -12,7 +12,7 @@ import {
   TrustBadges,
   ReviewsSection,
   ReviewForm
-} from '../../../components/product';
+} from '../../../components/pages/product';
 
 // Type definitions for variants
 interface VariantOption {
@@ -30,9 +30,9 @@ interface ProductVariants {
   bands?: VariantOption[];
   [key: string]: VariantOption[] | undefined;
 }
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
-import Toast from '../../../components/Toast';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
+import Toast from '../../../components/common/Toast';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
-import { Navbar, Footer, ConfirmationModal } from '../../components';
+import { Navbar, Footer, ConfirmationModal } from '../../components/common';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { 
@@ -12,7 +12,7 @@ import {
   CartItemsList, 
   SuggestedProducts, 
   OrderSummary 
-} from '../../components/cart';
+} from '../../components/pages/cart';
 
 export default function CartPage() {
   const { state, removeItem, updateQuantity, clearCart } = useCart();

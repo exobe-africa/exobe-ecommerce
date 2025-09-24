@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   TrackOrderHeader,
   TrackOrderIntroduction,
@@ -7,7 +7,7 @@ import {
   TrackingMethods,
   TrackingFAQ,
   TrackingSupport
-} from '../../../components/help-center/how-to-track-my-order';
+} from '../../../components/pages/help-center/how-to-track-my-order';
 
 export default function TrackOrderPage() {
   return (

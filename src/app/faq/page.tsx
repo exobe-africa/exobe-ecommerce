@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import Navbar from '../../components/common/Navbar';
+import Footer from '../../components/common/Footer';
 import { 
   FAQHeroSection, 
   QuickAccessSection, 
   FAQCategoriesSection, 
   HelpSupportSection, 
   PopularTopicsSection 
-} from '../../components/faq';
+} from '../../components/pages/faq';
 
 export default function FAQPage() {
   const [searchQuery, setSearchQuery] = useState('');

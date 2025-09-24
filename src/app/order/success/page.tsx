@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Navbar, Footer } from '../../../components';
+import { Navbar, Footer } from '../../../components/common';
 import {
   SuccessOrderHeader,
   OrderDetailsCard,
@@ -12,7 +12,7 @@ import {
   QuickActionsSidebar,
   RatingExperienceCard,
   EmailConfirmationNotice
-} from '../../../components/order/success';
+} from '../../../components/pages/order/success';
 
 export default function OrderSuccessPage() {
   const router = useRouter();

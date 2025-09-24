@@ -2,14 +2,14 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Navbar, Footer, ProductFilter } from '../../components';
+import { Navbar, Footer, ProductFilter } from '../../components/common';
 import {
   SearchHeader,
   SearchToolbar,
   SearchResults,
   NoResultsFound,
   MobileFiltersModal
-} from '../../components/search';
+} from '../../components/pages/search';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 

@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   DeliveryHeader,
   DeliveryIntroduction,
@@ -8,7 +8,7 @@ import {
   DeliverySchedule,
   DeliveryImportantNotes,
   DeliverySupport
-} from '../../../components/help-center/delivery-times-and-areas';
+} from '../../../components/pages/help-center/delivery-times-and-areas';
 
 export default function DeliveryTimesPage() {
   return (

@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   WarrantyHeader,
   WarrantyIntroduction,
@@ -11,7 +11,7 @@ import {
   WarrantyProcessingTimes,
   ExtendedWarrantyOptions,
   WarrantySupport
-} from '../../../components/help-center/product-warranty-information';
+} from '../../../components/pages/help-center/product-warranty-information';
 
 export default function ProductWarrantyPage() {
   return (

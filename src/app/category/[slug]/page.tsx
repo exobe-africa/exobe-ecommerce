@@ -9,10 +9,10 @@ import {
   SlidersHorizontal, 
   X,
 } from 'lucide-react';
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
-import Toast from '../../../components/Toast';
-import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
+import Toast from '../../../components/common/Toast';
+import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components/common';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 

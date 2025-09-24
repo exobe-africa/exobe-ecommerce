@@ -9,16 +9,16 @@ import {
   DollarSign,
   SortAsc
 } from 'lucide-react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import ConfirmationModal from '../../components/ConfirmationModal';
-import { Breadcrumb, PageHeader } from '../../components';
+import Navbar from '../../components/common/Navbar';
+import Footer from '../../components/common/Footer';
+import ConfirmationModal from '../../components/common/ConfirmationModal';
+import { Breadcrumb, PageHeader } from '../../components/common';
 import { 
   EmptyWishlistState, 
   WishlistToolbar, 
   WishlistGrid, 
   MobileFiltersModal 
-} from '../../components/wishlist';
+} from '../../components/pages/wishlist';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 

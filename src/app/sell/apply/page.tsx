@@ -10,7 +10,7 @@ import {
   FileText,
   CheckCircle
 } from 'lucide-react';
-import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components';
+import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components/common';
 import {
   ApplicationHeader,
   ProgressSteps,
@@ -22,7 +22,7 @@ import {
   FinalDetailsStep,
   NavigationButtons,
   FormData
-} from '../../../components/sell/apply';
+} from '../../../components/pages/sell/apply';
 
 export default function SellerApplicationPage() {
   const router = useRouter();

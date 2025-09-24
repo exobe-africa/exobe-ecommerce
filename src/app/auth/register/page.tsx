@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { RegisterHeader, RegisterForm, PasswordRequirements, TermsAndNewsletter, SignInLink } from '../../../components/auth/register';
-import { AuthFooter, SocialButtons, BackToHomeLink } from '../../../components';
+import { RegisterHeader, RegisterForm, PasswordRequirements, TermsAndNewsletter, SignInLink } from '../../../components/pages/auth/register';
+import { AuthFooter, SocialButtons, BackToHomeLink } from '../../../components/common';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({

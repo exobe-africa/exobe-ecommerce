@@ -4,8 +4,8 @@ import { useState } from 'react';
 import {
   ForgotPasswordForm,
   SuccessMessage,
-} from '../../../components/auth/forgot-password';
-import { AuthFooter, BackToLoginLink } from '../../../components';
+} from '../../../components/pages/auth/forgot-password';
+import { AuthFooter, BackToLoginLink } from '../../../components/common';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');

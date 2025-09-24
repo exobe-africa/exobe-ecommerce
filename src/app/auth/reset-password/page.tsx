@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { ResetPasswordHeader, ResetPasswordForm, PasswordRequirements, SecurityTip, InvalidTokenState, SuccessState } from '../../../components/auth/reset-password';
-import { BackToLoginLink } from '../../../components';
+import { ResetPasswordHeader, ResetPasswordForm, PasswordRequirements, SecurityTip, InvalidTokenState, SuccessState } from '../../../components/pages/auth/reset-password';
+import { BackToLoginLink } from '../../../components/common';
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();

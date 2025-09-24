@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   ReturnPolicyHeader,
   ReturnIntroduction,
@@ -10,7 +10,7 @@ import {
   ExchangePolicy,
   SpecialReturnPolicies,
   ReturnSupport
-} from '../../../components/help-center/return-policy-and-conditions';
+} from '../../../components/pages/help-center/return-policy-and-conditions';
 
 export default function ReturnPolicyPage() {
   return (

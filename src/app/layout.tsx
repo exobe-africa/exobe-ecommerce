@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
-import CartDrawer from "../components/CartDrawer";
-import WhatsAppButton from "../components/WhatsAppButton";
-import ScrollToTop from "../components/ScrollToTop";
+import CartDrawer from "../components/common/CartDrawer";
+import WhatsAppButton from "../components/common/WhatsAppButton";
+import ScrollToTop from "../components/common/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

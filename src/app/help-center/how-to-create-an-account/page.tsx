@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   AccountCreationHeader,
   AccountIntroduction,
@@ -8,7 +8,7 @@ import {
   AccountSecurity,
   AccountTroubleshooting,
   AccountSupport
-} from '../../../components/help-center/how-to-create-an-account';
+} from '../../../components/pages/help-center/how-to-create-an-account';
 
 export default function CreateAccountPage() {
   return (

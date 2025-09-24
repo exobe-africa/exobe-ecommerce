@@ -18,7 +18,7 @@ import {
   Dumbbell,
   ChefHat
 } from 'lucide-react';
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer } from '../../components/common';
 import {
   ServiceProvidersHeroSection,
   BenefitsSection,
@@ -28,7 +28,7 @@ import {
   EarningsPotentialSection,
   RequirementsSection,
   CTASection
-} from '../../components/service-providers';
+} from '../../components/pages/service-providers';
 
 export default function ServiceProvidersPage() {
   const benefits = [

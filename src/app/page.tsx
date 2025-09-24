@@ -1,10 +1,10 @@
 "use client";
 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Newsletter from "../components/Newsletter";
-import Toast from "../components/Toast";
-import { HeroSection, FeaturesSection, CategoriesSection, FeaturedProductsSection } from "../components/home";
+import Navbar from "../components/common/Navbar";
+import Footer from "../components/common/Footer";
+import Newsletter from "../components/common/Newsletter";
+import Toast from "../components/common/Toast";
+import { HeroSection, FeaturesSection, CategoriesSection, FeaturedProductsSection } from "../components/pages/home";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useState } from "react";

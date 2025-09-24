@@ -10,7 +10,7 @@ import {
   CheckCircle,
   Award
 } from 'lucide-react';
-import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components';
+import { Navbar, Footer, ApplicationSuccessModal, ApplicationHelpSection } from '../../../components/common';
 import {
   ApplicationHeader,
   ProgressSteps,
@@ -23,7 +23,7 @@ import {
   NavigationButtons,
   ServiceProviderFormData,
   StepData
-} from '../../../components/service-providers/apply';
+} from '../../../components/pages/service-providers/apply';
 
 export default function ServiceProviderApplicationPage() {
   const router = useRouter();

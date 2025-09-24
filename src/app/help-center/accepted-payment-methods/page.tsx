@@ -1,5 +1,5 @@
-import Navbar from '../../../components/Navbar';
-import Footer from '../../../components/Footer';
+import Navbar from '../../../components/common/Navbar';
+import Footer from '../../../components/common/Footer';
 import {
   PaymentMethodsHeader,
   PaymentIntroduction,
@@ -9,7 +9,7 @@ import {
   PaymentIssues,
   CurrencyPricing,
   PaymentSupport
-} from '../../../components/help-center/accepted-payment-methods';
+} from '../../../components/pages/help-center/accepted-payment-methods';
 
 export default function PaymentMethodsPage() {
   return (
