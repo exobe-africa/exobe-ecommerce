@@ -19,6 +19,7 @@ import {
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import Toast from '../../../components/Toast';
+import { ProductFilter } from '../../../components';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
@@ -60,7 +61,7 @@ const categories = {
   'books': { name: 'Books & Media', icon: '📚', description: 'Books and digital media' }
 };
 
-const brands = ['All Brands', 'Apple', 'Samsung', 'Sony', 'Nike', 'Adidas', 'JBL', 'Logitech', 'Levi\'s', 'Zara', 'Fitbit', 'Nespresso', 'IKEA', 'Philips'];
+const brands = ['Apple', 'Samsung', 'Sony', 'Nike', 'Adidas', 'JBL', 'Logitech', 'Levi\'s', 'Zara', 'Fitbit', 'Nespresso', 'IKEA', 'Philips'];
 const sortOptions = [
   { value: 'relevance', label: 'Most Relevant' },
   { value: 'price-low', label: 'Price: Low to High' },
@@ -82,8 +83,8 @@ export default function CategoryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   // Filter states
-  const [selectedBrand, setSelectedBrand] = useState('All Brands');
-  const [priceRange, setPriceRange] = useState([0, 12000]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 12000]);
   const [minRating, setMinRating] = useState(0);
   const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [showNewOnly, setShowNewOnly] = useState(false);
@@ -97,7 +98,7 @@ export default function CategoryPage() {
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
       if (product.category !== categorySlug) return false;
-      if (selectedBrand !== 'All Brands' && product.brand !== selectedBrand) return false;
+      if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) return false;
       if (product.price < priceRange[0] || product.price > priceRange[1]) return false;
       if (product.rating < minRating) return false;
       if (showInStockOnly && !product.inStock) return false;
@@ -129,7 +130,7 @@ export default function CategoryPage() {
     }
 
     return filtered;
-  }, [categorySlug, selectedBrand, priceRange, minRating, showInStockOnly, showNewOnly, showBestSellersOnly, sortBy]);
+  }, [categorySlug, selectedBrands, priceRange, minRating, showInStockOnly, showNewOnly, showBestSellersOnly, sortBy]);
 
   const handleAddToCart = (product: typeof allProducts[0]) => {
     if (!product.inStock) {
@@ -182,7 +183,7 @@ export default function CategoryPage() {
   };
 
   const clearFilters = () => {
-    setSelectedBrand('All Brands');
+    setSelectedBrands([]);
     setPriceRange([0, 12000]);
     setMinRating(0);
     setShowInStockOnly(false);
@@ -192,14 +193,14 @@ export default function CategoryPage() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (selectedBrand !== 'All Brands') count++;
+    if (selectedBrands.length > 0) count++;
     if (priceRange[0] > 0 || priceRange[1] < 12000) count++;
     if (minRating > 0) count++;
     if (showInStockOnly) count++;
     if (showNewOnly) count++;
     if (showBestSellersOnly) count++;
     return count;
-  }, [selectedBrand, priceRange, minRating, showInStockOnly, showNewOnly, showBestSellersOnly]);
+  }, [selectedBrands, priceRange, minRating, showInStockOnly, showNewOnly, showBestSellersOnly]);
 
   if (!category) {
     return (
@@ -220,164 +221,6 @@ export default function CategoryPage() {
     );
   }
 
-  const FilterSidebar = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className={`${isMobile ? 'fixed inset-0 bg-white z-50 overflow-y-auto' : 'sticky top-4'}`}>
-      {isMobile && (
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
-          <h3 className="text-lg font-semibold text-[#000000]">Filters</h3>
-          <button
-            onClick={() => setShowMobileFilters(false)}
-            className="p-3 hover:bg-gray-100 rounded-full touch-manipulation"
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-      )}
-      
-      <div className={`space-y-6 ${isMobile ? 'p-4' : ''}`}>
-        {/* Active Filters */}
-        {activeFiltersCount > 0 && (
-          <div className="pb-4 border-b border-gray-200">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-[#000000]">Active Filters ({activeFiltersCount})</h4>
-              <button
-                onClick={clearFilters}
-                className="text-sm text-[#C8102E] hover:underline"
-              >
-                Clear All
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Brand Filter */}
-        <div>
-          <h4 className="font-medium text-[#000000] mb-3">Brand</h4>
-          <select
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
-            className="w-full p-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] touch-manipulation bg-white"
-          >
-            {brands.map(brand => (
-              <option key={brand} value={brand}>{brand}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Price Range */}
-        <div>
-          <h4 className="font-medium text-[#000000] mb-3">Price Range</h4>
-          <div className="space-y-2">
-            <input
-              type="range"
-              min="0"
-              max="12000"
-              step="100"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-              className="w-full accent-[#C8102E]"
-            />
-            <div className="flex justify-between text-sm text-[#4A4A4A]">
-              <span>R{priceRange[0]}</span>
-              <span>R{priceRange[1]}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Rating Filter */}
-        <div>
-          <h4 className="font-medium text-[#000000] mb-3">Minimum Rating</h4>
-          <div className="space-y-2">
-            {[4, 3, 2, 1, 0].map(rating => (
-              <label key={rating} className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="rating"
-                  value={rating}
-                  checked={minRating === rating}
-                  onChange={() => setMinRating(rating)}
-                  className="text-[#C8102E] focus:ring-[#C8102E]"
-                />
-                <div className="flex items-center">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                  <span className="ml-2 text-sm text-[#4A4A4A]">
-                    {rating === 0 ? 'All Ratings' : `${rating}+ Stars`}
-                  </span>
-                </div>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Availability & Special Filters */}
-        <div>
-          <h4 className="font-medium text-[#000000] mb-3">Availability & Special</h4>
-          <div className="space-y-3">
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showInStockOnly}
-                onChange={(e) => setShowInStockOnly(e.target.checked)}
-                className="text-[#C8102E] focus:ring-[#C8102E] rounded"
-              />
-              <span className="text-sm text-[#4A4A4A]">In Stock Only</span>
-            </label>
-            
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showNewOnly}
-                onChange={(e) => setShowNewOnly(e.target.checked)}
-                className="text-[#C8102E] focus:ring-[#C8102E] rounded"
-              />
-              <span className="text-sm text-[#4A4A4A]">New Arrivals</span>
-            </label>
-            
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showBestSellersOnly}
-                onChange={(e) => setShowBestSellersOnly(e.target.checked)}
-                className="text-[#C8102E] focus:ring-[#C8102E] rounded"
-              />
-              <span className="text-sm text-[#4A4A4A]">Best Sellers</span>
-            </label>
-          </div>
-        </div>
-
-        {isMobile && (
-          <div className="pt-6 border-t border-gray-200 sticky bottom-0 bg-white">
-            <div className="space-y-3">
-              <button
-                onClick={() => setShowMobileFilters(false)}
-                className="w-full bg-[#C8102E] text-white py-4 rounded-full font-semibold hover:bg-[#A00E26] transition-colors text-lg touch-manipulation"
-              >
-                Apply Filters ({filteredAndSortedProducts.length} products)
-              </button>
-              {activeFiltersCount > 0 && (
-                <button
-                  onClick={() => {
-                    clearFilters();
-                    setShowMobileFilters(false);
-                  }}
-                  className="w-full border-2 border-[#4A4A4A] text-[#4A4A4A] py-3 rounded-full font-medium hover:bg-[#4A4A4A] hover:text-white transition-colors touch-manipulation"
-                >
-                  Clear All Filters
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -417,7 +260,23 @@ export default function CategoryPage() {
                   <SlidersHorizontal className="h-5 w-5 mr-2" />
                   Filters
                 </h3>
-                <FilterSidebar />
+                <ProductFilter
+                  selectedBrands={selectedBrands}
+                  setSelectedBrands={setSelectedBrands}
+                  priceRange={priceRange}
+                  setPriceRange={setPriceRange}
+                  minRating={minRating}
+                  setMinRating={setMinRating}
+                  showInStockOnly={showInStockOnly}
+                  setShowInStockOnly={setShowInStockOnly}
+                  showNewOnly={showNewOnly}
+                  setShowNewOnly={setShowNewOnly}
+                  showBestSellersOnly={showBestSellersOnly}
+                  setShowBestSellersOnly={setShowBestSellersOnly}
+                  brands={brands}
+                  clearFilters={clearFilters}
+                  activeFiltersCount={activeFiltersCount}
+                />
               </div>
             </div>
           </div>
@@ -643,7 +502,26 @@ export default function CategoryPage() {
       {showMobileFilters && (
         <div className="lg:hidden">
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 cursor-pointer" onClick={() => setShowMobileFilters(false)} />
-          <FilterSidebar isMobile />
+          <ProductFilter
+            selectedBrands={selectedBrands}
+            setSelectedBrands={setSelectedBrands}
+            priceRange={priceRange as [number, number]}
+            setPriceRange={setPriceRange}
+            minRating={minRating}
+            setMinRating={setMinRating}
+            showInStockOnly={showInStockOnly}
+            setShowInStockOnly={setShowInStockOnly}
+            showNewOnly={showNewOnly}
+            setShowNewOnly={setShowNewOnly}
+            showBestSellersOnly={showBestSellersOnly}
+            setShowBestSellersOnly={setShowBestSellersOnly}
+            brands={brands}
+            clearFilters={clearFilters}
+            activeFiltersCount={activeFiltersCount}
+            isMobile={true}
+            onCloseMobile={() => setShowMobileFilters(false)}
+            resultsCount={filteredAndSortedProducts.length}
+          />
         </div>
       )}
 

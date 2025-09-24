@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, Filter, Grid3X3, List, Star, Heart, ShoppingCart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer, ProductFilter } from '../../components';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -233,141 +233,26 @@ function SearchContent() {
                 )}
               </div>
 
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-medium text-[#000000] mb-3">Categories</h3>
-                  <div className="space-y-2">
-                    {categories.map(category => (
-                      <label key={category} className="flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedCategories.includes(category)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedCategories([...selectedCategories, category]);
-                            } else {
-                              setSelectedCategories(selectedCategories.filter(c => c !== category));
-                            }
-                          }}
-                          className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                        />
-                        <span className="ml-3 text-sm text-[#4A4A4A]">{category}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Brands */}
-                <div>
-                  <h3 className="font-medium text-[#000000] mb-3">Brands</h3>
-                  <div className="space-y-2">
-                    {brands.map(brand => (
-                      <label key={brand} className="flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(brand)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedBrands([...selectedBrands, brand]);
-                            } else {
-                              setSelectedBrands(selectedBrands.filter(b => b !== brand));
-                            }
-                          }}
-                          className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                        />
-                        <span className="ml-3 text-sm text-[#4A4A4A]">{brand}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Price Range */}
-                <div>
-                  <h3 className="font-medium text-[#000000] mb-3">Price Range</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="number"
-                        placeholder="Min"
-                        value={priceRange[0]}
-                        onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
-                      />
-                      <span className="text-[#4A4A4A]">to</span>
-                      <input
-                        type="number"
-                        placeholder="Max"
-                        value={priceRange[1]}
-                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 30000])}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Rating */}
-                <div>
-                  <h3 className="font-medium text-[#000000] mb-3">Minimum Rating</h3>
-                  <div className="space-y-2">
-                    {[4, 3, 2, 1].map(rating => (
-                      <label key={rating} className="flex items-center cursor-pointer">
-                        <input
-                          type="radio"
-                          name="rating"
-                          checked={minRating === rating}
-                          onChange={() => setMinRating(rating)}
-                          className="w-4 h-4 text-[#C8102E] border-gray-300 focus:ring-[#C8102E]"
-                        />
-                        <div className="ml-3 flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${
-                                i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                          <span className="ml-2 text-sm text-[#4A4A4A]">& up</span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Additional Filters */}
-                <div>
-                  <h3 className="font-medium text-[#000000] mb-3">Additional Filters</h3>
-                  <div className="space-y-2">
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={showInStockOnly}
-                        onChange={(e) => setShowInStockOnly(e.target.checked)}
-                        className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                      />
-                      <span className="ml-3 text-sm text-[#4A4A4A]">In Stock Only</span>
-                    </label>
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={showNewOnly}
-                        onChange={(e) => setShowNewOnly(e.target.checked)}
-                        className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                      />
-                      <span className="ml-3 text-sm text-[#4A4A4A]">New Products</span>
-                    </label>
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={showBestSellersOnly}
-                        onChange={(e) => setShowBestSellersOnly(e.target.checked)}
-                        className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                      />
-                      <span className="ml-3 text-sm text-[#4A4A4A]">Best Sellers</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              <ProductFilter
+                selectedBrands={selectedBrands}
+                setSelectedBrands={setSelectedBrands}
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+                minRating={minRating}
+                setMinRating={setMinRating}
+                showInStockOnly={showInStockOnly}
+                setShowInStockOnly={setShowInStockOnly}
+                showNewOnly={showNewOnly}
+                setShowNewOnly={setShowNewOnly}
+                showBestSellersOnly={showBestSellersOnly}
+                setShowBestSellersOnly={setShowBestSellersOnly}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+                brands={brands}
+                categories={categories}
+                clearFilters={clearAllFilters}
+                activeFiltersCount={activeFiltersCount}
+              />
             </div>
           </div>
 
@@ -682,107 +567,29 @@ function SearchContent() {
               </button>
             </div>
             
-            <div className="p-4 space-y-6">
-              {/* Same filter content as desktop, but mobile optimised */}
-              {/* Categories */}
-              <div>
-                <h3 className="font-medium text-[#000000] mb-3">Categories</h3>
-                <div className="space-y-2">
-                  {categories.map(category => (
-                    <label key={category} className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(category)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedCategories([...selectedCategories, category]);
-                          } else {
-                            setSelectedCategories(selectedCategories.filter(c => c !== category));
-                          }
-                        }}
-                        className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                      />
-                      <span className="ml-3 text-sm text-[#4A4A4A]">{category}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Brands */}
-              <div>
-                <h3 className="font-medium text-[#000000] mb-3">Brands</h3>
-                <div className="space-y-2">
-                  {brands.map(brand => (
-                    <label key={brand} className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedBrands.includes(brand)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedBrands([...selectedBrands, brand]);
-                          } else {
-                            setSelectedBrands(selectedBrands.filter(b => b !== brand));
-                          }
-                        }}
-                        className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                      />
-                      <span className="ml-3 text-sm text-[#4A4A4A]">{brand}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Additional mobile filter options... */}
-              <div>
-                <h3 className="font-medium text-[#000000] mb-3">Additional Filters</h3>
-                <div className="space-y-2">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showInStockOnly}
-                      onChange={(e) => setShowInStockOnly(e.target.checked)}
-                      className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                    />
-                    <span className="ml-3 text-sm text-[#4A4A4A]">In Stock Only</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showNewOnly}
-                      onChange={(e) => setShowNewOnly(e.target.checked)}
-                      className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                    />
-                    <span className="ml-3 text-sm text-[#4A4A4A]">New Products</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showBestSellersOnly}
-                      onChange={(e) => setShowBestSellersOnly(e.target.checked)}
-                      className="w-4 h-4 text-[#C8102E] border-gray-300 rounded focus:ring-[#C8102E]"
-                    />
-                    <span className="ml-3 text-sm text-[#4A4A4A]">Best Sellers</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex space-x-3">
-                <button
-                  onClick={clearAllFilters}
-                  className="flex-1 bg-gray-100 text-[#4A4A4A] py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-                >
-                  Clear All
-                </button>
-                <button
-                  onClick={() => setShowMobileFilters(false)}
-                  className="flex-1 bg-[#C8102E] text-white py-3 rounded-lg font-medium hover:bg-[#A00E26] transition-colors"
-                >
-                  Apply Filters
-                </button>
-              </div>
-            </div>
+            <ProductFilter
+              selectedBrands={selectedBrands}
+              setSelectedBrands={setSelectedBrands}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              minRating={minRating}
+              setMinRating={setMinRating}
+              showInStockOnly={showInStockOnly}
+              setShowInStockOnly={setShowInStockOnly}
+              showNewOnly={showNewOnly}
+              setShowNewOnly={setShowNewOnly}
+              showBestSellersOnly={showBestSellersOnly}
+              setShowBestSellersOnly={setShowBestSellersOnly}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
+              brands={brands}
+              categories={categories}
+              clearFilters={clearAllFilters}
+              activeFiltersCount={activeFiltersCount}
+              isMobile={true}
+              onCloseMobile={() => setShowMobileFilters(false)}
+              resultsCount={filteredResults.length}
+            />
           </div>
         </>
       )}

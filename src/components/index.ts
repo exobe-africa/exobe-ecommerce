@@ -9,3 +9,4 @@ export { default as RadioButton } from './RadioButton';
 export { default as WhatsAppButton } from './WhatsAppButton';
 export { default as ApplicationSuccessModal } from './ApplicationSuccessModal';
 export { default as ApplicationHelpSection } from './ApplicationHelpSection';
+export { default as ProductFilter } from './ProductFilter';
