@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from '../icons';
+import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from '../../icons';
 
 const socialLinks = [
   { name: 'Facebook', icon: FacebookIcon, url: '#', color: 'hover:text-blue-600' },

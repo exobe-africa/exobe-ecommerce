@@ -1,4 +1,4 @@
-import { GoogleIcon, FacebookIcon } from '../pages/icons';
+import { GoogleIcon, FacebookIcon } from '../icons';
 
 const SocialButtons: React.FC = () => {
   return (

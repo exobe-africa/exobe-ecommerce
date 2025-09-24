@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FacebookIcon, TwitterIcon, YouTubeIcon, InstagramIcon, LinkedInIcon } from "../pages/icons";
+import { FacebookIcon, TwitterIcon, YouTubeIcon, InstagramIcon, LinkedInIcon } from "../icons";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
