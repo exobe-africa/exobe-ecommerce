@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "eXobe - Premium E-commerce Experience",
+  title: "eXobe",
   description: "Discover premium products at eXobe. Shop with confidence from our curated collection of high-quality items with fast delivery and exceptional customer service.",
   keywords: "ecommerce, online shopping, premium products, eXobe",
   authors: [{ name: "eXobe" }],
