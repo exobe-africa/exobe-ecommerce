@@ -15,7 +15,6 @@ const HelpSupportSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Live Chat */}
           <div className="text-center p-6 bg-white rounded-xl border border-gray-200 hover:border-[#C8102E] transition-all duration-300 group">
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <MessageCircle className="h-8 w-8 text-white" />
@@ -28,7 +27,6 @@ const HelpSupportSection = () => {
             </button>
           </div>
 
-          {/* Phone Support */}
           <div className="text-center p-6 bg-white rounded-xl border border-gray-200 hover:border-[#C8102E] transition-all duration-300 group">
             <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <Phone className="h-8 w-8 text-white" />
@@ -41,7 +39,6 @@ const HelpSupportSection = () => {
             </button>
           </div>
 
-          {/* Email Support */}
           <div className="text-center p-6 bg-white rounded-xl border border-gray-200 hover:border-[#C8102E] transition-all duration-300 group">
             <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <Mail className="h-8 w-8 text-white" />
@@ -55,7 +52,6 @@ const HelpSupportSection = () => {
           </div>
         </div>
 
-        {/* Help Center Link */}
         <div className="text-center mt-10">
           <Link href="/help-center">
             <button className="bg-[#000000] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#4A4A4A] transition-colors flex items-center justify-center mx-auto group">

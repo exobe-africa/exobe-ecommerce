@@ -20,7 +20,6 @@ const PopularTopicsSection: React.FC<PopularTopicsSectionProps> = ({
   searchQuery,
   selectedCategory
 }) => {
-  // Only show when no search or category filter is active
   if (searchQuery || selectedCategory !== '') {
     return null;
   }
