@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Newsletter from "../components/Newsletter";
 import Toast from "../components/Toast";
+import { ProductCard } from "../components";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useState } from "react";
@@ -189,70 +190,19 @@ export default function Home() {
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
-                <Link href={`/product/${product.id}`}>
-                  <div className="relative cursor-pointer touch-manipulation">
-                    <div className="bg-gradient-to-br from-gray-200 to-gray-300 h-32 sm:h-40 lg:h-48 flex items-center justify-center">
-                      <span className="text-2xl sm:text-3xl lg:text-4xl">
-                        {product.image}
-                      </span>
-                    </div>
-                    <button 
-                      className="absolute top-2 sm:top-3 right-2 sm:right-3 p-1.5 sm:p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10 touch-manipulation"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleWishlistToggle(product);
-                      }}
-                    >
-                      <Heart className={`h-3 w-3 sm:h-4 sm:w-4 transition-colors ${
-                        isInWishlist(product.id) 
-                          ? 'text-[#C8102E] fill-[#C8102E]' 
-                          : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                      }`} />
-                    </button>
-                    <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#C8102E] text-white px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-xs font-semibold shadow-sm">
-                      -20%
-                    </div>
-                  </div>
-                </Link>
-                <div className="p-3 sm:p-4">
-                  <Link href={`/product/${product.id}`}>
-                    <h3 className="font-semibold text-[#000000] mb-1 sm:mb-2 hover:text-[#C8102E] transition-colors cursor-pointer text-sm sm:text-base line-clamp-2">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center mb-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                    <span className="text-xs sm:text-sm text-[#4A4A4A] ml-1 sm:ml-2">(124)</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 mr-2">
-                      <span className="text-sm sm:text-lg font-bold text-[#C8102E] block">
-                        R{product.price.toFixed(2)}
-                      </span>
-                      {product.originalPrice && (
-                        <span className="text-xs sm:text-sm text-[#4A4A4A] line-through">
-                          R{product.originalPrice.toFixed(2)}
-                        </span>
-                      )}
-                    </div>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleAddToCart(product);
-                      }}
-                      className="bg-[#000000] text-white p-2 sm:p-2.5 rounded-full hover:bg-[#4A4A4A] transition-all duration-300 transform hover:scale-110 active:scale-95 group/btn z-10 relative touch-manipulation"
-                      title="Add to cart"
-                    >
-                      <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 group-hover/btn:scale-110 transition-transform" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                originalPrice={product.originalPrice}
+                image={product.image}
+                category={product.category}
+                variant="default"
+                onAddToCart={handleAddToCart}
+                onWishlistToggle={handleWishlistToggle}
+                isInWishlist={isInWishlist(product.id)}
+              />
             ))}
           </div>
 

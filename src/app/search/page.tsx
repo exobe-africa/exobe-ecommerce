@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, Filter, Grid3X3, List, Star, Heart, ShoppingCart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
-import { Navbar, Footer, ProductFilter } from '../../components';
+import { Navbar, Footer, ProductFilter, ProductCard } from '../../components';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -354,197 +354,26 @@ function SearchContent() {
                 : 'space-y-4'
               }>
                 {filteredResults.map((product) => (
-                  <div
+                  <ProductCard
                     key={product.id}
-                    className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group ${
-                      viewMode === 'list' ? 'flex items-center p-4' : 'p-4'
-                    }`}
-                  >
-                    {viewMode === 'grid' ? (
-                      <>
-                        {/* Grid View */}
-                        <div className="relative">
-                          <Link href={`/product/${product.id}`}>
-                            <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform cursor-pointer">
-                              <span className="text-6xl">{product.image}</span>
-                            </div>
-                          </Link>
-                          
-                          {/* Badges */}
-                          <div className="absolute top-2 left-2 flex flex-col gap-1">
-                            {product.isNew && (
-                              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                                New
-                              </span>
-                            )}
-                            {product.isBestSeller && (
-                              <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                                Best Seller
-                              </span>
-                            )}
-                            {!product.inStock && (
-                              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                                Out of Stock
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Discount Badge */}
-                          {product.originalPrice && (
-                            <div className="absolute top-2 right-2 bg-[#C8102E] text-white px-2 py-1 rounded-full text-xs font-semibold">
-                              -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                            </div>
-                          )}
-
-                          {/* Wishlist Button */}
-                          <button
-                            onClick={() => handleWishlistToggle(product)}
-                            className="absolute bottom-2 right-2 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition-all"
-                          >
-                            <Heart className={`h-5 w-5 transition-colors ${
-                              isInWishlist(product.id) 
-                                ? 'fill-[#C8102E] text-[#C8102E]' 
-                                : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                            }`} />
-                          </button>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Link href={`/product/${product.id}`}>
-                            <h3 className="font-semibold text-[#000000] hover:text-[#C8102E] transition-colors cursor-pointer line-clamp-2">
-                              {product.name}
-                            </h3>
-                          </Link>
-                          
-                          <p className="text-sm text-[#4A4A4A]">{product.brand}</p>
-                          
-                          <div className="flex items-center space-x-1">
-                            <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`h-4 w-4 ${
-                                    i < Math.floor(product.rating) 
-                                      ? 'text-yellow-400 fill-current' 
-                                      : 'text-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-[#4A4A4A]">({product.reviews})</span>
-                          </div>
-                          
-                          <div className="flex items-center space-x-2">
-                            <span className="text-lg font-bold text-[#C8102E]">
-                              R{product.price.toFixed(2)}
-                            </span>
-                            {product.originalPrice && (
-                              <span className="text-sm text-[#4A4A4A] line-through">
-                                R{product.originalPrice.toFixed(2)}
-                              </span>
-                            )}
-                          </div>
-                          
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            disabled={!product.inStock}
-                            className="w-full bg-[#C8102E] text-white py-2 rounded-lg font-medium hover:bg-[#A00E26] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                            <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {/* List View */}
-                        <div className="flex-shrink-0 mr-4">
-                          <Link href={`/product/${product.id}`}>
-                            <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer">
-                              <span className="text-3xl">{product.image}</span>
-                            </div>
-                          </Link>
-                        </div>
-                        
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <Link href={`/product/${product.id}`}>
-                                <h3 className="font-semibold text-[#000000] hover:text-[#C8102E] transition-colors cursor-pointer">
-                                  {product.name}
-                                </h3>
-                              </Link>
-                              <p className="text-sm text-[#4A4A4A]">{product.brand}</p>
-                            </div>
-                            
-                            <div className="flex items-center space-x-2">
-                              {product.isNew && (
-                                <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                                  New
-                                </span>
-                              )}
-                              {product.isBestSeller && (
-                                <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                                  Best Seller
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center space-x-1">
-                            <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`h-4 w-4 ${
-                                    i < Math.floor(product.rating) 
-                                      ? 'text-yellow-400 fill-current' 
-                                      : 'text-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-[#4A4A4A]">({product.reviews})</span>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-lg font-bold text-[#C8102E]">
-                                R{product.price.toFixed(2)}
-                              </span>
-                              {product.originalPrice && (
-                                <span className="text-sm text-[#4A4A4A] line-through">
-                                  R{product.originalPrice.toFixed(2)}
-                                </span>
-                              )}
-                            </div>
-                            
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={() => handleWishlistToggle(product)}
-                                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                              >
-                                <Heart className={`h-5 w-5 transition-colors ${
-                                  isInWishlist(product.id) 
-                                    ? 'fill-[#C8102E] text-[#C8102E]' 
-                                    : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                                }`} />
-                              </button>
-                              
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                disabled={!product.inStock}
-                                className="bg-[#C8102E] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#A00E26] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2"
-                              >
-                                <ShoppingCart className="h-4 w-4" />
-                                <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                    originalPrice={product.originalPrice}
+                    image={product.image}
+                    category={product.category}
+                    brand={product.brand}
+                    rating={product.rating}
+                    reviews={product.reviews}
+                    inStock={product.inStock}
+                    isNew={product.isNew}
+                    isBestSeller={product.isBestSeller}
+                    variant="search"
+                    viewMode={viewMode}
+                    onAddToCart={handleAddToCart}
+                    onWishlistToggle={handleWishlistToggle}
+                    isInWishlist={isInWishlist(product.id)}
+                  />
                 ))}
               </div>
             )}

@@ -19,7 +19,7 @@ import {
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import Toast from '../../../components/Toast';
-import { ProductFilter } from '../../../components';
+import { ProductFilter, ProductCard } from '../../../components';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
@@ -373,124 +373,26 @@ export default function CategoryPage() {
                   : 'space-y-3 sm:space-y-4'
               }>
                 {filteredAndSortedProducts.map((product) => (
-                  <div
+                  <ProductCard
                     key={product.id}
-                    className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${
-                      viewMode === 'list' ? 'flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4' : ''
-                    }`}
-                  >
-                    <Link href={`/product/${product.id}`}>
-                      <div className={`relative cursor-pointer touch-manipulation ${
-                        viewMode === 'list' ? 'w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0' : ''
-                      }`}>
-                        <div className={`bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center ${
-                          viewMode === 'list' ? 'w-20 h-20 sm:w-24 sm:h-24 rounded-lg' : 'h-32 sm:h-40 lg:h-48'
-                        }`}>
-                          <span className={viewMode === 'list' ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl lg:text-4xl'}>
-                            {product.image}
-                          </span>
-                        </div>
-                        
-                        {/* Badges */}
-                        <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
-                          {product.isNew && (
-                            <span className="bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                              New
-                            </span>
-                          )}
-                          {product.isBestSeller && (
-                            <span className="bg-orange-500 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                              Best Seller
-                            </span>
-                          )}
-                          {!product.inStock && (
-                            <span className="bg-red-500 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
-                              Out of Stock
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Discount Badge */}
-                        {product.originalPrice && (
-                          <div className="absolute top-2 right-2 bg-[#C8102E] text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm z-10">
-                            -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-                    
-                    <div className={`${viewMode === 'list' ? 'flex-1' : 'p-3 sm:p-4'}`}>
-                      <Link href={`/product/${product.id}`}>
-                        <h3 className="font-semibold text-[#000000] mb-1 sm:mb-2 hover:text-[#C8102E] transition-colors cursor-pointer text-sm sm:text-base line-clamp-2">
-                          {product.name}
-                        </h3>
-                      </Link>
-                      
-                      <p className="text-xs sm:text-sm text-[#4A4A4A] mb-1 sm:mb-2">{product.brand}</p>
-                      
-                      <div className="flex items-center mb-2">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                              i < Math.floor(product.rating)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                        <span className="text-xs sm:text-sm text-[#4A4A4A] ml-1 sm:ml-2">
-                          {product.rating} ({product.reviews})
-                        </span>
-                      </div>
-                      
-                      <div className={`flex items-center ${viewMode === 'list' ? 'justify-between' : 'justify-between'}`}>
-                        <div className="flex-1 mr-2">
-                          <span className="text-sm sm:text-lg font-bold text-[#C8102E] block">
-                            R{product.price.toFixed(2)}
-                          </span>
-                          {product.originalPrice && (
-                            <span className="text-xs sm:text-sm text-[#4A4A4A] line-through">
-                              R{product.originalPrice.toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center space-x-1 sm:space-x-2">
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleWishlistToggle(product);
-                            }}
-                            className="p-1.5 sm:p-2 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation"
-                          >
-                            <Heart className={`h-3 w-3 sm:h-4 sm:w-4 transition-colors ${
-                              isInWishlist(product.id) 
-                                ? 'text-[#C8102E] fill-[#C8102E]' 
-                                : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                            }`} />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleAddToCart(product);
-                            }}
-                            disabled={!product.inStock}
-                            className={`p-1.5 sm:p-2 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 touch-manipulation ${
-                              product.inStock
-                                ? 'bg-[#000000] text-white hover:bg-[#4A4A4A]'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            }`}
-                            title={product.inStock ? "Add to cart" : "Out of stock"}
-                          >
-                            <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                    originalPrice={product.originalPrice}
+                    image={product.image}
+                    category={product.category}
+                    brand={product.brand}
+                    rating={product.rating}
+                    reviews={product.reviews}
+                    inStock={product.inStock}
+                    isNew={product.isNew}
+                    isBestSeller={product.isBestSeller}
+                    variant="category"
+                    viewMode={viewMode}
+                    onAddToCart={handleAddToCart}
+                    onWishlistToggle={handleWishlistToggle}
+                    isInWishlist={isInWishlist(product.id)}
+                  />
                 ))}
               </div>
             )}

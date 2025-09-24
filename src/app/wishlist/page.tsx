@@ -23,6 +23,7 @@ import {
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { ProductCard } from '../../components';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 
@@ -347,193 +348,33 @@ export default function WishlistPage() {
             </div>
 
             {/* Wishlist Items */}
-            {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                {sortedAndFilteredItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-gray-200">
-                    <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-48 flex items-center justify-center cursor-pointer" onClick={() => window.location.href = `/product/${item.id}`}>
-                      <span className="text-4xl">{item.image}</span>
-                      
-                      {/* Badges */}
-                      <div className="absolute top-3 left-3 flex flex-col gap-1">
-                        {item.originalPrice && item.originalPrice > item.price && (
-                          <span className="bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full font-semibold">
-                            -{Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}%
-                          </span>
-                        )}
-                        {item.inStock === false && (
-                          <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                            Out of Stock
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Quick Actions */}
-                      <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            // Share functionality
-                          }}
-                          className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-                          title="Share"
-                        >
-                          <Share2 className="h-4 w-4 text-[#4A4A4A]" />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            window.location.href = `/product/${item.id}`;
-                          }}
-                          className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-                          title="View Product"
-                        >
-                          <Eye className="h-4 w-4 text-[#4A4A4A]" />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="p-3 sm:p-4">
-                      <Link href={`/product/${item.id}`}>
-                        <h3 className="font-semibold text-[#000000] mb-2 hover:text-[#C8102E] transition-colors line-clamp-2">
-                          {item.name}
-                        </h3>
-                      </Link>
-                      
-                      <div className="flex items-center mb-2 sm:mb-3">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-                        ))}
-                        <span className="text-xs sm:text-sm text-[#4A4A4A] ml-1 sm:ml-2">
-                          ({item.reviews || 0})
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mb-3 sm:mb-4">
-                        <div>
-                          <span className="text-base sm:text-lg font-bold text-[#C8102E]">
-                            R{item.price.toFixed(2)}
-                          </span>
-                          {item.originalPrice && (
-                            <span className="text-xs sm:text-sm text-[#4A4A4A] line-through ml-1 sm:ml-2">
-                              R{item.originalPrice.toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="text-xs text-[#4A4A4A] mb-3 sm:mb-4">
-                        Added {formatDate(item.addedAt)}
-                      </div>
-                      
-                      <div className="flex flex-col sm:flex-row gap-2">
-                        <button
-                          onClick={() => handleAddToCart(item)}
-                          disabled={item.inStock === false}
-                          className={`flex-1 py-2.5 sm:py-2 px-3 sm:px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-sm ${
-                            item.inStock === false
-                              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                              : 'bg-[#C8102E] text-white hover:bg-[#A00E26]'
-                          }`}
-                        >
-                          <ShoppingCart className="h-4 w-4 mr-2" />
-                          {item.inStock === false ? 'Out of Stock' : 'Add to Cart'}
-                        </button>
-                        <button
-                          onClick={() => handleRemoveFromWishlist(item)}
-                          className="sm:w-auto w-full py-2.5 sm:py-2 px-3 sm:px-2 border border-gray-300 rounded-lg text-[#4A4A4A] hover:border-red-500 hover:text-red-500 transition-colors flex items-center justify-center sm:justify-center text-sm"
-                          title="Remove from wishlist"
-                        >
-                          <Trash2 className="h-4 w-4 sm:mr-0 mr-2" />
-                          <span className="sm:hidden">Remove</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              /* List View */
-              <div className="space-y-3 sm:space-y-4">
-                {sortedAndFilteredItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                      <div className="relative w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer" onClick={() => window.location.href = `/product/${item.id}`}>
-                        <span className="text-2xl">{item.image}</span>
-                        {item.inStock === false && (
-                          <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
-                            <span className="text-white text-xs font-semibold">Out of Stock</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <Link href={`/product/${item.id}`}>
-                          <h3 className="text-lg font-semibold text-[#000000] mb-2 hover:text-[#C8102E] transition-colors">
-                            {item.name}
-                          </h3>
-                        </Link>
-                        
-                        <div className="flex items-center mb-2">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          ))}
-                          <span className="text-sm text-[#4A4A4A] ml-2">
-                            ({item.reviews || 0} reviews)
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-4 mb-2">
-                          <div>
-                            <span className="text-xl font-bold text-[#C8102E]">
-                              R{item.price.toFixed(2)}
-                            </span>
-                            {item.originalPrice && (
-                              <span className="text-sm text-[#4A4A4A] line-through ml-2">
-                                R{item.originalPrice.toFixed(2)}
-                              </span>
-                            )}
-                          </div>
-                          {item.originalPrice && item.originalPrice > item.price && (
-                            <span className="bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full font-semibold">
-                              Save R{(item.originalPrice - item.price).toFixed(2)}
-                            </span>
-                          )}
-                        </div>
-                        
-                        <p className="text-sm text-[#4A4A4A]">
-                          Added to wishlist on {formatDate(item.addedAt)}
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-col sm:flex-col space-y-2 w-full sm:w-auto">
-                        <button
-                          onClick={() => handleAddToCart(item)}
-                          disabled={item.inStock === false}
-                          className={`w-full sm:w-auto px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors flex items-center justify-center text-sm ${
-                            item.inStock === false
-                              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                              : 'bg-[#C8102E] text-white hover:bg-[#A00E26]'
-                          }`}
-                        >
-                          <ShoppingCart className="h-4 w-4 mr-2" />
-                          {item.inStock === false ? 'Out of Stock' : 'Add to Cart'}
-                        </button>
-                        <button
-                          onClick={() => handleRemoveFromWishlist(item)}
-                          className="w-full sm:w-auto px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-[#4A4A4A] hover:border-red-500 hover:text-red-500 transition-colors flex items-center justify-center text-sm"
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className={viewMode === 'grid' 
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6' 
+              : 'space-y-3 sm:space-y-4'
+            }>
+              {sortedAndFilteredItems.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  price={item.price}
+                  originalPrice={item.originalPrice}
+                  image={item.image}
+                  category={item.category}
+                  brand={(item as any).brand || 'eXobe'}
+                  rating={item.rating}
+                  reviews={item.reviews}
+                  inStock={item.inStock}
+                  addedAt={new Date(item.addedAt)}
+                  variant="wishlist"
+                  viewMode={viewMode}
+                  onAddToCart={handleAddToCart}
+                  onRemoveFromWishlist={handleRemoveFromWishlist}
+                  showWishlistDate={true}
+                  showQuickActions={true}
+                />
+              ))}
+            </div>
 
             {/* No Results */}
             {sortedAndFilteredItems.length === 0 && wishlistState.totalItems > 0 && (
