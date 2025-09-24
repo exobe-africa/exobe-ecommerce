@@ -2,13 +2,17 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { Search, Filter, Grid3X3, List, Star, Heart, ShoppingCart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
-import { Navbar, Footer, ProductFilter, ProductCard, SortDropdown, ViewModeToggle } from '../../components';
+import { Navbar, Footer, ProductFilter } from '../../components';
+import {
+  SearchHeader,
+  SearchToolbar,
+  SearchResults,
+  NoResultsFound,
+  MobileFiltersModal
+} from '../../components/search';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
-// Sample products data (in a real app, this would come from an API)
 const allProducts = [
   { id: 1, name: "iPhone 15 Pro", category: "Electronics", price: 12999, originalPrice: 14999, image: "📱", brand: "Apple", rating: 4.8, reviews: 245, inStock: true, isNew: true, isBestSeller: false },
   { id: 2, name: "Samsung Galaxy S24", category: "Electronics", price: 11999, image: "📱", brand: "Samsung", rating: 4.7, reviews: 189, inStock: true, isNew: false, isBestSeller: true },
@@ -55,11 +59,9 @@ function SearchContent() {
   const [showNewOnly, setShowNewOnly] = useState(false);
   const [showBestSellersOnly, setShowBestSellersOnly] = useState(false);
 
-  // Search and filter products
   useEffect(() => {
     let results = allProducts;
     
-    // Search filter
     if (query.trim()) {
       results = results.filter(product =>
         product.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -71,31 +73,25 @@ function SearchContent() {
     setSearchResults(results);
   }, [query]);
 
-  // Apply filters
   useEffect(() => {
     let filtered = [...searchResults];
     
-    // Category filter
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(product => selectedCategories.includes(product.category));
     }
     
-    // Brand filter
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(product => selectedBrands.includes(product.brand));
     }
     
-    // Price range filter
     filtered = filtered.filter(product => 
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
     
-    // Rating filter
     if (minRating > 0) {
       filtered = filtered.filter(product => product.rating >= minRating);
     }
     
-    // Stock filter
     if (showInStockOnly) {
       filtered = filtered.filter(product => product.inStock);
     }
@@ -128,7 +124,6 @@ function SearchContent() {
         filtered.sort((a, b) => b.reviews - a.reviews);
         break;
       default:
-        // Relevance - keep original order
         break;
     }
     
@@ -187,28 +182,12 @@ function SearchContent() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      {/* Search Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#000000]">
-                {query ? `Search results for "${query}"` : 'All Products'}
-              </h1>
-              <p className="text-[#4A4A4A] mt-1">
-                {filteredResults.length} product{filteredResults.length !== 1 ? 's' : ''} found
-              </p>
-            </div>
-            
-            <ViewModeToggle
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-              variant="search"
-              hideOnMobile={true}
-            />
-          </div>
-        </div>
-      </div>
+      <SearchHeader
+        query={query}
+        resultsCount={filteredResults.length}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -249,142 +228,70 @@ function SearchContent() {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1">
-            {/* Mobile Toolbar */}
-            <div className="flex items-center justify-between mb-6 lg:hidden">
-              <button
-                onClick={() => setShowMobileFilters(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-[#4A4A4A] hover:text-[#C8102E] transition-colors"
-              >
-                <SlidersHorizontal className="h-5 w-5" />
-                <span>Filters</span>
-                {activeFiltersCount > 0 && (
-                  <span className="bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full">
-                    {activeFiltersCount}
-                  </span>
-                )}
-              </button>
-              
-              <div className="flex items-center space-x-3">
-                <SortDropdown
-                  value={sortBy}
-                  onChange={setSortBy}
-                  options={sortOptions}
-                  variant="compact"
-                  showLabel={false}
-                  showIcon={false}
-                />
-                
-                <ViewModeToggle
-                  viewMode={viewMode}
-                  onViewModeChange={setViewMode}
-                  variant="search"
-                />
-              </div>
-            </div>
+            <SearchToolbar
+              onShowMobileFilters={() => setShowMobileFilters(true)}
+              activeFiltersCount={activeFiltersCount}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              sortOptions={sortOptions}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              isMobile={true}
+            />
 
-            <div className="hidden lg:flex items-center justify-between mb-6">
-              <SortDropdown
-                value={sortBy}
-                onChange={setSortBy}
-                options={sortOptions}
-                variant="default"
-                showLabel={true}
-                showIcon={false}
-              />
-            </div>
+            <SearchToolbar
+              onShowMobileFilters={() => setShowMobileFilters(true)}
+              activeFiltersCount={activeFiltersCount}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              sortOptions={sortOptions}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              isMobile={false}
+            />
 
             {filteredResults.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Search className="h-12 w-12 text-[#4A4A4A]" />
-                </div>
-                <h3 className="text-xl font-semibold text-[#000000] mb-2">No products found</h3>
-                <p className="text-[#4A4A4A] mb-6">Try adjusting your search or filters</p>
-                {activeFiltersCount > 0 && (
-                  <button
-                    onClick={clearAllFilters}
-                    className="bg-[#C8102E] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#A00E26] transition-colors"
-                  >
-                    Clear All Filters
-                  </button>
-                )}
-              </div>
+              <NoResultsFound
+                activeFiltersCount={activeFiltersCount}
+                onClearFilters={clearAllFilters}
+              />
             ) : (
-              <div className={viewMode === 'grid' 
-                ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' 
-                : 'space-y-4'
-              }>
-                {filteredResults.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    name={product.name}
-                    price={product.price}
-                    originalPrice={product.originalPrice}
-                    image={product.image}
-                    category={product.category}
-                    brand={product.brand}
-                    rating={product.rating}
-                    reviews={product.reviews}
-                    inStock={product.inStock}
-                    isNew={product.isNew}
-                    isBestSeller={product.isBestSeller}
-                    variant="search"
-                    viewMode={viewMode}
-                    onAddToCart={handleAddToCart}
-                    onWishlistToggle={handleWishlistToggle}
-                    isInWishlist={isInWishlist(product.id)}
-                  />
-                ))}
-              </div>
+              <SearchResults
+                products={filteredResults}
+                viewMode={viewMode}
+                onAddToCart={handleAddToCart}
+                onWishlistToggle={handleWishlistToggle}
+                isInWishlist={(id) => isInWishlist(id.toString())}
+              />
             )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Filters Modal */}
-      {showMobileFilters && (
-        <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowMobileFilters(false)} />
-          <div className="fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-[#000000]">Filters</h2>
-              <button
-                onClick={() => setShowMobileFilters(false)}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-              >
-                <X className="h-5 w-5 text-[#4A4A4A]" />
-              </button>
-            </div>
-            
-            <ProductFilter
-              selectedBrands={selectedBrands}
-              setSelectedBrands={setSelectedBrands}
-              priceRange={priceRange}
-              setPriceRange={setPriceRange}
-              minRating={minRating}
-              setMinRating={setMinRating}
-              showInStockOnly={showInStockOnly}
-              setShowInStockOnly={setShowInStockOnly}
-              showNewOnly={showNewOnly}
-              setShowNewOnly={setShowNewOnly}
-              showBestSellersOnly={showBestSellersOnly}
-              setShowBestSellersOnly={setShowBestSellersOnly}
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-              brands={brands}
-              categories={categories}
-              clearFilters={clearAllFilters}
-              activeFiltersCount={activeFiltersCount}
-              isMobile={true}
-              onCloseMobile={() => setShowMobileFilters(false)}
-              resultsCount={filteredResults.length}
-            />
-          </div>
-        </>
-      )}
+      <MobileFiltersModal
+        isOpen={showMobileFilters}
+        onClose={() => setShowMobileFilters(false)}
+        selectedBrands={selectedBrands}
+        setSelectedBrands={setSelectedBrands}
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        minRating={minRating}
+        setMinRating={setMinRating}
+        showInStockOnly={showInStockOnly}
+        setShowInStockOnly={setShowInStockOnly}
+        showNewOnly={showNewOnly}
+        setShowNewOnly={setShowNewOnly}
+        showBestSellersOnly={showBestSellersOnly}
+        setShowBestSellersOnly={setShowBestSellersOnly}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        brands={brands}
+        categories={categories}
+        clearFilters={clearAllFilters}
+        activeFiltersCount={activeFiltersCount}
+        resultsCount={filteredResults.length}
+      />
 
       <Footer />
     </div>
