@@ -119,6 +119,7 @@ const ProductCard = ({
 
   if (variant === 'default') {
     return (
+      <>
       <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${className}`}>
         <Link href={`/product/${id}`}>
           <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-32 sm:h-40 lg:h-48 flex items-center justify-center cursor-pointer group-hover:scale-105 transition-transform">
@@ -167,6 +168,17 @@ const ProductCard = ({
           </div>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+        product={product}
+        onAddToCart={handleQuickViewAddToCart}
+        onWishlistToggle={onWishlistToggle}
+        isInWishlist={isInWishlist}
+      />
+      </>
     );
   }
 
@@ -593,6 +605,7 @@ const ProductCard = ({
   if (variant === 'wishlist') {
     if (viewMode === 'list') {
       return (
+        <>
         <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-lg transition-all duration-300 ${className}`}>
           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <div className="relative w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer" onClick={() => window.location.href = `/product/${id}`}>
@@ -668,11 +681,23 @@ const ProductCard = ({
             </div>
           </div>
         </div>
+
+        {/* Quick View Modal */}
+        <ProductQuickViewModal
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+          product={product}
+          onAddToCart={handleQuickViewAddToCart}
+          onWishlistToggle={onWishlistToggle}
+          isInWishlist={isInWishlist}
+        />
+        </>
       );
     }
 
     // Wishlist grid view
     return (
+      <>
       <div className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-gray-200 ${className}`}>
         <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-48 flex items-center justify-center cursor-pointer" onClick={() => window.location.href = `/product/${id}`}>
           <span className="text-4xl">{image}</span>
@@ -777,6 +802,17 @@ const ProductCard = ({
           </div>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+        product={product}
+        onAddToCart={handleQuickViewAddToCart}
+        onWishlistToggle={onWishlistToggle}
+        isInWishlist={isInWishlist}
+      />
+      </>
     );
   }
 

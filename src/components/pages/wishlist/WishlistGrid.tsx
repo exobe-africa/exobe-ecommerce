@@ -73,6 +73,22 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
           variant="wishlist"
           viewMode={viewMode}
           onAddToCart={onAddToCart}
+          onQuickViewAddToCart={(product, selectedVariants, quantity, currentLocations) => {
+            // Adapt wishlist item -> add to cart with selected variants
+            for (let i = 0; i < quantity; i++) {
+              onAddToCart({
+                ...item,
+                id: product.id as string,
+                name: product.name,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: product.image,
+                category: product.category,
+                variant: selectedVariants as any,
+                availableLocations: currentLocations as any,
+              } as any);
+            }
+          }}
           onRemoveFromWishlist={onRemoveFromWishlist}
           showWishlistDate={true}
           showQuickActions={true}
