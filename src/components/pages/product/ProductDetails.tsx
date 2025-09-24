@@ -17,9 +17,10 @@ interface Product {
 interface ProductDetailsProps {
   product: Product;
   currentPrice: number;
+  currentLocations?: string[];
 }
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice }) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, currentLocations }) => {
   return (
     <div className="space-y-6">
       {/* Product Title & Rating */}
@@ -46,9 +47,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice }
       </div>
 
       {/* Location Availability */}
-      {product.availableLocations && product.availableLocations.length > 0 && (
+      {currentLocations && currentLocations.length > 0 && (
         <LocationChips 
-          locations={product.availableLocations} 
+          locations={currentLocations} 
           size="lg"
           className="py-2"
         />

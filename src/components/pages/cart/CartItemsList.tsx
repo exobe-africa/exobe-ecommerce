@@ -68,11 +68,20 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
         {items.map((item) => (
           <div key={item.uniqueId || item.id} className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link href={`/product/${item.id}`} className="flex-shrink-0">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
-                  <span className="text-2xl sm:text-3xl">{item.image}</span>
-                </div>
-              </Link>
+              <div className="relative flex-shrink-0">
+                <Link href={`/product/${item.id}`} className="block">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
+                    <span className="text-2xl sm:text-3xl">{item.image}</span>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => onRemoveItem(item.id, item.variant)}
+                  className="absolute -top-2 -left-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                  title="Remove item"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
 
               <div className="flex-1 space-y-2">
                 <Link href={`/product/${item.id}`}>
@@ -82,7 +91,6 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                 </Link>
                 <p className="text-sm text-[#4A4A4A]">{item.category}</p>
                 
-                {/* Variant Info */}
                 {formatVariant(item.variant) && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {Object.entries(item.variant || {})
@@ -96,7 +104,6 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                   </div>
                 )}
 
-                {/* Location Availability */}
                 {item.availableLocations && item.availableLocations.length > 0 && (
                   <LocationChips 
                     locations={item.availableLocations} 
@@ -146,23 +153,13 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                   </p>
                 </div>
 
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => onMoveToWishlist(item)}
-                    className="p-2 rounded-full hover:bg-pink-50 text-[#4A4A4A] hover:text-pink-500 transition-all duration-200 group"
-                    title="Move to Wishlist"
-                  >
-                    <Heart className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                  </button>
-                  
-                  <button
-                    onClick={() => onRemoveItem(item.id, item.variant)}
-                    className="p-2 rounded-full hover:bg-red-50 text-[#4A4A4A] hover:text-red-500 transition-all duration-200 group"
-                    title="Remove Item"
-                  >
-                    <X className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => onMoveToWishlist(item)}
+                  className="p-2 rounded-full hover:bg-pink-50 text-[#4A4A4A] hover:text-pink-500 transition-all duration-200 group"
+                  title="Move to Wishlist"
+                >
+                  <Heart className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                </button>
               </div>
             </div>
           </div>

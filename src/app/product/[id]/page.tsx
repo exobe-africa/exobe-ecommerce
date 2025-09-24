@@ -20,6 +20,7 @@ interface VariantOption {
   image?: string;
   price?: number;
   stock: number;
+  availableLocations?: string[];
 }
 
 interface ProductVariants {
@@ -51,10 +52,10 @@ const products = [
     availableLocations: ['Johannesburg', 'Cape Town', 'Durban'],
     variants: {
       colors: [
-        { name: 'Midnight Black', value: 'black', image: '🎧', price: 1299.99, stock: 15 },
-        { name: 'Space Gray', value: 'gray', image: '🎤', price: 1299.99, stock: 8 },
-        { name: 'Rose Gold', value: 'rose', image: '🎵', price: 1399.99, stock: 5 },
-        { name: 'Silver', value: 'silver', image: '🔊', price: 1299.99, stock: 12 }
+        { name: 'Midnight Black', value: 'black', image: '🎧', price: 1299.99, stock: 15, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: 'Space Gray', value: 'gray', image: '🎤', price: 1299.99, stock: 8, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Rose Gold', value: 'rose', image: '🎵', price: 1399.99, stock: 5, availableLocations: ['Cape Town', 'Durban'] },
+        { name: 'Silver', value: 'silver', image: '🔊', price: 1299.99, stock: 12, availableLocations: ['Johannesburg', 'Durban', 'Pretoria'] }
       ]
     }
   },
@@ -75,18 +76,18 @@ const products = [
     availableLocations: ['Johannesburg', 'Cape Town'],
     variants: {
       colors: [
-        { name: 'Classic White', value: 'white', image: '👕', price: 299.99, stock: 20 },
-        { name: 'Jet Black', value: 'black', image: '🖤', price: 299.99, stock: 15 },
-        { name: 'Navy Blue', value: 'navy', image: '💙', price: 299.99, stock: 12 },
-        { name: 'Forest Green', value: 'green', image: '💚', price: 299.99, stock: 8 }
+        { name: 'Classic White', value: 'white', image: '👕', price: 299.99, stock: 20, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Jet Black', value: 'black', image: '🖤', price: 299.99, stock: 15, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: 'Navy Blue', value: 'navy', image: '💙', price: 299.99, stock: 12, availableLocations: ['Cape Town', 'Durban'] },
+        { name: 'Forest Green', value: 'green', image: '💚', price: 299.99, stock: 8, availableLocations: ['Johannesburg', 'Durban'] }
       ],
       sizes: [
-        { name: 'XS', value: 'xs', stock: 5 },
-        { name: 'S', value: 's', stock: 15 },
-        { name: 'M', value: 'm', stock: 20 },
-        { name: 'L', value: 'l', stock: 18 },
-        { name: 'XL', value: 'xl', stock: 12 },
-        { name: 'XXL', value: 'xxl', stock: 6 }
+        { name: 'XS', value: 'xs', stock: 5, availableLocations: ['Cape Town'] },
+        { name: 'S', value: 's', stock: 15, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: 'M', value: 'm', stock: 20, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+        { name: 'L', value: 'l', stock: 18, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: 'XL', value: 'xl', stock: 12, availableLocations: ['Johannesburg', 'Durban'] },
+        { name: 'XXL', value: 'xxl', stock: 6, availableLocations: ['Cape Town', 'Pretoria'] }
       ]
     }
   },
@@ -107,16 +108,16 @@ const products = [
     availableLocations: ['Johannesburg', 'Durban'],
     variants: {
       colors: [
-        { name: 'Cosmic Black', value: 'black', image: '📱', price: 9999.99, stock: 8 },
-        { name: 'Starlight', value: 'white', image: '🤍', price: 9999.99, stock: 5 },
-        { name: 'Deep Purple', value: 'purple', image: '💜', price: 9999.99, stock: 3 },
-        { name: 'Gold', value: 'gold', image: '💛', price: 10199.99, stock: 2 }
+        { name: 'Cosmic Black', value: 'black', image: '📱', price: 9999.99, stock: 8, availableLocations: ['Johannesburg', 'Durban'] },
+        { name: 'Starlight', value: 'white', image: '🤍', price: 9999.99, stock: 5, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Deep Purple', value: 'purple', image: '💜', price: 9999.99, stock: 3, availableLocations: ['Cape Town', 'Durban'] },
+        { name: 'Gold', value: 'gold', image: '💛', price: 10199.99, stock: 2, availableLocations: ['Johannesburg', 'Pretoria'] }
       ],
       storage: [
-        { name: '128GB', value: '128gb', price: 9999.99, stock: 10 },
-        { name: '256GB', value: '256gb', price: 11499.99, stock: 8 },
-        { name: '512GB', value: '512gb', price: 13999.99, stock: 4 },
-        { name: '1TB', value: '1tb', price: 16499.99, stock: 2 }
+        { name: '128GB', value: '128gb', price: 9999.99, stock: 10, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: '256GB', value: '256gb', price: 11499.99, stock: 8, availableLocations: ['Johannesburg', 'Durban'] },
+        { name: '512GB', value: '512gb', price: 13999.99, stock: 4, availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
+        { name: '1TB', value: '1tb', price: 16499.99, stock: 2, availableLocations: ['Johannesburg', 'Pretoria'] }
       ]
     }
   },
@@ -137,16 +138,16 @@ const products = [
     availableLocations: ['Cape Town', 'Durban', 'Pretoria'],
     variants: {
       colors: [
-        { name: 'Midnight', value: 'black', image: '⌚', price: 3499.99, stock: 15 },
-        { name: 'Silver', value: 'silver', image: '⚪', price: 3499.99, stock: 12 },
-        { name: 'Gold', value: 'gold', image: '🟡', price: 3799.99, stock: 8 },
-        { name: 'Red', value: 'red', image: '🔴', price: 3499.99, stock: 6 }
+        { name: 'Midnight', value: 'black', image: '⌚', price: 3499.99, stock: 15, availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
+        { name: 'Silver', value: 'silver', image: '⚪', price: 3499.99, stock: 12, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+        { name: 'Gold', value: 'gold', image: '🟡', price: 3799.99, stock: 8, availableLocations: ['Johannesburg', 'Pretoria'] },
+        { name: 'Red', value: 'red', image: '🔴', price: 3499.99, stock: 6, availableLocations: ['Cape Town', 'Durban'] }
       ],
       bands: [
-        { name: 'Sport Band', value: 'sport', image: '⌚', price: 0, stock: 20 },
-        { name: 'Leather Loop', value: 'leather', image: '🤎', price: 299.99, stock: 15 },
-        { name: 'Milanese Loop', value: 'milanese', image: '⚙️', price: 399.99, stock: 10 },
-        { name: 'Link Bracelet', value: 'link', image: '🔗', price: 699.99, stock: 5 }
+        { name: 'Sport Band', value: 'sport', image: '⌚', price: 0, stock: 20, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+        { name: 'Leather Loop', value: 'leather', image: '🤎', price: 299.99, stock: 15, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Milanese Loop', value: 'milanese', image: '⚙️', price: 399.99, stock: 10, availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
+        { name: 'Link Bracelet', value: 'link', image: '🔗', price: 699.99, stock: 5, availableLocations: ['Johannesburg', 'Durban'] }
       ]
     }
   },
@@ -200,6 +201,7 @@ export default function ProductPage() {
   const [currentImage, setCurrentImage] = useState('');
   const [currentPrice, setCurrentPrice] = useState(0);
   const [currentStock, setCurrentStock] = useState(0);
+  const [currentLocations, setCurrentLocations] = useState<string[]>([]);
 
   // Review states
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -208,6 +210,41 @@ export default function ProductPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const product = products.find(p => p.id === params.id);
+
+  // Function to calculate current available locations based on selected variants
+  const calculateCurrentLocations = (variants: Record<string, string>) => {
+    if (!product?.variants) return product?.availableLocations || [];
+    
+    const selectedOptions: VariantOption[] = [];
+    
+    // Get all selected variant options
+    Object.entries(variants).forEach(([variantType, selectedValue]) => {
+      const variantOptions = product.variants[variantType as keyof typeof product.variants];
+      if (variantOptions) {
+        const selectedOption = variantOptions.find(option => option.value === selectedValue);
+        if (selectedOption) {
+          selectedOptions.push(selectedOption);
+        }
+      }
+    });
+    
+    // If no variants selected, return product-level locations
+    if (selectedOptions.length === 0) {
+      return product.availableLocations || [];
+    }
+    
+    // Find intersection of all selected variant locations
+    let commonLocations = selectedOptions[0]?.availableLocations || [];
+    
+    for (let i = 1; i < selectedOptions.length; i++) {
+      const optionLocations = selectedOptions[i]?.availableLocations || [];
+      commonLocations = commonLocations.filter(location => 
+        optionLocations.includes(location)
+      );
+    }
+    
+    return commonLocations;
+  };
 
   // Initialize variants and pricing
   useEffect(() => {
@@ -240,10 +277,12 @@ export default function ProductPage() {
       setCurrentImage(baseImage);
       setCurrentPrice(basePrice);
       setCurrentStock(baseStock);
+      setCurrentLocations(calculateCurrentLocations(initialVariants));
     } else if (product) {
       setCurrentImage(product.image);
       setCurrentPrice(product.price);
       setCurrentStock(product.stockCount);
+      setCurrentLocations(product.availableLocations || []);
     }
   }, [product]);
 
@@ -286,6 +325,9 @@ export default function ProductPage() {
         setCurrentStock(variantOption.stock);
       }
     }
+    
+    // Update current locations based on all selected variants
+    setCurrentLocations(calculateCurrentLocations(newVariants));
   };
 
   if (!product) {
@@ -340,7 +382,7 @@ export default function ProductPage() {
         originalPrice: product.originalPrice,
         image: currentImage || product.image,
         category: product.category,
-        availableLocations: product.availableLocations,
+        availableLocations: currentLocations,
       });
     }
     
@@ -498,6 +540,7 @@ export default function ProductPage() {
             <ProductDetails 
               product={product}
               currentPrice={currentPrice || product.price}
+              currentLocations={currentLocations}
             />
 
             {product.variants && (
