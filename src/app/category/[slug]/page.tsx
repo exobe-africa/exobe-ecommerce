@@ -6,26 +6,16 @@ import { useState, useEffect, useMemo } from 'react';
 import { 
   Filter, 
   SlidersHorizontal, 
-  Grid3X3, 
-  List, 
-  Star, 
-  Heart, 
-  ShoppingCart, 
-  ChevronDown,
   X,
-  ArrowLeft,
-  ArrowUpDown
 } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import Toast from '../../../components/Toast';
-import { ProductFilter, ProductCard, Breadcrumb } from '../../../components';
+import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
-// Sample products data - expanded for filtering/sorting
 const allProducts = [
-  // Electronics
   { id: '1', name: 'Premium Headphones', price: 1299.99, originalPrice: 1599.99, image: '🎧', category: 'electronics', brand: 'Sony', rating: 4.8, reviews: 124, inStock: true, isNew: true, isBestSeller: true },
   { id: '3', name: 'Smartphone Pro', price: 9999.99, originalPrice: 11999.99, image: '📱', category: 'electronics', brand: 'Apple', rating: 4.9, reviews: 256, inStock: true, isNew: true, isBestSeller: true },
   { id: '4', name: 'Smart Watch', price: 3499.99, originalPrice: 4199.99, image: '⌚', category: 'electronics', brand: 'Samsung', rating: 4.7, reviews: 178, inStock: true, isNew: false, isBestSeller: true },
@@ -82,7 +72,6 @@ export default function CategoryPage() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
-  // Filter states
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 12000]);
   const [minRating, setMinRating] = useState(0);
@@ -94,7 +83,6 @@ export default function CategoryPage() {
   const categorySlug = params.slug as string;
   const category = categories[categorySlug as keyof typeof categories];
 
-  // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
       if (product.category !== categorySlug) return false;
@@ -107,7 +95,6 @@ export default function CategoryPage() {
       return true;
     });
 
-    // Sort products
     switch (sortBy) {
       case 'price-low':
         filtered.sort((a, b) => a.price - b.price);
@@ -125,7 +112,6 @@ export default function CategoryPage() {
         filtered.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
         break;
       default:
-        // Keep original order for relevance
         break;
     }
 
@@ -227,7 +213,6 @@ export default function CategoryPage() {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Breadcrumb */}
         <Breadcrumb 
           items={[
             { label: 'Home', href: '/' },
@@ -238,15 +223,13 @@ export default function CategoryPage() {
         />
 
         {/* Category Header */}
-        <div className="flex items-center space-x-3 sm:space-x-4 mb-6 sm:mb-8">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C8102E] to-[#A00E26] rounded-xl sm:rounded-2xl flex items-center justify-center">
-            <span className="text-xl sm:text-2xl">{category.icon}</span>
-          </div>
-          <div className="flex-1">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight">{category.name}</h1>
-            <p className="text-sm sm:text-base text-[#4A4A4A] mt-1">{category.description}</p>
-          </div>
-        </div>
+        <PageHeader
+          title={category.name}
+          description={category.description}
+          icon={category.icon}
+          variant="gradient"
+          size="medium"
+        />
 
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="hidden lg:block">
@@ -277,13 +260,10 @@ export default function CategoryPage() {
             </div>
           </div>
 
-          {/* Products Section */}
           <div className="lg:col-span-3">
-            {/* Toolbar */}
             <div className="sticky top-4 z-10 bg-white rounded-lg shadow-sm border border-gray-200 mb-4 sm:mb-6">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4">
               <div className="flex items-center justify-between sm:justify-start sm:space-x-4">
-                {/* Mobile Filter Button */}
                 <button
                   onClick={() => setShowMobileFilters(true)}
                   className="lg:hidden flex items-center space-x-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors touch-manipulation bg-white"
@@ -297,57 +277,32 @@ export default function CategoryPage() {
                   )}
                 </button>
 
-                {/* Results Count */}
                 <span className="text-sm text-[#4A4A4A] font-medium">
                   {filteredAndSortedProducts.length} product{filteredAndSortedProducts.length !== 1 ? 's' : ''}
                 </span>
               </div>
 
               <div className="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-4">
-                {/* Sort Dropdown */}
-                <div className="flex items-center space-x-2 flex-1 sm:flex-none">
-                  <ArrowUpDown className="h-4 w-4 text-[#4A4A4A] hidden sm:block" />
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white flex-1 sm:flex-none touch-manipulation"
-                  >
-                    {sortOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <SortDropdown
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={sortOptions}
+                  variant="full-width"
+                  showLabel={false}
+                  showIcon={true}
+                />
 
                 {/* View Mode Toggle */}
-                <div className="hidden sm:flex items-center space-x-1 border border-gray-300 rounded-lg p-1 bg-white">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded transition-colors touch-manipulation ${
-                      viewMode === 'grid' 
-                        ? 'bg-[#C8102E] text-white' 
-                        : 'text-[#4A4A4A] hover:bg-gray-100'
-                    }`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded transition-colors touch-manipulation ${
-                      viewMode === 'list' 
-                        ? 'bg-[#C8102E] text-white' 
-                        : 'text-[#4A4A4A] hover:bg-gray-100'
-                    }`}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
+                <ViewModeToggle
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  variant="default"
+                  hideOnMobile={true}
+                />
               </div>
             </div>
             </div>
 
-            {/* Products Grid/List */}
             {filteredAndSortedProducts.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-6xl mb-4">🔍</div>
@@ -396,7 +351,6 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* Mobile Filters Modal */}
       {showMobileFilters && (
         <div className="lg:hidden">
           <div className="fixed inset-0 bg-black bg-opacity-50 z-40 cursor-pointer" onClick={() => setShowMobileFilters(false)} />
@@ -425,7 +379,6 @@ export default function CategoryPage() {
 
       <Footer />
       
-      {/* Toast Notifications */}
       {toast && (
         <Toast
           message={toast.message}

@@ -23,7 +23,7 @@ import {
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ConfirmationModal from '../../components/ConfirmationModal';
-import { ProductCard, Breadcrumb } from '../../components';
+import { ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../components';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 
@@ -196,38 +196,33 @@ export default function WishlistPage() {
             className="mb-6"
           />
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#F6E2E0] rounded-xl flex items-center justify-center">
-                <Heart className="h-6 w-6 text-[#C8102E]" />
-              </div>
-              <div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-[#000000]">My Wishlist</h1>
-                <p className="text-[#4A4A4A]">
-                  {wishlistState.totalItems} {wishlistState.totalItems === 1 ? 'item' : 'items'} saved for later
-                </p>
-              </div>
-            </div>
-
-            {wishlistState.totalItems > 0 && (
-              <div className="hidden md:flex items-center space-x-3">
-                <button
-                  onClick={handleAddAllToCart}
-                  className="bg-[#C8102E] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#A00E26] transition-colors flex items-center"
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  Add All to Cart
-                </button>
-                <button
-                  onClick={handleClearWishlist}
-                  className="border-2 border-[#4A4A4A] text-[#4A4A4A] px-6 py-3 rounded-full font-semibold hover:bg-[#4A4A4A] hover:text-white transition-colors flex items-center"
-                >
-                  <Trash2 className="h-5 w-5 mr-2" />
-                  Clear All
-                </button>
-              </div>
-            )}
-          </div>
+          <PageHeader
+            title="My Wishlist"
+            description={`${wishlistState.totalItems} ${wishlistState.totalItems === 1 ? 'item' : 'items'} saved for later`}
+            iconComponent={Heart}
+            variant="wishlist"
+            size="large"
+            actions={
+              wishlistState.totalItems > 0 ? (
+                <div className="hidden md:flex items-center space-x-3">
+                  <button
+                    onClick={handleAddAllToCart}
+                    className="bg-[#C8102E] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#A00E26] transition-colors flex items-center"
+                  >
+                    <ShoppingCart className="h-5 w-5 mr-2" />
+                    Add All to Cart
+                  </button>
+                  <button
+                    onClick={handleClearWishlist}
+                    className="border-2 border-[#4A4A4A] text-[#4A4A4A] px-6 py-3 rounded-full font-semibold hover:bg-[#4A4A4A] hover:text-white transition-colors flex items-center"
+                  >
+                    <Trash2 className="h-5 w-5 mr-2" />
+                    Clear All
+                  </button>
+                </div>
+              ) : undefined
+            }
+          />
         </div>
       </section>
 
@@ -294,40 +289,24 @@ export default function WishlistPage() {
                       ))}
                     </select>
 
-                    <select
+                    <SortDropdown
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
-                    >
-                      {sortOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
-                      ))}
-                    </select>
+                      onChange={setSortBy}
+                      options={sortOptions}
+                      variant="compact"
+                      showLabel={false}
+                      showIcon={false}
+                      selectClassName="px-4 py-2 text-[#000000]"
+                    />
                   </div>
 
                   {/* View Mode Toggle */}
-                  <div className="flex bg-gray-100 rounded-lg p-1">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-2 rounded-md transition-colors ${
-                        viewMode === 'grid' 
-                          ? 'bg-white text-[#C8102E] shadow-sm' 
-                          : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                      }`}
-                    >
-                      <Grid className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => setViewMode('list')}
-                      className={`p-2 rounded-md transition-colors ${
-                        viewMode === 'list' 
-                          ? 'bg-white text-[#C8102E] shadow-sm' 
-                          : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                      }`}
-                    >
-                      <List className="h-4 w-4" />
-                    </button>
-                  </div>
+                  <ViewModeToggle
+                    viewMode={viewMode}
+                    onViewModeChange={setViewMode}
+                    variant="wishlist"
+                    gridIcon="grid"
+                  />
                 </div>
               </div>
 
@@ -429,15 +408,15 @@ export default function WishlistPage() {
 
               <div>
                 <label className="block text-sm font-semibold text-[#000000] mb-3">Sort by</label>
-                <select
+                <SortDropdown
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
-                >
-                  {sortOptions.map(option => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                  onChange={setSortBy}
+                  options={sortOptions}
+                  variant="compact"
+                  showLabel={false}
+                  showIcon={false}
+                  selectClassName="w-full px-4 py-3 text-[#000000]"
+                />
               </div>
             </div>
 

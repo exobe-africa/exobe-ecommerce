@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, User, Mail, Lock, Smartphone, Shield, CheckCircle, MessageCircle, Eye, EyeOff } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import { Breadcrumb } from '../../../components';
+import { Breadcrumb, PageHeader } from '../../../components';
 
 export default function CreateAccountPage() {
   return (
@@ -29,15 +29,13 @@ export default function CreateAccountPage() {
           </Link>
 
           {/* Title */}
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-[#F6E2E0] rounded-xl flex items-center justify-center">
-              <User className="h-8 w-8 text-[#C8102E]" />
-            </div>
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-[#000000] mb-2">How to Create an Account</h1>
-              <p className="text-lg text-[#4A4A4A]">Account & Profile</p>
-            </div>
-          </div>
+          <PageHeader
+            title="How to Create an Account"
+            description="Account & Profile"
+            iconComponent={User}
+            variant="help-center"
+            size="large"
+          />
         </div>
       </section>
 

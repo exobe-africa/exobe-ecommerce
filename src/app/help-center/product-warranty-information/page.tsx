@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, FileText, Wrench, MessageCircle, CheckCircle, AlertTriangle, Clock } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import { Breadcrumb } from '../../../components';
+import { Breadcrumb, PageHeader } from '../../../components';
 
 export default function ProductWarrantyPage() {
   return (
@@ -25,15 +25,13 @@ export default function ProductWarrantyPage() {
             Back to Help Centre
           </Link>
 
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-[#F6E2E0] rounded-xl flex items-center justify-center">
-              <Shield className="h-8 w-8 text-[#C8102E]" />
-            </div>
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-[#000000] mb-2">Product Warranty Information</h1>
-              <p className="text-lg text-[#4A4A4A]">Products & Stock</p>
-            </div>
-          </div>
+          <PageHeader
+            title="Product Warranty Information"
+            description="Products & Stock"
+            iconComponent={Shield}
+            variant="help-center"
+            size="large"
+          />
         </div>
       </section>
 

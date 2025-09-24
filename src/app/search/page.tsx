@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, Filter, Grid3X3, List, Star, Heart, ShoppingCart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
-import { Navbar, Footer, ProductFilter, ProductCard } from '../../components';
+import { Navbar, Footer, ProductFilter, ProductCard, SortDropdown, ViewModeToggle } from '../../components';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -22,6 +22,15 @@ const allProducts = [
   { id: 10, name: "ASUS Gaming Laptop", category: "Electronics", price: 18999, originalPrice: 21999, image: "💻", brand: "ASUS", rating: 4.4, reviews: 145, inStock: true, isNew: false, isBestSeller: false },
   { id: 11, name: "Nike Dri-FIT Shirt", category: "Fashion", price: 599, image: "👕", brand: "Nike", rating: 4.2, reviews: 156, inStock: true, isNew: false, isBestSeller: false },
   { id: 12, name: "Samsung 4K Monitor", category: "Electronics", price: 5999, image: "🖥️", brand: "Samsung", rating: 4.5, reviews: 89, inStock: true, isNew: true, isBestSeller: false },
+];
+
+const sortOptions = [
+  { value: 'relevance', label: 'Most Relevant' },
+  { value: 'price-low', label: 'Price: Low to High' },
+  { value: 'price-high', label: 'Price: High to Low' },
+  { value: 'rating', label: 'Highest Rated' },
+  { value: 'newest', label: 'Newest First' },
+  { value: 'popular', label: 'Most Popular' }
 ];
 
 function SearchContent() {
@@ -191,28 +200,12 @@ function SearchContent() {
               </p>
             </div>
             
-            <div className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === 'grid' 
-                    ? 'bg-white text-[#C8102E] shadow-sm' 
-                    : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                }`}
-              >
-                <Grid3X3 className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === 'list' 
-                    ? 'bg-white text-[#C8102E] shadow-sm' 
-                    : 'text-[#4A4A4A] hover:text-[#C8102E]'
-                }`}
-              >
-                <List className="h-5 w-5" />
-              </button>
-            </div>
+            <ViewModeToggle
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              variant="search"
+              hideOnMobile={true}
+            />
           </div>
         </div>
       </div>
@@ -274,64 +267,34 @@ function SearchContent() {
               </button>
               
               <div className="flex items-center space-x-3">
-                <select
+                <SortDropdown
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
-                >
-                  <option value="relevance">Most Relevant</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="newest">Newest First</option>
-                  <option value="popular">Most Popular</option>
-                </select>
+                  onChange={setSortBy}
+                  options={sortOptions}
+                  variant="compact"
+                  showLabel={false}
+                  showIcon={false}
+                />
                 
-                <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-md transition-colors ${
-                      viewMode === 'grid' 
-                        ? 'bg-white text-[#C8102E] shadow-sm' 
-                        : 'text-[#4A4A4A]'
-                    }`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-md transition-colors ${
-                      viewMode === 'list' 
-                        ? 'bg-white text-[#C8102E] shadow-sm' 
-                        : 'text-[#4A4A4A]'
-                    }`}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
+                <ViewModeToggle
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  variant="search"
+                />
               </div>
             </div>
 
-            {/* Desktop Sort */}
             <div className="hidden lg:flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-[#4A4A4A]">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
-                >
-                  <option value="relevance">Most Relevant</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="newest">Newest First</option>
-                  <option value="popular">Most Popular</option>
-                </select>
-              </div>
+              <SortDropdown
+                value={sortBy}
+                onChange={setSortBy}
+                options={sortOptions}
+                variant="default"
+                showLabel={true}
+                showIcon={false}
+              />
             </div>
 
-            {/* Results */}
             {filteredResults.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">

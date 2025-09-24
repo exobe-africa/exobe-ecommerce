@@ -12,3 +12,6 @@ export { default as ApplicationHelpSection } from './ApplicationHelpSection';
 export { default as ProductFilter } from './ProductFilter';
 export { default as ProductCard } from './ProductCard';
 export { default as Breadcrumb } from './Breadcrumb';
+export { default as SortDropdown } from './SortDropdown';
+export { default as ViewModeToggle } from './ViewModeToggle';
+export { default as PageHeader } from './PageHeader';

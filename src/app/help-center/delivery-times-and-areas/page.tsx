@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, MapPin, Truck, Package, MessageCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import { Breadcrumb } from '../../../components';
+import { Breadcrumb, PageHeader } from '../../../components';
 
 export default function DeliveryTimesPage() {
   return (
@@ -29,15 +29,13 @@ export default function DeliveryTimesPage() {
           </Link>
 
           {/* Title */}
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-[#F6E2E0] rounded-xl flex items-center justify-center">
-              <Clock className="h-8 w-8 text-[#C8102E]" />
-            </div>
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-[#000000] mb-2">Delivery Times & Areas</h1>
-              <p className="text-lg text-[#4A4A4A]">Orders & Delivery</p>
-            </div>
-          </div>
+          <PageHeader
+            title="Delivery Times & Areas"
+            description="Orders & Delivery"
+            iconComponent={Clock}
+            variant="help-center"
+            size="large"
+          />
         </div>
       </section>
 

@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { Breadcrumb } from '../../components';
+import { Breadcrumb, PageHeader } from '../../components';
 
 const contactMethods = [
   {
@@ -180,12 +180,13 @@ export default function ContactPage() {
           />
 
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-4 mb-6">
-              <div className="w-16 h-16 bg-[#C8102E] rounded-xl flex items-center justify-center">
-                <MessageCircle className="h-8 w-8 text-white" />
-              </div>
-              <h1 className="text-4xl lg:text-6xl font-bold">Get in Touch</h1>
-            </div>
+            <PageHeader
+              title="Get in Touch"
+              iconComponent={MessageCircle}
+              variant="centered"
+              size="large"
+              className="text-4xl lg:text-6xl mb-6"
+            />
             
             <p className="text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
               We're here to help you with everything from product questions to order support. 

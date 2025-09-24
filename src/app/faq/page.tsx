@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { Breadcrumb } from '../../components';
+import { Breadcrumb, PageHeader } from '../../components';
 
 const faqCategories = [
   {
@@ -269,14 +269,13 @@ export default function FAQPage() {
             className="mb-6"
           />
 
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-[#C8102E] rounded-xl flex items-center justify-center">
-              <HelpCircle className="h-8 w-8 text-white" />
-            </div>
-            <h1 className="text-4xl lg:text-6xl font-bold">
-              Frequently Asked Questions
-            </h1>
-          </div>
+          <PageHeader
+            title="Frequently Asked Questions"
+            iconComponent={HelpCircle}
+            variant="centered"
+            size="large"
+            className="text-4xl lg:text-6xl"
+          />
           
           <p className="text-xl lg:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
             Find quick answers to the most common questions about shopping with eXobe
