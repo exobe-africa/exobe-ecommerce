@@ -14,7 +14,6 @@ import {
   ReviewForm
 } from '../../../components/pages/product';
 
-// Type definitions for variants
 interface VariantOption {
   name: string;
   value: string;
@@ -32,8 +31,8 @@ interface ProductVariants {
 }
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
+import LocationChips from '../../../components/common/LocationChips';
 
-// Sample product data with variants - in a real app, this would come from an API
 const products = [
   { 
     id: '1', 
@@ -49,6 +48,7 @@ const products = [
     stockCount: 15,
     rating: 4.8,
     reviews: 124,
+    availableLocations: ['Johannesburg', 'Cape Town', 'Durban'],
     variants: {
       colors: [
         { name: 'Midnight Black', value: 'black', image: '🎧', price: 1299.99, stock: 15 },
@@ -72,6 +72,7 @@ const products = [
     stockCount: 8,
     rating: 4.6,
     reviews: 89,
+    availableLocations: ['Johannesburg', 'Cape Town'],
     variants: {
       colors: [
         { name: 'Classic White', value: 'white', image: '👕', price: 299.99, stock: 20 },
@@ -103,6 +104,7 @@ const products = [
     stockCount: 5,
     rating: 4.9,
     reviews: 256,
+    availableLocations: ['Johannesburg', 'Durban'],
     variants: {
       colors: [
         { name: 'Cosmic Black', value: 'black', image: '📱', price: 9999.99, stock: 8 },
@@ -132,6 +134,7 @@ const products = [
     stockCount: 12,
     rating: 4.7,
     reviews: 178,
+    availableLocations: ['Cape Town', 'Durban', 'Pretoria'],
     variants: {
       colors: [
         { name: 'Midnight', value: 'black', image: '⌚', price: 3499.99, stock: 15 },
@@ -337,6 +340,7 @@ export default function ProductPage() {
         originalPrice: product.originalPrice,
         image: currentImage || product.image,
         category: product.category,
+        availableLocations: product.availableLocations,
       });
     }
     

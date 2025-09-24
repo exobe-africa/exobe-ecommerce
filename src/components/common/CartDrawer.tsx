@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import LocationChips from './LocationChips';
 
 const formatVariant = (variant?: { [key: string]: string | undefined }) => {
   if (!variant) return null;
@@ -194,6 +195,15 @@ export default function CartDrawer() {
                             ))
                           }
                         </div>
+                      )}
+
+                      {/* Location Availability */}
+                      {item.availableLocations && item.availableLocations.length > 0 && (
+                        <LocationChips 
+                          locations={item.availableLocations} 
+                          size="sm"
+                          className="mb-2"
+                        />
                       )}
                       
                       <p className="text-xs text-[#4A4A4A] mb-1">{item.category}</p>

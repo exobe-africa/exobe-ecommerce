@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from 'lucide-react';
+import LocationChips from '../../common/LocationChips';
 
 interface Product {
   id: string;
@@ -10,6 +11,7 @@ interface Product {
   description: string;
   rating: number;
   reviews: number;
+  availableLocations?: string[];
 }
 
 interface ProductDetailsProps {
@@ -42,6 +44,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice }
         </div>
         <p className="text-[#4A4A4A] leading-relaxed">{product.description}</p>
       </div>
+
+      {/* Location Availability */}
+      {product.availableLocations && product.availableLocations.length > 0 && (
+        <LocationChips 
+          locations={product.availableLocations} 
+          size="lg"
+          className="py-2"
+        />
+      )}
 
       {/* Price */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">

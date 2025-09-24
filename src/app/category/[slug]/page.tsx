@@ -14,30 +14,30 @@ import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
 const allProducts = [
-  { id: '1', name: 'Premium Headphones', price: 1299.99, originalPrice: 1599.99, image: '🎧', category: 'electronics', brand: 'Sony', rating: 4.8, reviews: 124, inStock: true, isNew: true, isBestSeller: true },
-  { id: '3', name: 'Smartphone Pro', price: 9999.99, originalPrice: 11999.99, image: '📱', category: 'electronics', brand: 'Apple', rating: 4.9, reviews: 256, inStock: true, isNew: true, isBestSeller: true },
-  { id: '4', name: 'Smart Watch', price: 3499.99, originalPrice: 4199.99, image: '⌚', category: 'electronics', brand: 'Samsung', rating: 4.7, reviews: 178, inStock: true, isNew: false, isBestSeller: true },
-  { id: '5', name: 'Wireless Speaker', price: 1499.99, originalPrice: 1999.99, image: '🔊', category: 'electronics', brand: 'JBL', rating: 4.5, reviews: 95, inStock: true, isNew: false, isBestSeller: false },
-  { id: '7', name: 'Gaming Mouse', price: 799.99, originalPrice: 999.99, image: '🖱️', category: 'electronics', brand: 'Logitech', rating: 4.7, reviews: 143, inStock: true, isNew: true, isBestSeller: false },
-  { id: '9', name: 'Bluetooth Earbuds', price: 599.99, originalPrice: 799.99, image: '🎵', category: 'electronics', brand: 'Sony', rating: 4.6, reviews: 89, inStock: true, isNew: false, isBestSeller: true },
-  { id: '10', name: 'Tablet Pro', price: 4999.99, originalPrice: 5999.99, image: '📱', category: 'electronics', brand: 'Apple', rating: 4.8, reviews: 167, inStock: false, isNew: true, isBestSeller: false },
-  { id: '11', name: 'Wireless Charger', price: 299.99, originalPrice: 399.99, image: '🔋', category: 'electronics', brand: 'Samsung', rating: 4.4, reviews: 73, inStock: true, isNew: false, isBestSeller: false },
+  { id: '1', name: 'Premium Headphones', price: 1299.99, originalPrice: 1599.99, image: '🎧', category: 'electronics', brand: 'Sony', rating: 4.8, reviews: 124, inStock: true, isNew: true, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: '3', name: 'Smartphone Pro', price: 9999.99, originalPrice: 11999.99, image: '📱', category: 'electronics', brand: 'Apple', rating: 4.9, reviews: 256, inStock: true, isNew: true, isBestSeller: true, availableLocations: ['Johannesburg', 'Durban'] },
+  { id: '4', name: 'Smart Watch', price: 3499.99, originalPrice: 4199.99, image: '⌚', category: 'electronics', brand: 'Samsung', rating: 4.7, reviews: 178, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
+  { id: '5', name: 'Wireless Speaker', price: 1499.99, originalPrice: 1999.99, image: '🔊', category: 'electronics', brand: 'JBL', rating: 4.5, reviews: 95, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { id: '7', name: 'Gaming Mouse', price: 799.99, originalPrice: 999.99, image: '🖱️', category: 'electronics', brand: 'Logitech', rating: 4.7, reviews: 143, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Pretoria'] },
+  { id: '9', name: 'Bluetooth Earbuds', price: 599.99, originalPrice: 799.99, image: '🎵', category: 'electronics', brand: 'Sony', rating: 4.6, reviews: 89, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: '10', name: 'Tablet Pro', price: 4999.99, originalPrice: 5999.99, image: '📱', category: 'electronics', brand: 'Apple', rating: 4.8, reviews: 167, inStock: false, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban'] },
+  { id: '11', name: 'Wireless Charger', price: 299.99, originalPrice: 399.99, image: '🔋', category: 'electronics', brand: 'Samsung', rating: 4.4, reviews: 73, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town'] },
   
   // Fashion
-  { id: '2', name: 'Cotton T-Shirt', price: 299.99, originalPrice: 399.99, image: '👕', category: 'fashion', brand: 'Nike', rating: 4.6, reviews: 89, inStock: true, isNew: false, isBestSeller: true },
-  { id: '6', name: 'Designer Jacket', price: 2499.99, originalPrice: 3299.99, image: '🧥', category: 'fashion', brand: 'Adidas', rating: 4.8, reviews: 67, inStock: true, isNew: true, isBestSeller: false },
-  { id: '12', name: 'Denim Jeans', price: 899.99, originalPrice: 1199.99, image: '👖', category: 'fashion', brand: 'Levi\'s', rating: 4.5, reviews: 156, inStock: true, isNew: false, isBestSeller: true },
-  { id: '13', name: 'Summer Dress', price: 699.99, originalPrice: 999.99, image: '👗', category: 'fashion', brand: 'Zara', rating: 4.7, reviews: 92, inStock: true, isNew: true, isBestSeller: false },
+  { id: '2', name: 'Cotton T-Shirt', price: 299.99, originalPrice: 399.99, image: '👕', category: 'fashion', brand: 'Nike', rating: 4.6, reviews: 89, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town'] },
+  { id: '6', name: 'Designer Jacket', price: 2499.99, originalPrice: 3299.99, image: '🧥', category: 'fashion', brand: 'Adidas', rating: 4.8, reviews: 67, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban'] },
+  { id: '12', name: 'Denim Jeans', price: 899.99, originalPrice: 1199.99, image: '👖', category: 'fashion', brand: 'Levi\'s', rating: 4.5, reviews: 156, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { id: '13', name: 'Summer Dress', price: 699.99, originalPrice: 999.99, image: '👗', category: 'fashion', brand: 'Zara', rating: 4.7, reviews: 92, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban'] },
   
   // Sports
-  { id: '8', name: 'Running Shoes', price: 1999.99, originalPrice: 2499.99, image: '👟', category: 'sports', brand: 'Nike', rating: 4.6, reviews: 201, inStock: false, isNew: false, isBestSeller: true },
-  { id: '14', name: 'Yoga Mat', price: 399.99, originalPrice: 499.99, image: '🧘', category: 'sports', brand: 'Adidas', rating: 4.5, reviews: 134, inStock: true, isNew: false, isBestSeller: false },
-  { id: '15', name: 'Fitness Tracker', price: 1299.99, originalPrice: 1599.99, image: '⌚', category: 'sports', brand: 'Fitbit', rating: 4.4, reviews: 88, inStock: true, isNew: true, isBestSeller: false },
+  { id: '8', name: 'Running Shoes', price: 1999.99, originalPrice: 2499.99, image: '👟', category: 'sports', brand: 'Nike', rating: 4.6, reviews: 201, inStock: false, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: '14', name: 'Yoga Mat', price: 399.99, originalPrice: 499.99, image: '🧘', category: 'sports', brand: 'Adidas', rating: 4.5, reviews: 134, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Pretoria'] },
+  { id: '15', name: 'Fitness Tracker', price: 1299.99, originalPrice: 1599.99, image: '⌚', category: 'sports', brand: 'Fitbit', rating: 4.4, reviews: 88, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
   
   // Home & Garden
-  { id: '16', name: 'Coffee Maker', price: 1899.99, originalPrice: 2399.99, image: '☕', category: 'home-garden', brand: 'Nespresso', rating: 4.7, reviews: 156, inStock: true, isNew: false, isBestSeller: true },
-  { id: '17', name: 'Plant Pot Set', price: 599.99, originalPrice: 799.99, image: '🪴', category: 'home-garden', brand: 'IKEA', rating: 4.3, reviews: 67, inStock: true, isNew: true, isBestSeller: false },
-  { id: '18', name: 'LED Desk Lamp', price: 799.99, originalPrice: 999.99, image: '💡', category: 'home-garden', brand: 'Philips', rating: 4.6, reviews: 123, inStock: true, isNew: false, isBestSeller: false },
+  { id: '16', name: 'Coffee Maker', price: 1899.99, originalPrice: 2399.99, image: '☕', category: 'home-garden', brand: 'Nespresso', rating: 4.7, reviews: 156, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: '17', name: 'Plant Pot Set', price: 599.99, originalPrice: 799.99, image: '🪴', category: 'home-garden', brand: 'IKEA', rating: 4.3, reviews: 67, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { id: '18', name: 'LED Desk Lamp', price: 799.99, originalPrice: 999.99, image: '💡', category: 'home-garden', brand: 'Philips', rating: 4.6, reviews: 123, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Pretoria'] },
 ];
 
 const categories = {
@@ -137,6 +137,7 @@ export default function CategoryPage() {
       originalPrice: product.originalPrice,
       image: product.image,
       category: product.category,
+      availableLocations: product.availableLocations,
     });
     
     // Toast removed - cart drawer opens automatically

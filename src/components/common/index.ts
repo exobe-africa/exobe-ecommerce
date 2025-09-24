@@ -22,3 +22,4 @@ export { default as AuthFooter } from './AuthFooter';
 export { default as SocialButtons } from './SocialButtons';
 export { default as BackToHomeLink } from './BackToHomeLink';
 export { default as BackToLoginLink } from './BackToLoginLink';
+export { default as LocationChips } from './LocationChips';

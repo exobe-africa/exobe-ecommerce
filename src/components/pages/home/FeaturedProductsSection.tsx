@@ -10,6 +10,7 @@ interface Product {
   originalPrice: number;
   image: string;
   category: string;
+  availableLocations: string[];
 }
 
 interface FeaturedProductsSectionProps {

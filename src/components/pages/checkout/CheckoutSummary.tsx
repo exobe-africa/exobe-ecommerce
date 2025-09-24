@@ -1,6 +1,7 @@
 "use client";
 
 import { ShoppingBag, Shield, Truck, Phone } from 'lucide-react';
+import LocationChips from '../../common/LocationChips';
 
 // Helper function to format variant display
 const formatVariant = (variant?: { [key: string]: string | undefined }) => {
@@ -28,6 +29,7 @@ interface CartItem {
     [key: string]: string | undefined;
   };
   uniqueId?: string;
+  availableLocations?: string[];
 }
 
 interface CheckoutSummaryProps {
@@ -73,6 +75,14 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                     ))
                   }
                 </div>
+              )}
+              {/* Location Availability */}
+              {item.availableLocations && item.availableLocations.length > 0 && (
+                <LocationChips 
+                  locations={item.availableLocations} 
+                  size="sm"
+                  className="mb-2"
+                />
               )}
               <p className="text-sm text-[#4A4A4A]">Qty: {item.quantity}</p>
               <div className="mt-1">

@@ -18,6 +18,7 @@ export interface CartItem {
     [key: string]: string | undefined;
   };
   uniqueId?: string; // Generated unique ID including variant info
+  availableLocations?: string[];
 }
 
 interface CartState {

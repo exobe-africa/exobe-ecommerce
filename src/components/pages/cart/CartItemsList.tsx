@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Plus, Minus, X, Heart, Trash2 } from 'lucide-react';
+import LocationChips from '../../common/LocationChips';
 
 // Helper function to format variant display
 const formatVariant = (variant?: { [key: string]: string | undefined }) => {
@@ -30,6 +31,7 @@ interface CartItem {
     [key: string]: string | undefined;
   };
   uniqueId?: string;
+  availableLocations?: string[];
 }
 
 interface CartItemsListProps {
@@ -92,6 +94,15 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                       ))
                     }
                   </div>
+                )}
+
+                {/* Location Availability */}
+                {item.availableLocations && item.availableLocations.length > 0 && (
+                  <LocationChips 
+                    locations={item.availableLocations} 
+                    size="sm"
+                    className="mb-2"
+                  />
                 )}
                 
                 <div className="flex items-center space-x-4">

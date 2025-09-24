@@ -11,14 +11,14 @@ export default function Home() {
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
 
   const products = [
-    { id: '1', name: 'Premium Headphones', price: 79.99, originalPrice: 99.99, image: '🎧', category: 'Electronics' },
-    { id: '2', name: 'Cotton T-Shirt', price: 29.99, originalPrice: 39.99, image: '👕', category: 'Fashion' },
-    { id: '3', name: 'Smartphone', price: 599.99, originalPrice: 699.99, image: '📱', category: 'Electronics' },
-    { id: '4', name: 'Smart Watch', price: 199.99, originalPrice: 249.99, image: '⌚', category: 'Electronics' },
-    { id: '5', name: 'Wireless Speaker', price: 89.99, originalPrice: 119.99, image: '🔊', category: 'Electronics' },
-    { id: '6', name: 'Designer Jacket', price: 149.99, originalPrice: 199.99, image: '🧥', category: 'Fashion' },
-    { id: '7', name: 'Gaming Mouse', price: 49.99, originalPrice: 69.99, image: '🖱️', category: 'Electronics' },
-    { id: '8', name: 'Running Shoes', price: 119.99, originalPrice: 149.99, image: '👟', category: 'Sports' },
+    { id: '1', name: 'Premium Headphones', price: 79.99, originalPrice: 99.99, image: '🎧', category: 'Electronics', availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+    { id: '2', name: 'Cotton T-Shirt', price: 29.99, originalPrice: 39.99, image: '👕', category: 'Fashion', availableLocations: ['Johannesburg', 'Cape Town'] },
+    { id: '3', name: 'Smartphone', price: 599.99, originalPrice: 699.99, image: '📱', category: 'Electronics', availableLocations: ['Johannesburg', 'Durban'] },
+    { id: '4', name: 'Smart Watch', price: 199.99, originalPrice: 249.99, image: '⌚', category: 'Electronics', availableLocations: ['Cape Town', 'Durban', 'Pretoria'] },
+    { id: '5', name: 'Wireless Speaker', price: 89.99, originalPrice: 119.99, image: '🔊', category: 'Electronics', availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+    { id: '6', name: 'Designer Jacket', price: 149.99, originalPrice: 199.99, image: '🧥', category: 'Fashion', availableLocations: ['Cape Town', 'Durban'] },
+    { id: '7', name: 'Gaming Mouse', price: 49.99, originalPrice: 69.99, image: '🖱️', category: 'Electronics', availableLocations: ['Johannesburg', 'Pretoria'] },
+    { id: '8', name: 'Running Shoes', price: 119.99, originalPrice: 149.99, image: '👟', category: 'Sports', availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
   ];
 
   const handleAddToCart = (product: typeof products[0]) => {
@@ -41,6 +41,7 @@ export default function Home() {
       image: product.image,
       category: product.category,
       variant: exampleVariants[product.id as keyof typeof exampleVariants],
+      availableLocations: product.availableLocations,
     });
     
     // Toast removed - cart drawer opens automatically
