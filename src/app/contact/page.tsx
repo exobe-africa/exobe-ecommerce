@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { Breadcrumb } from '../../components';
 
 const contactMethods = [
   {
@@ -169,11 +170,14 @@ export default function ContactPage() {
       <section className="bg-gradient-to-br from-[#000000] to-[#4A4A4A] text-white py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <div className="flex items-center justify-center space-x-2 text-sm text-gray-300 mb-8">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-white">Contact Us</span>
-          </div>
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Contact Us', isCurrentPage: true }
+            ]}
+            variant="centered"
+            className="mb-8"
+          />
 
           <div className="text-center">
             <div className="flex items-center justify-center space-x-4 mb-6">

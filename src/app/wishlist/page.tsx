@@ -23,7 +23,7 @@ import {
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ConfirmationModal from '../../components/ConfirmationModal';
-import { ProductCard } from '../../components';
+import { ProductCard, Breadcrumb } from '../../components';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 
@@ -188,11 +188,13 @@ export default function WishlistPage() {
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
-            <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-[#000000] font-medium">My Wishlist</span>
-          </div>
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'My Wishlist', isCurrentPage: true }
+            ]}
+            className="mb-6"
+          />
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">

@@ -19,7 +19,7 @@ import {
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import Toast from '../../../components/Toast';
-import { ProductFilter, ProductCard } from '../../../components';
+import { ProductFilter, ProductCard, Breadcrumb } from '../../../components';
 import { useCart } from '../../../context/CartContext';
 import { useWishlist } from '../../../context/WishlistContext';
 
@@ -228,17 +228,14 @@ export default function CategoryPage() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
-          <Link href="/" className="hover:text-[#C8102E] transition-colors">
-            Home
-          </Link>
-          <span>/</span>
-          <Link href="/categories" className="hover:text-[#C8102E] transition-colors">
-            Categories
-          </Link>
-          <span>/</span>
-          <span className="text-[#000000] font-medium">{category.name}</span>
-        </div>
+        <Breadcrumb 
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Categories', href: '/categories' },
+            { label: category.name, isCurrentPage: true }
+          ]}
+          className="mb-6"
+        />
 
         {/* Category Header */}
         <div className="flex items-center space-x-3 sm:space-x-4 mb-6 sm:mb-8">
@@ -252,7 +249,6 @@ export default function CategoryPage() {
         </div>
 
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-          {/* Desktop Filters Sidebar */}
           <div className="hidden lg:block">
             <div className="sticky top-4">
               <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">

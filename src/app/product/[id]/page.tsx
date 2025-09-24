@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { Star, Heart, ShoppingCart, Minus, Plus, ArrowLeft, Shield, Truck, RotateCcw, Share2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Breadcrumb } from '../../../components';
 
 // Type definitions for variants
 interface VariantOption {
@@ -538,16 +539,14 @@ export default function ProductPage() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
-          <button onClick={() => router.back()} className="flex items-center hover:text-[#C8102E] transition-colors">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back
-          </button>
-          <span>/</span>
-          <span>{product.category}</span>
-          <span>/</span>
-          <span className="text-[#000000] font-medium">{product.name}</span>
-        </div>
+        <Breadcrumb 
+          showBackButton={true}
+          items={[
+            { label: product.category },
+            { label: product.name, isCurrentPage: true }
+          ]}
+          className="mb-6"
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Images */}

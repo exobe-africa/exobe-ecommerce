@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { Breadcrumb } from '../../components';
 
 const faqCategories = [
   {
@@ -258,13 +259,15 @@ export default function FAQPage() {
       <section className="bg-gradient-to-br from-[#000000] to-[#4A4A4A] text-white py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Breadcrumb */}
-          <div className="flex items-center justify-center space-x-2 text-sm text-gray-300 mb-6">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/help-center" className="hover:text-white transition-colors">Help Centre</Link>
-            <span>/</span>
-            <span className="text-white">FAQ</span>
-          </div>
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Help Centre', href: '/help-center' },
+              { label: 'FAQ', isCurrentPage: true }
+            ]}
+            variant="centered"
+            className="mb-6"
+          />
 
           <div className="flex items-center justify-center space-x-4 mb-6">
             <div className="w-16 h-16 bg-[#C8102E] rounded-xl flex items-center justify-center">

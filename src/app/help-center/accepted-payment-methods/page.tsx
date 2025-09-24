@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, CreditCard, Smartphone, Building2, Shield, Lock, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
+import { Breadcrumb } from '../../../components';
 
 export default function PaymentMethodsPage() {
   return (
@@ -12,13 +13,14 @@ export default function PaymentMethodsPage() {
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-sm text-[#4A4A4A] mb-6">
-            <Link href="/" className="hover:text-[#C8102E] transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/help-center" className="hover:text-[#C8102E] transition-colors">Help Centre</Link>
-            <span>/</span>
-            <span className="text-[#000000] font-medium">Accepted payment methods</span>
-          </div>
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Help Centre', href: '/help-center' },
+              { label: 'Accepted payment methods', isCurrentPage: true }
+            ]}
+            className="mb-6"
+          />
 
           {/* Back Button */}
           <Link href="/help-center" className="inline-flex items-center text-[#C8102E] hover:text-[#A00E26] transition-colors mb-6">

@@ -11,3 +11,4 @@ export { default as ApplicationSuccessModal } from './ApplicationSuccessModal';
 export { default as ApplicationHelpSection } from './ApplicationHelpSection';
 export { default as ProductFilter } from './ProductFilter';
 export { default as ProductCard } from './ProductCard';
+export { default as Breadcrumb } from './Breadcrumb';
