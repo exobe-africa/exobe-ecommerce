@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Smartphone, Shirt, Home, Zap } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { CategoryFilter } from "../../components";
 
 const categories = [
   {
@@ -81,7 +83,26 @@ const categories = [
   }
 ];
 
+const popularTags = [
+  { id: 'new-arrivals', title: 'New Arrivals' },
+  { id: 'best-sellers', title: 'Best Sellers' },
+  { id: 'on-sale', title: 'On Sale' },
+  { id: 'premium-collection', title: 'Premium Collection' },
+  { id: 'customer-favourites', title: 'Customer Favourites' }
+];
+
 export default function CategoriesPage() {
+  const [selectedTag, setSelectedTag] = useState('');
+
+  const handleTagSelect = (tagId: string) => {
+    setSelectedTag(tagId);
+    // Navigate to electronics category with filter
+    const tag = popularTags.find(t => t.id === tagId);
+    if (tag) {
+      window.location.href = `/category/electronics?filter=${tagId}`;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -209,17 +230,17 @@ export default function CategoriesPage() {
         {/* Popular Categories Quick Links */}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-[#000000] mb-8">Popular Right Now</h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {['New Arrivals', 'Best Sellers', 'On Sale', 'Premium Collection', 'Customer Favourites'].map((tag, index) => (
-              <Link
-                key={index}
-                href={`/category/electronics?filter=${tag.toLowerCase().replace(' ', '-')}`}
-                className="bg-white border-2 border-[#4A4A4A] text-[#4A4A4A] px-6 py-3 rounded-full font-medium hover:bg-[#4A4A4A] hover:text-white transition-all duration-300 transform hover:scale-105"
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
+          <CategoryFilter
+            categories={popularTags}
+            selectedCategory={selectedTag}
+            onCategoryChange={handleTagSelect}
+            variant="light"
+            size="medium"
+            showAllOption={false}
+            layout="horizontal"
+            showIcons={false}
+            className="justify-center"
+          />
         </div>
       </div>
 

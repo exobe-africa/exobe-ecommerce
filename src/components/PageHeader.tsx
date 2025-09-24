@@ -26,7 +26,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   children,
   actions,
 }) => {
-  // Icon rendering logic
   const renderIcon = () => {
     if (!icon && !IconComponent) return null;
 
@@ -75,7 +74,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     );
   };
 
-  // Title and description styles
   const getTitleStyles = () => {
     const baseStyles = "font-bold leading-tight";
     
@@ -115,9 +113,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   };
 
   const containerClasses = `${getContainerStyles()} ${className}`;
-  const titleClasses = `${getTitleStyles()} text-[#000000]`;
+  const titleClasses = `${getTitleStyles()} ${variant === 'centered' ? 'text-white' : 'text-[#000000]'}`;
 
-  // Handle different layouts
   if (variant === 'centered') {
     return (
       <div className={containerClasses}>
@@ -131,7 +128,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     );
   }
 
-  // Default layout with optional actions
   return (
     <div className={actions ? "flex items-center justify-between" : containerClasses}>
       <div className={actions ? getContainerStyles() : "flex items-center space-x-4"}>

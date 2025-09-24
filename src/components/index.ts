@@ -16,3 +16,4 @@ export { default as SortDropdown } from './SortDropdown';
 export { default as ViewModeToggle } from './ViewModeToggle';
 export { default as PageHeader } from './PageHeader';
 export { default as QuickStats } from './QuickStats';
+export { default as CategoryFilter } from './CategoryFilter';
