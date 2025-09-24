@@ -1,29 +1,24 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { 
   Heart, 
   ShoppingCart, 
-  Star, 
   Trash2, 
-  ShoppingBag,
-  ArrowRight,
-  Filter,
-  Grid,
-  List,
-  SortAsc,
   Calendar,
   DollarSign,
-  Package,
-  Share2,
-  Eye,
-  AlertCircle
+  SortAsc
 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ConfirmationModal from '../../components/ConfirmationModal';
-import { ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../components';
+import { Breadcrumb, PageHeader } from '../../components';
+import { 
+  EmptyWishlistState, 
+  WishlistToolbar, 
+  WishlistGrid, 
+  MobileFiltersModal 
+} from '../../components/wishlist';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 
@@ -229,206 +224,50 @@ export default function WishlistPage() {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {wishlistState.totalItems === 0 ? (
-          /* Empty Wishlist State */
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-[#F6E2E0] rounded-full flex items-center justify-center mx-auto mb-6">
-              <Heart className="h-12 w-12 text-[#C8102E]" />
-            </div>
-            <h2 className="text-3xl font-bold text-[#000000] mb-4">Your Wishlist is Empty</h2>
-            <p className="text-lg text-[#4A4A4A] mb-8 max-w-md mx-auto">
-              Start adding items you love to your wishlist. They'll appear here so you can easily find them later.
-            </p>
-            
-            <div className="space-y-4">
-              <Link href="/categories">
-                <button className="bg-[#C8102E] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#A00E26] transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto">
-                  <ShoppingBag className="h-5 w-5 mr-2" />
-                  Start Shopping
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </button>
-              </Link>
-              
-              <div className="flex justify-center space-x-6 text-sm text-[#4A4A4A]">
-                <Link href="/categories/electronics" className="hover:text-[#C8102E] transition-colors">Electronics</Link>
-                <Link href="/categories/fashion" className="hover:text-[#C8102E] transition-colors">Fashion</Link>
-                <Link href="/categories/sports" className="hover:text-[#C8102E] transition-colors">Sports</Link>
-                <Link href="/categories/home-garden" className="hover:text-[#C8102E] transition-colors">Home & Garden</Link>
-              </div>
-            </div>
-          </div>
+          <EmptyWishlistState />
         ) : (
           <>
-            {/* Toolbar */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <div className="flex items-center space-x-4">
-                  <span className="text-[#4A4A4A] font-medium">
-                    Showing {sortedAndFilteredItems.length} of {wishlistState.totalItems} items
-                  </span>
-                </div>
+            <WishlistToolbar
+              totalItems={wishlistState.totalItems}
+              filteredItemsCount={sortedAndFilteredItems.length}
+              filterBy={filterBy}
+              sortBy={sortBy}
+              viewMode={viewMode}
+              filterOptions={filterOptions}
+              sortOptions={sortOptions}
+              onFilterChange={setFilterBy}
+              onSortChange={setSortBy}
+              onViewModeChange={setViewMode}
+              onShowMobileFilters={() => setShowMobileFilters(true)}
+              onAddAllToCart={handleAddAllToCart}
+              onClearWishlist={handleClearWishlist}
+            />
 
-                <div className="flex items-center space-x-4">
-                  {/* Mobile Filter Button */}
-                  <button
-                    onClick={() => setShowMobileFilters(true)}
-                    className="md:hidden bg-[#4A4A4A] text-white px-4 py-2 rounded-lg font-medium flex items-center"
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filters
-                  </button>
-
-                  {/* Desktop Filters */}
-                  <div className="hidden md:flex items-center space-x-4">
-                    <select
-                      value={filterBy}
-                      onChange={(e) => setFilterBy(e.target.value)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
-                    >
-                      {filterOptions.map(option => (
-                        <option key={option.value} value={option.value}>{option.label}</option>
-                      ))}
-                    </select>
-
-                    <SortDropdown
-                      value={sortBy}
-                      onChange={setSortBy}
-                      options={sortOptions}
-                      variant="compact"
-                      showLabel={false}
-                      showIcon={false}
-                      selectClassName="px-4 py-2 text-[#000000]"
-                    />
-                  </div>
-
-                  {/* View Mode Toggle */}
-                  <ViewModeToggle
-                    viewMode={viewMode}
-                    onViewModeChange={setViewMode}
-                    variant="wishlist"
-                    gridIcon="grid"
-                  />
-                </div>
-              </div>
-
-              {/* Mobile Action Buttons */}
-              <div className="md:hidden mt-4 flex space-x-3">
-                <button
-                  onClick={handleAddAllToCart}
-                  className="flex-1 bg-[#C8102E] text-white py-3 rounded-lg font-semibold hover:bg-[#A00E26] transition-colors flex items-center justify-center"
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Add All to Cart
-                </button>
-                <button
-                  onClick={handleClearWishlist}
-                  className="px-4 py-3 border border-[#4A4A4A] text-[#4A4A4A] rounded-lg hover:bg-[#4A4A4A] hover:text-white transition-colors"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Wishlist Items */}
-            <div className={viewMode === 'grid' 
-              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6' 
-              : 'space-y-3 sm:space-y-4'
-            }>
-              {sortedAndFilteredItems.map((item) => (
-                <ProductCard
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  price={item.price}
-                  originalPrice={item.originalPrice}
-                  image={item.image}
-                  category={item.category}
-                  brand={(item as any).brand || 'eXobe'}
-                  rating={item.rating}
-                  reviews={item.reviews}
-                  inStock={item.inStock}
-                  addedAt={new Date(item.addedAt)}
-                  variant="wishlist"
-                  viewMode={viewMode}
-                  onAddToCart={handleAddToCart}
-                  onRemoveFromWishlist={handleRemoveFromWishlist}
-                  showWishlistDate={true}
-                  showQuickActions={true}
-                />
-              ))}
-            </div>
-
-            {/* No Results */}
-            {sortedAndFilteredItems.length === 0 && wishlistState.totalItems > 0 && (
-              <div className="text-center py-12">
-                <AlertCircle className="h-12 w-12 text-[#4A4A4A] mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-[#000000] mb-2">No items match your filters</h3>
-                <p className="text-[#4A4A4A] mb-4">Try adjusting your filter or sort options.</p>
-                <button
-                  onClick={() => {
-                    setFilterBy('all');
-                    setSortBy('newest');
-                  }}
-                  className="bg-[#C8102E] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#A00E26] transition-colors"
-                >
-                  Clear Filters
-                </button>
-              </div>
-            )}
+            <WishlistGrid
+              items={sortedAndFilteredItems}
+              viewMode={viewMode}
+              totalItems={wishlistState.totalItems}
+              onAddToCart={handleAddToCart}
+              onRemoveFromWishlist={handleRemoveFromWishlist}
+              onClearFilters={() => {
+                setFilterBy('all');
+                setSortBy('newest');
+              }}
+            />
           </>
         )}
       </div>
 
-      {/* Mobile Filters Modal */}
-      {showMobileFilters && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 sm:p-6 max-h-[80vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-[#000000]">Filters & Sort</h3>
-              <button
-                onClick={() => setShowMobileFilters(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-[#000000] mb-3">Filter by</label>
-                <select
-                  value={filterBy}
-                  onChange={(e) => setFilterBy(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
-                >
-                  {filterOptions.map(option => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#000000] mb-3">Sort by</label>
-                <SortDropdown
-                  value={sortBy}
-                  onChange={setSortBy}
-                  options={sortOptions}
-                  variant="compact"
-                  showLabel={false}
-                  showIcon={false}
-                  selectClassName="w-full px-4 py-3 text-[#000000]"
-                />
-              </div>
-            </div>
-
-            <button
-              onClick={() => setShowMobileFilters(false)}
-              className="w-full bg-[#C8102E] text-white py-4 rounded-lg font-semibold hover:bg-[#A00E26] transition-colors mt-6"
-            >
-              Apply Filters
-            </button>
-          </div>
-        </div>
-      )}
+      <MobileFiltersModal
+        isOpen={showMobileFilters}
+        filterBy={filterBy}
+        sortBy={sortBy}
+        filterOptions={filterOptions}
+        sortOptions={sortOptions}
+        onClose={() => setShowMobileFilters(false)}
+        onFilterChange={setFilterBy}
+        onSortChange={setSortBy}
+      />
 
       {/* Clear Wishlist Confirmation Modal */}
       <ConfirmationModal
