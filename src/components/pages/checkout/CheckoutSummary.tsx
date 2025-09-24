@@ -2,12 +2,32 @@
 
 import { ShoppingBag, Shield, Truck, Phone } from 'lucide-react';
 
+// Helper function to format variant display
+const formatVariant = (variant?: { [key: string]: string | undefined }) => {
+  if (!variant) return null;
+  
+  const variantEntries = Object.entries(variant).filter(([_, value]) => value);
+  if (variantEntries.length === 0) return null;
+  
+  return variantEntries
+    .map(([key, value]) => `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`)
+    .join(' • ');
+};
+
 interface CartItem {
   id: string;
   name: string;
   price: number;
   quantity: number;
   image: string;
+  variant?: {
+    size?: string;
+    color?: string;
+    style?: string;
+    material?: string;
+    [key: string]: string | undefined;
+  };
+  uniqueId?: string;
 }
 
 interface CheckoutSummaryProps {
@@ -34,18 +54,30 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         Order Summary
       </h3>
       
-      <div className="space-y-4 mb-6">
+      <div className="space-y-5 mb-6">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center space-x-3">
+          <div key={item.uniqueId || item.id} className="flex items-start space-x-3">
             <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
               <span className="text-2xl">{item.image}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-[#000000] truncate">{item.name}</h4>
+              <h4 className="font-medium text-[#000000] leading-tight mb-1">{item.name}</h4>
+              {formatVariant(item.variant) && (
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {Object.entries(item.variant || {})
+                    .filter(([_, value]) => value)
+                    .map(([key, value]) => (
+                      <span key={key} className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-[#C8102E] text-white shadow-sm">
+                        {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                      </span>
+                    ))
+                  }
+                </div>
+              )}
               <p className="text-sm text-[#4A4A4A]">Qty: {item.quantity}</p>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold text-[#C8102E]">R{(item.price * item.quantity).toFixed(2)}</p>
+              <div className="mt-1">
+                <p className="font-semibold text-[#C8102E]">R{(item.price * item.quantity).toFixed(2)}</p>
+              </div>
             </div>
           </div>
         ))}

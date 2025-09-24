@@ -32,7 +32,7 @@ export default function CartPage() {
         inStock: true
       });
     }
-    removeItem(item.id);
+    removeItem(item.id, item.variant);
   };
 
   const subtotal = state.totalPrice;

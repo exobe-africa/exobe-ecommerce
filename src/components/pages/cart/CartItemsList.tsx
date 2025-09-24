@@ -3,6 +3,18 @@
 import Link from 'next/link';
 import { Plus, Minus, X, Heart, Trash2 } from 'lucide-react';
 
+// Helper function to format variant display
+const formatVariant = (variant?: { [key: string]: string | undefined }) => {
+  if (!variant) return null;
+  
+  const variantEntries = Object.entries(variant).filter(([_, value]) => value);
+  if (variantEntries.length === 0) return null;
+  
+  return variantEntries
+    .map(([key, value]) => `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`)
+    .join(' • ');
+};
+
 interface CartItem {
   id: string;
   name: string;
@@ -10,12 +22,20 @@ interface CartItem {
   quantity: number;
   image: string;
   category: string;
+  variant?: {
+    size?: string;
+    color?: string;
+    style?: string;
+    material?: string;
+    [key: string]: string | undefined;
+  };
+  uniqueId?: string;
 }
 
 interface CartItemsListProps {
   items: CartItem[];
-  onUpdateQuantity: (id: string, quantity: number) => void;
-  onRemoveItem: (id: string) => void;
+  onUpdateQuantity: (id: string, quantity: number, variant?: { [key: string]: string | undefined }) => void;
+  onRemoveItem: (id: string, variant?: { [key: string]: string | undefined }) => void;
   onMoveToWishlist: (item: CartItem) => void;
   onClearCart: () => void;
 }
@@ -44,7 +64,7 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
 
       <div className="divide-y divide-gray-200">
         {items.map((item) => (
-          <div key={item.id} className="p-4 sm:p-6">
+          <div key={item.uniqueId || item.id} className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Link href={`/product/${item.id}`} className="flex-shrink-0">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
@@ -59,6 +79,21 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                   </h3>
                 </Link>
                 <p className="text-sm text-[#4A4A4A]">{item.category}</p>
+                
+                {/* Variant Info */}
+                {formatVariant(item.variant) && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {Object.entries(item.variant || {})
+                      .filter(([_, value]) => value)
+                      .map(([key, value]) => (
+                        <span key={key} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#F6E2E0] text-[#C8102E] border border-[#C8102E]/20">
+                          {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                        </span>
+                      ))
+                    }
+                  </div>
+                )}
+                
                 <div className="flex items-center space-x-4">
                   <span className="font-bold text-[#C8102E] text-lg">
                     R{item.price.toFixed(2)}
@@ -74,7 +109,7 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                   <span className="text-sm font-medium text-[#000000] w-16">Quantity:</span>
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                      onClick={() => onUpdateQuantity(item.id, item.quantity - 1, item.variant)}
                       className="w-10 h-10 rounded-full border-2 border-gray-500 bg-white flex items-center justify-center hover:border-[#C8102E] hover:bg-[#C8102E] hover:text-white transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={item.quantity <= 1}
                     >
@@ -86,7 +121,7 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                     </span>
                     
                     <button
-                      onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => onUpdateQuantity(item.id, item.quantity + 1, item.variant)}
                       className="w-10 h-10 rounded-full border-2 border-gray-500 bg-white flex items-center justify-center hover:border-[#C8102E] hover:bg-[#C8102E] hover:text-white transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Plus className="h-5 w-5 text-[#000000] font-bold" />
@@ -110,7 +145,7 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
                   </button>
                   
                   <button
-                    onClick={() => onRemoveItem(item.id)}
+                    onClick={() => onRemoveItem(item.id, item.variant)}
                     className="p-2 rounded-full hover:bg-red-50 text-[#4A4A4A] hover:text-red-500 transition-all duration-200 group"
                     title="Remove Item"
                   >

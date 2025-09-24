@@ -24,6 +24,19 @@ export default function Home() {
   ];
 
   const handleAddToCart = (product: typeof products[0]) => {
+    // Example: Add product with variant information
+    // In a real app, this would come from product selection UI
+    const exampleVariants = {
+      '1': { size: 'Large', color: 'Black' },
+      '2': { size: 'Medium', color: 'Blue' },
+      '3': { size: 'Large', color: 'Space Gray' },
+      '4': { size: 'Large', color: 'Black' },
+      '5': { color: 'White' },
+      '6': { size: 'Large', color: 'Navy' },
+      '7': { color: 'Black' },
+      '8': { size: '10', color: 'White' },
+    };
+
     addItem({
       id: product.id,
       name: product.name,
@@ -31,10 +44,17 @@ export default function Home() {
       originalPrice: product.originalPrice,
       image: product.image,
       category: product.category,
+      variant: exampleVariants[product.id as keyof typeof exampleVariants],
     });
     
+    const variantText = exampleVariants[product.id as keyof typeof exampleVariants] 
+      ? ` (${Object.entries(exampleVariants[product.id as keyof typeof exampleVariants])
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(', ')})`
+      : '';
+    
     setToast({
-      message: `${product.name} added to cart!`,
+      message: `${product.name}${variantText} added to cart!`,
       type: 'success'
     });
   };

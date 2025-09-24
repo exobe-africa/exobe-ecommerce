@@ -7,6 +7,18 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Helper function to format variant display
+const formatVariant = (variant?: { [key: string]: string | undefined }) => {
+  if (!variant) return null;
+  
+  const variantEntries = Object.entries(variant).filter(([_, value]) => value);
+  if (variantEntries.length === 0) return null;
+  
+  return variantEntries
+    .map(([key, value]) => `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`)
+    .join(' • ');
+};
+
 export default function CartDrawer() {
   const { state, removeItem, updateQuantity, closeCart, clearCart } = useCart();
   const router = useRouter();
@@ -163,22 +175,45 @@ export default function CartDrawer() {
                 data-scrollable="true"
               >
                 {state.items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                    {/* Product Image */}
-                    <Link href={`/product/${item.id}`} className="flex-shrink-0 touch-manipulation" onClick={closeCart}>
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
-                        <span className="text-xl sm:text-2xl">{item.image}</span>
-                      </div>
-                    </Link>
+                  <div key={item.uniqueId || item.id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                    <div className="relative flex-shrink-0">
+                      <Link href={`/product/${item.id}`} className="block touch-manipulation" onClick={closeCart}>
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
+                          <span className="text-xl sm:text-2xl">{item.image}</span>
+                        </div>
+                      </Link>
+                      <button
+                        onClick={() => removeItem(item.id, item.variant)}
+                        className="absolute -top-2 -left-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                        title="Remove item"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
 
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
                       <Link href={`/product/${item.id}`} className="block hover:text-[#C8102E] transition-colors" onClick={closeCart}>
-                        <h4 className="font-semibold text-[#000000] text-sm truncate cursor-pointer">
+                        <h4 className="font-semibold text-[#000000] text-sm leading-tight cursor-pointer mb-1">
                           {item.name}
                         </h4>
                       </Link>
-                      <p className="text-xs text-[#4A4A4A] mb-2">{item.category}</p>
+                      
+                      {/* Variant Info - More Prominent */}
+                      {formatVariant(item.variant) && (
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {Object.entries(item.variant || {})
+                            .filter(([_, value]) => value)
+                            .map(([key, value]) => (
+                              <span key={key} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[#C8102E] text-white shadow-sm">
+                                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                              </span>
+                            ))
+                          }
+                        </div>
+                      )}
+                      
+                      <p className="text-xs text-[#4A4A4A] mb-1">{item.category}</p>
                       
                       {/* Price */}
                       <div className="flex items-center space-x-2">
@@ -194,34 +229,24 @@ export default function CartDrawer() {
                     </div>
 
                     {/* Quantity Controls */}
-                    <div className="flex flex-col items-end space-y-2">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-1.5 rounded-full hover:bg-red-50 text-[#000000] hover:text-red-500 transition-all duration-200 group touch-manipulation border border-gray-300 hover:border-red-300 bg-white shadow-sm"
-                        title="Remove item"
+                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.variant)}
+                        className="w-8 h-8 sm:w-8 sm:h-8 rounded-full border-2 border-gray-400 bg-white flex items-center justify-center hover:bg-gray-50 hover:border-[#C8102E] transition-all duration-200 touch-manipulation shadow-sm"
                       >
-                        <X className="h-4 w-4 group-hover:scale-110 transition-transform font-bold" />
+                        <Minus className="h-4 w-4 text-[#000000] font-bold" />
                       </button>
                       
-                      <div className="flex items-center space-x-1 sm:space-x-2">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 sm:w-8 sm:h-8 rounded-full border-2 border-gray-400 bg-white flex items-center justify-center hover:bg-gray-50 hover:border-[#C8102E] transition-all duration-200 touch-manipulation shadow-sm"
-                        >
-                          <Minus className="h-4 w-4 text-[#000000] font-bold" />
-                        </button>
-                        
-                        <span className="w-8 text-center font-semibold text-[#000000] text-sm sm:text-base">
-                          {item.quantity}
-                        </span>
-                        
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 sm:w-8 sm:h-8 rounded-full border-2 border-gray-400 bg-white flex items-center justify-center hover:bg-gray-50 hover:border-[#C8102E] transition-all duration-200 touch-manipulation shadow-sm"
-                        >
-                          <Plus className="h-4 w-4 text-[#000000] font-bold" />
-                        </button>
-                      </div>
+                      <span className="w-8 text-center font-semibold text-[#000000] text-sm sm:text-base">
+                        {item.quantity}
+                      </span>
+                      
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1, item.variant)}
+                        className="w-8 h-8 sm:w-8 sm:h-8 rounded-full border-2 border-gray-400 bg-white flex items-center justify-center hover:bg-gray-50 hover:border-[#C8102E] transition-all duration-200 touch-manipulation shadow-sm"
+                      >
+                        <Plus className="h-4 w-4 text-[#000000] font-bold" />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -326,9 +351,19 @@ export default function CartDrawer() {
                     </button>
                   </Link>
 
+                  <Link href="/cart" className="block">
+                    <button
+                      onClick={closeCart}
+                      className="w-full bg-white border-2 border-[#C8102E] text-[#C8102E] py-3 rounded-full font-semibold hover:bg-[#C8102E] hover:text-white transition-all duration-300 touch-manipulation text-base shadow-md hover:shadow-lg flex items-center justify-center group"
+                    >
+                      <ShoppingBag className="mr-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                      View Cart
+                    </button>
+                  </Link>
+
                   <button
                     onClick={closeCart}
-                    className="w-full bg-white border-2 border-[#C8102E] text-[#C8102E] py-3 rounded-full font-semibold hover:bg-[#C8102E] hover:text-white transition-all duration-300 touch-manipulation text-base shadow-md hover:shadow-lg"
+                    className="w-full bg-gray-100 text-[#4A4A4A] py-2.5 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 active:scale-95 touch-manipulation text-sm sm:text-base"
                   >
                     Continue Shopping
                   </button>

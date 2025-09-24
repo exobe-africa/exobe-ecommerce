@@ -10,6 +10,14 @@ export interface CartItem {
   image: string;
   quantity: number;
   category: string;
+  variant?: {
+    size?: string;
+    color?: string;
+    style?: string;
+    material?: string;
+    [key: string]: string | undefined;
+  };
+  uniqueId?: string; // Generated unique ID including variant info
 }
 
 interface CartState {
@@ -21,8 +29,8 @@ interface CartState {
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'REMOVE_ITEM'; payload: { id: string; variant?: { [key: string]: string | undefined } } }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number; variant?: { [key: string]: string | undefined } } }
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'OPEN_CART' }
@@ -39,17 +47,23 @@ const initialState: CartState = {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
+      // Create a unique key for the item including variants
+      const uniqueId = action.payload.id + '_' + JSON.stringify(action.payload.variant || {});
+      const existingItem = state.items.find(item => 
+        item.id === action.payload.id && 
+        JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
+      );
       let newItems: CartItem[];
 
       if (existingItem) {
         newItems = state.items.map(item =>
-          item.id === action.payload.id
+          item.id === action.payload.id && 
+          JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        newItems = [...state.items, { ...action.payload, quantity: 1 }];
+        newItems = [...state.items, { ...action.payload, quantity: 1, uniqueId }];
       }
 
       const totalItems = newItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -64,7 +78,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
 
     case 'REMOVE_ITEM': {
-      const newItems = state.items.filter(item => item.id !== action.payload);
+      const newItems = state.items.filter(item => 
+        !(item.id === action.payload.id && 
+          JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {}))
+      );
       const totalItems = newItems.reduce((sum, item) => sum + item.quantity, 0);
       const totalPrice = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
@@ -78,7 +95,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
     case 'UPDATE_QUANTITY': {
       const newItems = state.items.map(item =>
-        item.id === action.payload.id
+        item.id === action.payload.id && 
+        JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
           ? { ...item, quantity: Math.max(0, action.payload.quantity) }
           : item
       ).filter(item => item.quantity > 0);
@@ -140,8 +158,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 interface CartContextType {
   state: CartState;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, variant?: { [key: string]: string | undefined }) => void;
+  updateQuantity: (id: string, quantity: number, variant?: { [key: string]: string | undefined }) => void;
   clearCart: () => void;
   toggleCart: () => void;
   openCart: () => void;
@@ -175,14 +193,15 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const addItem = (item: Omit<CartItem, 'quantity'>) => {
     dispatch({ type: 'ADD_ITEM', payload: item });
+    dispatch({ type: 'OPEN_CART' });
   };
 
-  const removeItem = (id: string) => {
-    dispatch({ type: 'REMOVE_ITEM', payload: id });
+  const removeItem = (id: string, variant?: { [key: string]: string | undefined }) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: { id, variant } });
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
-    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+  const updateQuantity = (id: string, quantity: number, variant?: { [key: string]: string | undefined }) => {
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity, variant } });
   };
 
   const clearCart = () => {
