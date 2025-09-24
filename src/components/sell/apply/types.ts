@@ -1,0 +1,35 @@
+export interface FormData {
+  businessType: string;
+  applicantType: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  landline: string;
+  identificationType: string;
+  businessName: string;
+  businessRegistration: string;
+  saIdNumber: string;
+  vatRegistered: string;
+  vatNumber: string;
+  monthlyRevenue: string;
+  physicalStores: string;
+  numberOfStores: string;
+  supplierToRetailers: string;
+  otherMarketplaces: string;
+  address: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  uniqueProducts: string;
+  primaryCategory: string;
+  stockType: string;
+  productDescription: string;
+  ownedBrands: string;
+  resellerBrands: string;
+  website: string;
+  socialMedia: string;
+  businessSummary: string;
+  howDidYouHear: string;
+  agreeToTerms: boolean;
+}

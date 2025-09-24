@@ -30,7 +30,6 @@ export default function ServiceProviderApplicationPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState({
-    // Step 1: Personal Information
     firstName: '',
     lastName: '',
     email: '',
@@ -38,8 +37,6 @@ export default function ServiceProviderApplicationPage() {
     dateOfBirth: '',
     idNumber: '',
     identificationType: '',
-    
-    // Step 2: Service Details
     serviceCategories: [] as string[],
     primaryService: '',
     experience: '',
@@ -47,31 +44,23 @@ export default function ServiceProviderApplicationPage() {
     portfolio: '',
     hourlyRate: '',
     availability: '',
-    
-    // Step 3: Location & Coverage
     address: '',
     city: '',
     province: '',
     postalCode: '',
     serviceRadius: '',
     transportMode: '',
-    
-    // Step 4: Professional Information
     businessName: '',
     businessRegistration: '',
     vatRegistered: '',
     vatNumber: '',
     bankDetails: '',
     emergencyContact: '',
-    
-    // Step 5: Portfolio & References
     workSamples: '',
     clientReferences: '',
     certifications: '',
     insurance: '',
     backgroundCheck: '',
-    
-    // Step 6: Final Details
     motivation: '',
     goals: '',
     howDidYouHear: '',
@@ -108,7 +97,6 @@ export default function ServiceProviderApplicationPage() {
     
     let processedValue = value;
     
-    // Special handling for SA ID number - only allow digits
     if (name === 'idNumber') {
       processedValue = value.replace(/\D/g, '').slice(0, 13);
     }
@@ -118,7 +106,6 @@ export default function ServiceProviderApplicationPage() {
       [name]: type === 'checkbox' ? checked : processedValue
     }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
