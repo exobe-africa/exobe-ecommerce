@@ -21,7 +21,6 @@ const QuickAccessSection: React.FC<QuickAccessSectionProps> = ({
   searchQuery,
   selectedCategory
 }) => {
-  // Only show when no search or category filter is active
   if (searchQuery || selectedCategory !== '') {
     return null;
   }
