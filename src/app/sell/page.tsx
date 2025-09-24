@@ -15,7 +15,7 @@ import {
   Star,
   Headphones
 } from 'lucide-react';
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer, QuickStats } from '../../components';
 
 export default function SellOnExobePage() {
 
@@ -98,14 +98,11 @@ export default function SellOnExobePage() {
                   <h3 className="text-2xl font-bold">Ready to Start?</h3>
                   <p className="text-red-100">Join thousands of successful sellers</p>
                 </div>
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  {stats.map((stat, index) => (
-                    <div key={index}>
-                      <div className="text-2xl font-bold">{stat.number}</div>
-                      <div className="text-red-100 text-sm">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <QuickStats
+                  stats={stats}
+                  variant="card"
+                  columns={2}
+                />
               </div>
             </div>
           </div>

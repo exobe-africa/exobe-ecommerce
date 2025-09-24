@@ -33,7 +33,7 @@ import {
   ChefHat,
   Headphones
 } from 'lucide-react';
-import { Navbar, Footer } from '../../components';
+import { Navbar, Footer, QuickStats } from '../../components';
 
 export default function ServiceProvidersPage() {
   const benefits = [
@@ -179,14 +179,11 @@ export default function ServiceProvidersPage() {
                   <h3 className="text-2xl font-bold">Join Our Community</h3>
                   <p className="text-red-100">Thousands of service providers earning more</p>
                 </div>
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  {stats.map((stat, index) => (
-                    <div key={index}>
-                      <div className="text-2xl font-bold">{stat.number}</div>
-                      <div className="text-red-100 text-sm">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <QuickStats
+                  stats={stats}
+                  variant="card"
+                  columns={2}
+                />
               </div>
             </div>
           </div>
