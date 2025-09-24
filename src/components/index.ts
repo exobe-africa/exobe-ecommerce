@@ -17,3 +17,4 @@ export { default as ViewModeToggle } from './ViewModeToggle';
 export { default as PageHeader } from './PageHeader';
 export { default as QuickStats } from './QuickStats';
 export { default as CategoryFilter } from './CategoryFilter';
+export { default as ScrollToTop } from './ScrollToTop';

@@ -5,6 +5,7 @@ import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
 import CartDrawer from "../components/CartDrawer";
 import WhatsAppButton from "../components/WhatsAppButton";
+import ScrollToTop from "../components/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
       >
         <CartProvider>
         <WishlistProvider>
+          <ScrollToTop />
           {children}
           <CartDrawer />
           <WhatsAppButton />

@@ -1,0 +1,10 @@
+export { default as WarrantyHeader } from './WarrantyHeader';
+export { default as WarrantyIntroduction } from './WarrantyIntroduction';
+export { default as WarrantyCoverageTypes } from './WarrantyCoverageTypes';
+export { default as WarrantyPeriods } from './WarrantyPeriods';
+export { default as WarrantyCoverageDetails } from './WarrantyCoverageDetails';
+export { default as WarrantyClaimProcess } from './WarrantyClaimProcess';
+export { default as WarrantyDocumentation } from './WarrantyDocumentation';
+export { default as WarrantyProcessingTimes } from './WarrantyProcessingTimes';
+export { default as ExtendedWarrantyOptions } from './ExtendedWarrantyOptions';
+export { default as WarrantySupport } from './WarrantySupport';

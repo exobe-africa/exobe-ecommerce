@@ -9,7 +9,7 @@ import {
   PaymentIssues,
   CurrencyPricing,
   PaymentSupport
-} from '../../../components/accepted-payment-methods';
+} from '../../../components/help-center/accepted-payment-methods';
 
 export default function PaymentMethodsPage() {
   return (
@@ -18,7 +18,6 @@ export default function PaymentMethodsPage() {
       
       <PaymentMethodsHeader />
 
-      {/* Content */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

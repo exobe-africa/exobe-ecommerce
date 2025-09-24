@@ -3,6 +3,7 @@
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect, useMemo } from 'react';
+import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import { 
   Filter, 
   SlidersHorizontal, 
@@ -68,6 +69,9 @@ export default function CategoryPage() {
   const { addItem } = useCart();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
   
+  // Use scroll position preservation for category pages
+  const { clearScrollPosition } = useScrollPosition();
+  
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -81,6 +85,13 @@ export default function CategoryPage() {
   const [sortBy, setSortBy] = useState('relevance');
 
   const categorySlug = params.slug as string;
+  
+  // Clear scroll position when component unmounts (navigating away)
+  useEffect(() => {
+    return () => {
+      clearScrollPosition();
+    };
+  }, [clearScrollPosition]);
   const category = categories[categorySlug as keyof typeof categories];
 
   const filteredAndSortedProducts = useMemo(() => {

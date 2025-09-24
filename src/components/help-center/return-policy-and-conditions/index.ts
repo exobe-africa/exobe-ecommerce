@@ -1,0 +1,9 @@
+export { default as ReturnPolicyHeader } from './ReturnPolicyHeader';
+export { default as ReturnIntroduction } from './ReturnIntroduction';
+export { default as ReturnTimeframe } from './ReturnTimeframe';
+export { default as ReturnConditions } from './ReturnConditions';
+export { default as ReturnProcess } from './ReturnProcess';
+export { default as RefundInformation } from './RefundInformation';
+export { default as ExchangePolicy } from './ExchangePolicy';
+export { default as SpecialReturnPolicies } from './SpecialReturnPolicies';
+export { default as ReturnSupport } from './ReturnSupport';
