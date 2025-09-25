@@ -4,6 +4,8 @@ export const metadata = {
   description: "Terms and Conditions for eXobe e-commerce platform",
 };
 
+import { Newsletter } from "@/components/common";
+
 export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-white">
@@ -448,7 +450,7 @@ export default function TermsAndConditions() {
         </div>
       </div>
       
-
+      <Newsletter />
     </div>
   );
 }

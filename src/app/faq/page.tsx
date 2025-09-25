@@ -8,6 +8,7 @@ import {
   HelpSupportSection, 
   PopularTopicsSection 
 } from '../../components/pages/faq';
+import { Newsletter } from '@/components/common';
 
 export default function FAQPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,7 +44,7 @@ export default function FAQPage() {
           selectedCategory={selectedCategory}
         />
       </div>
-
+      <Newsletter />
     </div>
   );
 }

@@ -23,6 +23,8 @@ import {
   ServiceProviderFormData,
   StepData
 } from '../../../components/pages/service-providers/apply';
+import { ApplicationHelpSection } from '@/components/common';
+import { ApplicationSuccessModal } from '@/components/common';
 
 export default function ServiceProviderApplicationPage() {
   const router = useRouter();
@@ -300,7 +302,6 @@ export default function ServiceProviderApplicationPage() {
           />
         </form>
 
-        {/* Help Section */}
         <ApplicationHelpSection
           applicationType="service-provider"
           responseTime="3-5 business days"

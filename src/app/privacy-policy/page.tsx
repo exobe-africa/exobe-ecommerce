@@ -1,3 +1,4 @@
+import { Newsletter } from "@/components/common";
 
 export const metadata = {
   title: "Privacy Policy - eXobe",
@@ -186,7 +187,7 @@ export default function PrivacyPolicy() {
         </div>
       </div>
       
-
+      <Newsletter />
     </div>
   );
 }

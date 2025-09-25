@@ -8,6 +8,7 @@ import {
   DepartmentDirectorySection, 
   FAQSocialSection 
 } from '../../components/pages/contact';
+import { Newsletter } from '@/components/common';
 
 export default function ContactPage() {
 
@@ -31,6 +32,7 @@ export default function ContactPage() {
 
         <FAQSocialSection />
       </div>
+      <Newsletter />
     </div>
   );
 }
