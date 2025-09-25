@@ -8,7 +8,7 @@ import {
   ArticleContent,
   RelatedArticles,
   ArticleNotFound
-} from '../../../components/pages/articles';
+} from '../../../components/pages/news/articles';
 import { Newsletter } from '@/components/common';
 
 interface NewsArticle {
