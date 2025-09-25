@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { Breadcrumb } from '../../common';
+import { Breadcrumb } from '../../../common';
 
 interface ArticleHeaderProps {
   title: string;
