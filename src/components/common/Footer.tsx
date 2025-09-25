@@ -38,8 +38,6 @@ export default function Footer() {
             
             <div className="text-sm text-gray-400">
               © {currentYear} eXobe. All Rights Reserved.
-              <br />
-              www.exobe.africa
             </div>
           </div>
           
