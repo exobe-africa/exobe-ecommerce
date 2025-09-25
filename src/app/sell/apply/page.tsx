@@ -22,6 +22,7 @@ import {
   NavigationButtons,
   FormData
 } from '../../../components/pages/sell/apply';
+import { ApplicationHelpSection, ApplicationSuccessModal } from '../../../components/common';
 
 export default function SellerApplicationPage() {
   const router = useRouter();
