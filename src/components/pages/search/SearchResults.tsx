@@ -15,12 +15,16 @@ interface Product {
   inStock: boolean;
   isNew?: boolean;
   isBestSeller?: boolean;
+  description?: string;
+  variants?: any;
+  availableLocations?: string[];
 }
 
 interface SearchResultsProps {
   products: Product[];
   viewMode: 'grid' | 'list';
   onAddToCart: (product: Product) => void;
+  onQuickViewAddToCart?: (product: Product, selectedVariants: Record<string, string>, quantity: number, currentLocations: string[]) => void;
   onWishlistToggle: (product: Product) => void;
   isInWishlist: (id: number) => boolean;
 }
@@ -29,6 +33,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   products,
   viewMode,
   onAddToCart,
+  onQuickViewAddToCart,
   onWishlistToggle,
   isInWishlist,
 }) => {
@@ -55,8 +60,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
           variant="search"
           viewMode={viewMode}
           onAddToCart={() => onAddToCart(product)}
+          onQuickViewAddToCart={onQuickViewAddToCart}
           onWishlistToggle={() => onWishlistToggle(product)}
           isInWishlist={isInWishlist(product.id)}
+          description={product.description}
+          variants={product.variants}
+          availableLocations={product.availableLocations}
         />
       ))}
     </div>

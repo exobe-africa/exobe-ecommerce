@@ -185,6 +185,7 @@ const ProductCard = ({
   if (variant === 'search') {
     if (viewMode === 'list') {
       return (
+        <>
         <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group flex items-center p-4 ${className}`}>
           <div className="flex-shrink-0 mr-4">
             <Link href={`/product/${id}`}>
@@ -271,10 +272,22 @@ const ProductCard = ({
             </div>
           </div>
         </div>
+
+        {/* Quick View Modal */}
+        <ProductQuickViewModal
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+          product={product}
+          onAddToCart={handleQuickViewAddToCart}
+          onWishlistToggle={onWishlistToggle}
+          isInWishlist={isInWishlist}
+        />
+        </>
       );
     }
 
     return (
+      <>
       <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group p-4 ${className}`}>
         <div className="relative">
           <Link href={`/product/${id}`}>
@@ -365,6 +378,17 @@ const ProductCard = ({
           </button>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+        product={product}
+        onAddToCart={handleQuickViewAddToCart}
+        onWishlistToggle={onWishlistToggle}
+        isInWishlist={isInWishlist}
+      />
+      </>
     );
   }
 

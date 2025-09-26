@@ -14,18 +14,45 @@ import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
 const allProducts = [
-  { id: 1, name: "iPhone 15 Pro", category: "Electronics", price: 12999, originalPrice: 14999, image: "📱", brand: "Apple", rating: 4.8, reviews: 245, inStock: true, isNew: true, isBestSeller: false },
-  { id: 2, name: "Samsung Galaxy S24", category: "Electronics", price: 11999, image: "📱", brand: "Samsung", rating: 4.7, reviews: 189, inStock: true, isNew: false, isBestSeller: true },
-  { id: 3, name: "MacBook Pro M3", category: "Electronics", price: 24999, originalPrice: 27999, image: "💻", brand: "Apple", rating: 4.9, reviews: 156, inStock: true, isNew: true, isBestSeller: true },
-  { id: 4, name: "Nike Air Max 270", category: "Fashion", price: 2499, image: "👟", brand: "Nike", rating: 4.6, reviews: 324, inStock: true, isNew: false, isBestSeller: false },
-  { id: 5, name: "Adidas Ultraboost", category: "Fashion", price: 2299, originalPrice: 2799, image: "👟", brand: "Adidas", rating: 4.5, reviews: 267, inStock: true, isNew: false, isBestSeller: true },
-  { id: 6, name: "Sony WH-1000XM5", category: "Electronics", price: 4999, image: "🎧", brand: "Sony", rating: 4.8, reviews: 412, inStock: true, isNew: false, isBestSeller: true },
-  { id: 7, name: "Cotton T-Shirt", category: "Fashion", price: 299, image: "👕", brand: "eXobe", rating: 4.3, reviews: 89, inStock: true, isNew: false, isBestSeller: false },
-  { id: 8, name: "Apple Watch Series 9", category: "Electronics", price: 3999, originalPrice: 4499, image: "⌚", brand: "Apple", rating: 4.7, reviews: 298, inStock: true, isNew: true, isBestSeller: false },
-  { id: 9, name: "Sony WF-1000XM4", category: "Electronics", price: 1999, image: "🎧", brand: "Sony", rating: 4.6, reviews: 178, inStock: false, isNew: false, isBestSeller: false },
-  { id: 10, name: "ASUS Gaming Laptop", category: "Electronics", price: 18999, originalPrice: 21999, image: "💻", brand: "ASUS", rating: 4.4, reviews: 145, inStock: true, isNew: false, isBestSeller: false },
-  { id: 11, name: "Nike Dri-FIT Shirt", category: "Fashion", price: 599, image: "👕", brand: "Nike", rating: 4.2, reviews: 156, inStock: true, isNew: false, isBestSeller: false },
-  { id: 12, name: "Samsung 4K Monitor", category: "Electronics", price: 5999, image: "🖥️", brand: "Samsung", rating: 4.5, reviews: 89, inStock: true, isNew: true, isBestSeller: false },
+  { id: 1, name: "iPhone 15 Pro", category: "Electronics", price: 12999, originalPrice: 14999, image: "📱", brand: "Apple", rating: 4.8, reviews: 245, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: 2, name: "Samsung Galaxy S24", category: "Electronics", price: 11999, image: "📱", brand: "Samsung", rating: 4.7, reviews: 189, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: 3, name: "MacBook Pro M3", category: "Electronics", price: 24999, originalPrice: 27999, image: "💻", brand: "Apple", rating: 4.9, reviews: 156, inStock: true, isNew: true, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town'] },
+  { id: 4, name: "Nike Air Max 270", category: "Fashion", price: 2499, image: "👟", brand: "Nike", rating: 4.6, reviews: 324, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { id: 5, name: "Adidas Ultraboost", category: "Fashion", price: 2299, originalPrice: 2799, image: "👟", brand: "Adidas", rating: 4.5, reviews: 267, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: 6, name: "Sony WH-1000XM5", category: "Electronics", price: 4999, image: "🎧", brand: "Sony", rating: 4.8, reviews: 412, inStock: true, isNew: false, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { 
+    id: 7, 
+    name: "Cotton T-Shirt", 
+    category: "Fashion", 
+    price: 299, 
+    image: "👕", 
+    brand: "eXobe", 
+    rating: 4.3, 
+    reviews: 89, 
+    inStock: true, 
+    isNew: false, 
+    isBestSeller: false, 
+    availableLocations: ['Johannesburg', 'Cape Town'],
+    description: 'Premium 100% organic cotton t-shirt with a comfortable fit.',
+    variants: {
+      colors: [
+        { name: 'Classic White', value: 'white', image: '👕', price: 299, stock: 20, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Jet Black', value: 'black', image: '🖤', price: 299, stock: 15, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'Navy Blue', value: 'navy', image: '💙', price: 299, stock: 12, availableLocations: ['Cape Town'] }
+      ],
+      sizes: [
+        { name: 'S', value: 's', stock: 15, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'M', value: 'm', stock: 20, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'L', value: 'l', stock: 18, availableLocations: ['Johannesburg', 'Cape Town'] },
+        { name: 'XL', value: 'xl', stock: 12, availableLocations: ['Johannesburg'] }
+      ]
+    }
+  },
+  { id: 8, name: "Apple Watch Series 9", category: "Electronics", price: 3999, originalPrice: 4499, image: "⌚", brand: "Apple", rating: 4.7, reviews: 298, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: 9, name: "Sony WF-1000XM4", category: "Electronics", price: 1999, image: "🎧", brand: "Sony", rating: 4.6, reviews: 178, inStock: false, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town'] },
+  { id: 10, name: "ASUS Gaming Laptop", category: "Electronics", price: 18999, originalPrice: 21999, image: "💻", brand: "ASUS", rating: 4.4, reviews: 145, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
+  { id: 11, name: "Nike Dri-FIT Shirt", category: "Fashion", price: 599, image: "👕", brand: "Nike", rating: 4.2, reviews: 156, inStock: true, isNew: false, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban', 'Pretoria'] },
+  { id: 12, name: "Samsung 4K Monitor", category: "Electronics", price: 5999, image: "🖥️", brand: "Samsung", rating: 4.5, reviews: 89, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town'] },
 ];
 
 const sortOptions = [
@@ -136,8 +163,30 @@ function SearchContent() {
       name: product.name,
       price: product.price,
       image: product.image,
-      category: product.category
+      category: product.category,
+      availableLocations: product.availableLocations
     });
+  };
+
+  // Quick view add to cart handler used by ProductCard quick view
+  const handleQuickViewAddToCart = (
+    product: any,
+    selectedVariants: Record<string, string>,
+    quantity: number,
+    currentLocations: string[]
+  ) => {
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.image,
+        category: product.category,
+        variant: selectedVariants,
+        availableLocations: currentLocations,
+      });
+    }
   };
 
   const handleWishlistToggle = (product: any) => {
@@ -260,6 +309,7 @@ function SearchContent() {
                 products={filteredResults}
                 viewMode={viewMode}
                 onAddToCart={handleAddToCart}
+                onQuickViewAddToCart={handleQuickViewAddToCart}
                 onWishlistToggle={handleWishlistToggle}
                 isInWishlist={(id) => isInWishlist(id.toString())}
               />
