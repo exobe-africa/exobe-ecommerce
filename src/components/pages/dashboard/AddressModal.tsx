@@ -36,7 +36,6 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
     }
   );
 
-  // Lock body scroll when modal is open
   useScrollLock(isOpen);
 
   const provinces = [

@@ -13,7 +13,6 @@ interface SettingsTabProps {
 export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: SettingsTabProps) {
   return (
     <div className="space-y-6">
-      {/* Profile Settings */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <h2 className="text-xl font-semibold text-[#000000]">Profile Settings</h2>
@@ -92,7 +91,6 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
         </div>
       </div>
 
-      {/* Password Settings */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <h2 className="text-xl font-semibold text-[#000000]">Change Password</h2>
@@ -140,7 +138,6 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
         </div>
       </div>
 
-      {/* Danger Zone */}
       <div className="bg-white rounded-2xl shadow-sm border border-red-200">
         <div className="p-6 border-b border-red-200">
           <h2 className="text-xl font-semibold text-red-600">Danger Zone</h2>

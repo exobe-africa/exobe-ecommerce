@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useUser } from "../../context/UserContext";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { state, toggleCart } = useCart();
   const { state: wishlistState } = useWishlist();
+  const { user, isLoggedIn, logout } = useUser();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
   const [isMobileMenuAnimating, setIsMobileMenuAnimating] = useState(false);
@@ -331,11 +333,20 @@ export default function Navbar() {
                   )}
                 </button>
               </Link>
-              <Link href="/dashboard">
-                <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
-                  <User className="h-6 w-6 text-[#4A4A4A]" />
-                </button>
-              </Link>
+              {isLoggedIn ? (
+                <Link href="/dashboard">
+                  <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation relative">
+                    <User className="h-6 w-6 text-[#C8102E]" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                  </button>
+                </Link>
+              ) : (
+                <Link href="/auth/login">
+                  <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
+                    <User className="h-6 w-6 text-[#4A4A4A]" />
+                  </button>
+                </Link>
+              )}
               <button 
                 onClick={toggleCart}
                 className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation"
@@ -561,22 +572,56 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
-                  <Link
-                    href="/dashboard"
-                    onClick={closeMobileMenu}
-                    className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
-                  >
-                    <User className="h-6 w-6 mr-3" />
-                    My Account
-                  </Link>
-                  <Link
-                    href="/dashboard?tab=orders"
-                    onClick={closeMobileMenu}
-                    className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
-                  >
-                    <span className="text-2xl mr-3">📦</span>
-                    My Orders
-                  </Link>
+                  {isLoggedIn ? (
+                    <>
+                      <Link
+                        href="/dashboard"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <User className="h-6 w-6 mr-3" />
+                        <span className="flex-1">My Account</span>
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      </Link>
+                      <Link
+                        href="/dashboard?tab=orders"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <span className="text-2xl mr-3">📦</span>
+                        My Orders
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logout();
+                          closeMobileMenu();
+                        }}
+                        className="flex items-center py-3 px-4 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full touch-manipulation text-left"
+                      >
+                        <span className="text-2xl mr-3">🚪</span>
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/auth/login"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <User className="h-6 w-6 mr-3" />
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/auth/register"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 bg-[#C8102E] text-white hover:bg-[#A00E26] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <span className="text-2xl mr-3">✨</span>
+                        Create Account
+                      </Link>
+                    </>
+                  )}
                   <Link
                     href="/help-center"
                     onClick={closeMobileMenu}

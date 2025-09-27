@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
+import { UserProvider } from "../context/UserContext";
 import CartDrawer from "../components/common/CartDrawer";
 import HelpChatWidget from "../components/common/HelpChatWidget";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <UserProvider>
         <CartProvider>
         <WishlistProvider>
           <ScrollToTop />
@@ -51,6 +53,7 @@ export default function RootLayout({
           <HelpChatWidget position="bottom-right" />
         </WishlistProvider>
         </CartProvider>
+        </UserProvider>
       </body>
     </html>
   );

@@ -5,3 +5,5 @@ export { default as PaymentForm } from './PaymentForm';
 export { default as OrderReview } from './OrderReview';
 export { default as CheckoutSummary } from './CheckoutSummary';
 export { default as CheckoutNavigation } from './CheckoutNavigation';
+export { default as GuestCheckoutModal } from './GuestCheckoutModal';
+export { default as AddressSelectionModal } from './AddressSelectionModal';

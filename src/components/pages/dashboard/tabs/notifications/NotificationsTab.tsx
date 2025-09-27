@@ -9,7 +9,6 @@ export default function NotificationsTab() {
       </div>
       <div className="p-6">
         <div className="space-y-8">
-          {/* Order Updates */}
           <div>
             <h3 className="text-lg font-semibold text-[#000000] mb-4">Order Updates</h3>
             <div className="space-y-4">
@@ -46,7 +45,6 @@ export default function NotificationsTab() {
             </div>
           </div>
 
-          {/* Marketing Communications */}
           <div>
             <h3 className="text-lg font-semibold text-[#000000] mb-2">Personalized Shopping Experience</h3>
             <p className="text-sm text-[#4A4A4A] mb-4">Help us improve your shopping experience with relevant updates and recommendations</p>
@@ -94,7 +92,6 @@ export default function NotificationsTab() {
             </div>
           </div>
 
-          {/* Account Security */}
           <div>
             <h3 className="text-lg font-semibold text-[#000000] mb-4">Account Security</h3>
             <div className="space-y-4">

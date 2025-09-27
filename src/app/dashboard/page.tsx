@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useUser } from '../../context/UserContext';
 import { 
   AddressModal, 
   OrderDetailsModal, 

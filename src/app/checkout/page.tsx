@@ -11,13 +11,21 @@ import {
   CheckoutSummary, 
   CheckoutNavigation 
 } from '../../components/pages/checkout';
+import GuestCheckoutModal from '../../components/pages/checkout/GuestCheckoutModal';
+import AddressSelectionModal from '../../components/pages/checkout/AddressSelectionModal';
 import { useCart } from '../../context/CartContext';
+import { useUser } from '../../context/UserContext';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { state, clearCart } = useCart();
+  const { user, addresses, isLoggedIn } = useUser();
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>();
+  const [hasDeclinedGuestModal, setHasDeclinedGuestModal] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -55,6 +63,45 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
 
+  // Auto-populate form data for logged-in users
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      const [firstName, ...lastNameParts] = user.name.split(' ');
+      const lastName = lastNameParts.join(' ');
+      
+      setFormData(prev => ({
+        ...prev,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+      }));
+
+      // Auto-select default address if available
+      const defaultAddress = addresses.find(addr => addr.isDefault);
+      if (defaultAddress) {
+        setSelectedAddressId(defaultAddress.id);
+        setFormData(prev => ({
+          ...prev,
+          address: defaultAddress.street,
+          city: defaultAddress.city,
+          province: defaultAddress.province,
+          postalCode: defaultAddress.postalCode,
+        }));
+      }
+    }
+  }, [isLoggedIn, user, addresses]);
+
+  // Show guest modal for non-logged-in users (only if they haven't declined before)
+  useEffect(() => {
+    if (!isLoggedIn && !showGuestModal && !hasDeclinedGuestModal && state.items.length > 0) {
+      const timer = setTimeout(() => {
+        setShowGuestModal(true);
+      }, 1000); // Show after 1 second
+      return () => clearTimeout(timer);
+    }
+  }, [isLoggedIn, showGuestModal, hasDeclinedGuestModal, state.items.length]);
+
   useEffect(() => {
     if (state.items.length === 0 && !orderComplete) {
       router.push('/');
@@ -76,6 +123,23 @@ export default function CheckoutPage() {
         [name]: ''
       }));
     }
+  };
+
+  const handleAddressSelect = (address: any) => {
+    setSelectedAddressId(address.id);
+    setFormData(prev => ({
+      ...prev,
+      address: address.street,
+      apartment: '', // Reset apartment as it's not stored in saved addresses
+      city: address.city,
+      province: address.province,
+      postalCode: address.postalCode,
+    }));
+  };
+
+  const handleContinueAsGuest = () => {
+    setShowGuestModal(false);
+    setHasDeclinedGuestModal(true);
   };
 
   const validateStep = (step: number) => {
@@ -171,6 +235,10 @@ export default function CheckoutPage() {
                 onInputChange={handleInputChange}
                 onPhoneChange={handlePhoneChange}
                 onCheckboxChange={handleCheckboxChange}
+                isLoggedIn={isLoggedIn}
+                userAddresses={addresses}
+                onSelectAddress={() => setShowAddressModal(true)}
+                showGuestPrompt={hasDeclinedGuestModal}
               />
             )}
 
@@ -212,6 +280,29 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* Guest Checkout Modal */}
+      <GuestCheckoutModal
+        isOpen={showGuestModal}
+        onClose={() => {
+          setShowGuestModal(false);
+          setHasDeclinedGuestModal(true);
+        }}
+        onContinueAsGuest={handleContinueAsGuest}
+      />
+
+      {/* Address Selection Modal */}
+      <AddressSelectionModal
+        isOpen={showAddressModal}
+        onClose={() => setShowAddressModal(false)}
+        addresses={addresses}
+        selectedAddressId={selectedAddressId}
+        onSelectAddress={handleAddressSelect}
+        onAddNewAddress={() => {
+          setShowAddressModal(false);
+          router.push('/dashboard?tab=addresses');
+        }}
+      />
       
     </div>
   );

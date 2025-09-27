@@ -1,6 +1,7 @@
 "use client";
 
-import { Truck, User, Mail, MapPin } from 'lucide-react';
+import { Truck, User, Mail, MapPin, ChevronDown, Star, Clock } from 'lucide-react';
+import Link from 'next/link';
 import { Checkbox, PhoneInput } from '../../common/index';
 
 interface ShippingFormData {
@@ -19,6 +20,17 @@ interface ShippingFormData {
   newsletter: boolean;
 }
 
+interface Address {
+  id: number;
+  type: string;
+  name: string;
+  street: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  isDefault: boolean;
+}
+
 interface ShippingFormProps {
   formData: ShippingFormData;
   errors: Record<string, string>;
@@ -26,6 +38,10 @@ interface ShippingFormProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onPhoneChange: (value: string) => void;
   onCheckboxChange: (name: string, checked: boolean) => void;
+  isLoggedIn?: boolean;
+  userAddresses?: Address[];
+  onSelectAddress?: () => void;
+  showGuestPrompt?: boolean;
 }
 
 const ShippingForm: React.FC<ShippingFormProps> = ({
@@ -38,13 +54,110 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
   onInputChange,
   onPhoneChange,
   onCheckboxChange,
+  isLoggedIn = false,
+  userAddresses = [],
+  onSelectAddress,
+  showGuestPrompt = false,
 }) => {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h2 className="text-xl font-semibold text-[#000000] mb-6 flex items-center">
-        <Truck className="h-6 w-6 mr-2 text-[#C8102E]" />
-        Shipping Information
-      </h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold text-[#000000] flex items-center">
+          <Truck className="h-6 w-6 mr-2 text-[#C8102E]" />
+          Shipping Information
+        </h2>
+        
+        {/* Address Selection Button for Logged In Users */}
+        {isLoggedIn && userAddresses.length > 0 && onSelectAddress && (
+          <button
+            type="button"
+            onClick={onSelectAddress}
+            className="flex items-center space-x-2 px-4 py-2 bg-[#F6E2E0] text-[#C8102E] rounded-xl font-medium hover:bg-[#C8102E] hover:text-white transition-colors"
+          >
+            <MapPin className="h-4 w-4" />
+            <span>Choose Address</span>
+            <ChevronDown className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Guest User Prompt */}
+      {!isLoggedIn && showGuestPrompt && (
+        <div className="mb-6 relative overflow-hidden">
+          {/* Background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl"></div>
+          <div className="absolute inset-0 bg-white/40 rounded-2xl"></div>
+          
+          {/* Content */}
+          <div className="relative p-5 sm:p-6 border border-blue-100 rounded-2xl backdrop-blur-sm">
+            <div className="text-center mb-4">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-3 shadow-lg">
+                <Star className="h-7 w-7 text-white" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                Save Time on Future Orders
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-sm mx-auto">
+                Create an account to save your information and enjoy faster checkout, order tracking, and exclusive benefits.
+              </p>
+            </div>
+
+            {/* Benefits */}
+            <div className="grid grid-cols-3 gap-3 mb-5">
+              <div className="text-center">
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <Clock className="h-5 w-5 text-green-600" />
+                </div>
+                <p className="text-xs font-medium text-gray-700">Faster Checkout</p>
+              </div>
+              <div className="text-center">
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <Truck className="h-5 w-5 text-purple-600" />
+                </div>
+                <p className="text-xs font-medium text-gray-700">Order Tracking</p>
+              </div>
+              <div className="text-center">
+                <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                  <Star className="h-5 w-5 text-orange-600" />
+                </div>
+                <p className="text-xs font-medium text-gray-700">Exclusive Deals</p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              <Link href="/auth/register" className="block">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]">
+                  ✨ Create Account (30 seconds)
+                </button>
+              </Link>
+              <Link href="/auth/login" className="block">
+                <button className="w-full border-2 border-blue-200 text-blue-700 px-6 py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-blue-50 hover:border-blue-300 transition-all duration-200">
+                  Already have an account? Sign In
+                </button>
+              </Link>
+            </div>
+
+            {/* Trust indicators */}
+            <div className="mt-4 pt-4 border-t border-blue-100">
+              <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                  Secure & Private
+                </span>
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                  No Spam
+                </span>
+                <span className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-1"></div>
+                  Free Forever
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>

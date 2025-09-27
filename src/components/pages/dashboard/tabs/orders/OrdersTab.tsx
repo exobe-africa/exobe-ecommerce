@@ -1,6 +1,7 @@
 "use client";
 
-import { Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Truck, CheckCircle, Clock, AlertCircle, ChevronDown } from 'lucide-react';
 import { Order } from '../../shared/types';
 import { getStatusColor, formatCurrency, formatDate } from '../../shared/utils';
 
@@ -22,6 +23,16 @@ const getStatusIcon = (status: string) => {
   }
 };
 
+type SortOption = 'newest' | 'oldest' | 'highest' | 'lowest' | 'status';
+
+const sortOptions = [
+  { value: 'newest', label: 'Newest First' },
+  { value: 'oldest', label: 'Oldest First' },
+  { value: 'highest', label: 'Highest Amount' },
+  { value: 'lowest', label: 'Lowest Amount' },
+  { value: 'status', label: 'By Status' }
+];
+
 export default function OrdersTab({ 
   orders, 
   onOrderView, 
@@ -29,15 +40,96 @@ export default function OrdersTab({
   onTrackPackage, 
   onReturnRequest 
 }: OrdersTabProps) {
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowSortDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const sortOrders = (orders: Order[], sortType: SortOption): Order[] => {
+    const sortedOrders = [...orders];
+    
+    switch (sortType) {
+      case 'newest':
+        return sortedOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      case 'oldest':
+        return sortedOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      case 'highest':
+        return sortedOrders.sort((a, b) => b.total - a.total);
+      case 'lowest':
+        return sortedOrders.sort((a, b) => a.total - b.total);
+      case 'status':
+        const statusOrder = { 'processing': 1, 'shipped': 2, 'delivered': 3, 'cancelled': 4 };
+        return sortedOrders.sort((a, b) => (statusOrder[a.status as keyof typeof statusOrder] || 5) - (statusOrder[b.status as keyof typeof statusOrder] || 5));
+      default:
+        return sortedOrders;
+    }
+  };
+
+  const sortedOrders = sortOrders(orders, sortBy);
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
       <div className="p-6 border-b border-gray-100">
-        <h2 className="text-xl font-semibold text-[#000000]">Order History</h2>
-        <p className="text-[#4A4A4A] mt-1">Track and manage your orders</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-semibold text-[#000000]">Order History</h2>
+            <p className="text-[#4A4A4A] mt-1">Track and manage your orders</p>
+          </div>
+          
+          {/* Sort Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setShowSortDropdown(!showSortDropdown)}
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-sm font-medium text-[#4A4A4A] transition-colors"
+            >
+              <span>Sort by: {sortOptions.find(option => option.value === sortBy)?.label}</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {showSortDropdown && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
+                <div className="py-2">
+                  {sortOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setSortBy(option.value as SortOption);
+                        setShowSortDropdown(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                        sortBy === option.value 
+                          ? 'text-[#C8102E] bg-[#F6E2E0] font-medium' 
+                          : 'text-[#4A4A4A]'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Order Count and Sort Info */}
+        <div className="mt-4 flex items-center justify-between text-sm text-[#4A4A4A]">
+          <span>{orders.length} {orders.length === 1 ? 'order' : 'orders'} found</span>
+          <span>Sorted by {sortOptions.find(option => option.value === sortBy)?.label.toLowerCase()}</span>
+        </div>
       </div>
       <div className="p-6">
         <div className="space-y-6">
-          {orders.map((order) => (
+          {sortedOrders.map((order) => (
             <div key={order.id} className="border border-gray-200 rounded-xl p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                 <div className="flex items-center space-x-4 mb-4 sm:mb-0">

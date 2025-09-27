@@ -76,7 +76,6 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
         </div>
       </div>
 
-      {/* Recent Orders */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
@@ -120,7 +119,6 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
         </div>
       </div>
 
-      {/* Active Returns */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
@@ -130,7 +128,6 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
         </div>
         <div className="p-6">
           <div className="space-y-4">
-            {/* Mock return data */}
             <div className="flex items-center justify-between p-4 bg-orange-50 rounded-xl border border-orange-200">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
@@ -177,7 +174,6 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-[#000000] mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
