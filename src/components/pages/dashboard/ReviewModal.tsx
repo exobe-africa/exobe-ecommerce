@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { X, Star, MessageSquare } from 'lucide-react';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 interface Review {
   id: number;
@@ -23,6 +24,9 @@ export default function ReviewModal({ isOpen, onClose, review, onSave }: ReviewM
   const [rating, setRating] = useState(review?.rating || 5);
   const [comment, setComment] = useState(review?.comment || '');
   const [hoveredRating, setHoveredRating] = useState(0);
+
+  // Lock body scroll when modal is open
+  useScrollLock(isOpen);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +52,8 @@ export default function ReviewModal({ isOpen, onClose, review, onSave }: ReviewM
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="sticky top-0 bg-white p-6 border-b border-gray-100 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-[#F6E2E0] rounded-full flex items-center justify-center">
@@ -68,8 +72,9 @@ export default function ReviewModal({ isOpen, onClose, review, onSave }: ReviewM
             </button>
           </div>
         </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
+          <div className="flex-1 p-6 space-y-6">
           {/* Rating Section */}
           <div>
             <label className="block text-sm font-medium text-[#000000] mb-3">
@@ -139,25 +144,29 @@ export default function ReviewModal({ isOpen, onClose, review, onSave }: ReviewM
               <li>• Avoid personal information or inappropriate content</li>
             </ul>
           </div>
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={!comment.trim()}
-              className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Update Review
-            </button>
+          {/* Sticky Footer */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6 rounded-b-2xl">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={!comment.trim()}
+                className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Update Review
+              </button>
+            </div>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );

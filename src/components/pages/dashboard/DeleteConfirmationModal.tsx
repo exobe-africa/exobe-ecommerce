@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, X } from 'lucide-react';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -11,14 +12,17 @@ interface DeleteConfirmationModalProps {
   itemName?: string;
 }
 
-export default function DeleteConfirmationModal({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  title, 
-  message, 
-  itemName 
+export default function DeleteConfirmationModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  itemName
 }: DeleteConfirmationModalProps) {
+  // Lock body scroll when modal is open
+  useScrollLock(isOpen);
+
   if (!isOpen) return null;
 
   return (

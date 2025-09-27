@@ -1,6 +1,7 @@
 "use client";
 
 import { X, Package, Truck, CheckCircle, Clock, AlertCircle, MapPin, CreditCard } from 'lucide-react';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 interface OrderItem {
   id: number;
@@ -40,6 +41,9 @@ interface OrderDetailsModalProps {
 }
 
 export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveReview, onTrackPackage }: OrderDetailsModalProps) {
+  // Lock body scroll when modal is open
+  useScrollLock(isOpen);
+
   if (!isOpen || !order) return null;
 
   const getStatusColor = (status: string) => {
@@ -73,9 +77,9 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col mx-4">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="sticky top-0 bg-white p-6 border-b border-gray-100 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-[#F6E2E0] rounded-full flex items-center justify-center">
@@ -94,17 +98,18 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
             </button>
           </div>
         </div>
-
-        <div className="p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-col h-full">
+          <div className="flex-1 p-6 space-y-8">
           {/* Order Status */}
           <div>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-3">
-                <div className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium ${getStatusColor(order.status)}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium ${getStatusColor(order.status)} self-start`}>
                   {getStatusIcon(order.status)}
                   <span className="capitalize">{order.status}</span>
                 </div>
-                <span className="text-[#4A4A4A]">
+                <span className="text-[#4A4A4A] text-sm sm:text-base">
                   Placed on {new Date(order.date).toLocaleDateString('en-ZA', { 
                     year: 'numeric', 
                     month: 'long', 
@@ -112,7 +117,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
                   })}
                 </span>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <p className="text-2xl font-bold text-[#000000]">R{order.total.toFixed(2)}</p>
               </div>
             </div>
@@ -120,7 +125,31 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
             {/* Progress Steps */}
             {order.status !== 'cancelled' && (
               <div className="mb-6">
-                <div className="flex items-center justify-between">
+                {/* Mobile: Vertical Layout */}
+                <div className="block sm:hidden space-y-4">
+                  {getStatusSteps(order.status).map((step, index) => (
+                    <div key={step.key} className="flex items-center space-x-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        step.completed ? 'bg-[#C8102E] text-white' : 'bg-gray-200 text-gray-500'
+                      }`}>
+                        {step.completed ? <CheckCircle className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`font-medium text-sm ${step.completed ? 'text-[#000000]' : 'text-gray-500'}`}>
+                          {step.label}
+                        </p>
+                      </div>
+                      {index < getStatusSteps(order.status).length - 1 && (
+                        <div className={`absolute left-4 mt-8 w-0.5 h-6 ${
+                          step.completed ? 'bg-[#C8102E]' : 'bg-gray-200'
+                        }`} style={{marginLeft: '15px'}} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Desktop: Horizontal Layout */}
+                <div className="hidden sm:flex items-center justify-between">
                   {getStatusSteps(order.status).map((step, index) => (
                     <div key={step.key} className="flex items-center">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -134,7 +163,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
                         </p>
                       </div>
                       {index < getStatusSteps(order.status).length - 1 && (
-                        <div className={`flex-1 h-1 mx-4 ${
+                        <div className={`flex-1 h-1 mx-4 min-w-[60px] ${
                           step.completed ? 'bg-[#C8102E]' : 'bg-gray-200'
                         }`} />
                       )}
@@ -234,40 +263,44 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
               </div>
             </div>
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
-            {order.status === 'delivered' && onLeaveReview && (
-              <button 
-                onClick={() => {
-                  onLeaveReview(order);
-                  onClose();
-                }}
-                className="flex-1 bg-[#C8102E] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
-              >
-                Leave Review
-              </button>
-            )}
-            {order.status === 'shipped' && onTrackPackage && (
-              <button 
-                onClick={() => {
-                  onTrackPackage(order);
-                  onClose();
-                }}
-                className="flex-1 border border-blue-500 text-blue-600 px-6 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
-              >
-                Track Package
-              </button>
-            )}
-            <button className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
-              Download Invoice
-            </button>
-            {order.status === 'processing' && (
-              <button className="flex-1 border border-red-500 text-red-600 px-6 py-3 rounded-xl font-medium hover:bg-red-50 transition-colors">
-                Cancel Order
-              </button>
-            )}
           </div>
+
+          {/* Sticky Footer */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 rounded-b-2xl">
+            <div className="flex flex-col sm:flex-row gap-3">
+              {order.status === 'delivered' && onLeaveReview && (
+                <button 
+                  onClick={() => {
+                    onLeaveReview(order);
+                    onClose();
+                  }}
+                  className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
+                >
+                  Leave Review
+                </button>
+              )}
+              {order.status === 'shipped' && onTrackPackage && (
+                <button 
+                  onClick={() => {
+                    onTrackPackage(order);
+                    onClose();
+                  }}
+                  className="flex-1 border border-blue-500 text-blue-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
+                >
+                  Track Package
+                </button>
+              )}
+              <button className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                Download Invoice
+              </button>
+              {order.status === 'processing' && (
+                <button className="flex-1 border border-red-500 text-red-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-red-50 transition-colors">
+                  Cancel Order
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>

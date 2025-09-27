@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { X, MapPin } from 'lucide-react';
 import { Checkbox } from '../../common';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 interface Address {
   id?: number;
@@ -35,6 +36,9 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
     }
   );
 
+  // Lock body scroll when modal is open
+  useScrollLock(isOpen);
+
   const provinces = [
     'Eastern Cape',
     'Free State',
@@ -65,8 +69,8 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="sticky top-0 bg-white p-6 border-b border-gray-100 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-[#F6E2E0] rounded-full flex items-center justify-center">
@@ -89,8 +93,9 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
             </button>
           </div>
         </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full">
+          <div className="flex-1 p-6 space-y-6">
           <div>
             <label className="block text-sm font-medium text-[#000000] mb-2">
               Address Type
@@ -194,23 +199,28 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
             label="Set as default address"
             size="sm"
           />
+          </div>
 
-          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
-            >
-              {address ? 'Update Address' : 'Add Address'}
-            </button>
+          {/* Sticky Footer */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6 rounded-b-2xl">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
+              >
+                {address ? 'Update Address' : 'Add Address'}
+              </button>
+            </div>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );

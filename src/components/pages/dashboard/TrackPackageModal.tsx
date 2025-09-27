@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Truck, MapPin, Clock, CheckCircle, Package, AlertCircle } from 'lucide-react';
+import { useScrollLock } from '../../../hooks/useScrollLock';
 
 interface TrackingEvent {
   id: number;
@@ -30,6 +31,9 @@ export default function TrackPackageModal({
   const [trackingEvents, setTrackingEvents] = useState<TrackingEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStatus, setCurrentStatus] = useState('');
+
+  // Lock body scroll when modal is open
+  useScrollLock(isOpen);
 
   // Mock tracking data - in a real app, this would come from an API
   const generateTrackingEvents = (trackingNum: string): TrackingEvent[] => {
@@ -145,8 +149,8 @@ export default function TrackPackageModal({
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/20 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-100">
+      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="sticky top-0 bg-white p-6 border-b border-gray-100 rounded-t-2xl z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -165,8 +169,9 @@ export default function TrackPackageModal({
             </button>
           </div>
         </div>
-
-        <div className="p-6">
+        <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-col h-full">
+          <div className="flex-1 p-6">
           {/* Tracking Number */}
           <div className="bg-blue-50 rounded-xl p-4 mb-6">
             <div className="flex items-center space-x-3">
@@ -276,19 +281,23 @@ export default function TrackPackageModal({
               </div>
             </div>
           )}
-
-          {/* Action Buttons */}
-          <div className="flex space-x-4 mt-8">
-            <button
-              onClick={onClose}
-              className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
-            >
-              Close
-            </button>
-            <button className="flex-1 bg-[#C8102E] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors">
-              Contact Support
-            </button>
           </div>
+
+          {/* Sticky Footer */}
+          <div className="sticky bottom-0 bg-white border-t border-gray-100 p-6 rounded-b-2xl">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+              <button
+                onClick={onClose}
+                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors">
+                Contact Support
+              </button>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
