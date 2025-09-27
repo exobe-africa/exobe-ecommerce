@@ -20,6 +20,7 @@ import {
   ReviewsTab,
   NotificationsTab,
   SettingsTab,
+  ReturnsTab,
   Address,
   Review,
   Order,
@@ -284,7 +285,7 @@ export default function CustomerDashboard() {
 
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['overview', 'orders', 'addresses', 'reviews', 'notifications', 'settings'].includes(tab)) {
+    if (tab && ['overview', 'orders', 'returns', 'addresses', 'reviews', 'notifications', 'settings'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [searchParams]);
@@ -337,6 +338,8 @@ export default function CustomerDashboard() {
             onReviewDelete={handleReviewDelete}
           />
         );
+      case 'returns':
+        return <ReturnsTab />;
       case 'notifications':
         return <NotificationsTab />;
       case 'settings':

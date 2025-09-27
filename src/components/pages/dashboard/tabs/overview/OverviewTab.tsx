@@ -166,7 +166,10 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
           </div>
           
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <button className="text-[#C8102E] hover:text-[#A00E26] font-medium text-sm flex items-center space-x-1">
+            <button 
+              onClick={() => onTabChange('returns')}
+              className="text-[#C8102E] hover:text-[#A00E26] font-medium text-sm flex items-center space-x-1 transition-colors"
+            >
               <span>View all returns</span>
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -177,33 +180,33 @@ export default function OverviewTab({ user, orders, onOrderView, onTabChange }: 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-[#000000] mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <button 
+          <button
             onClick={() => onTabChange('orders')}
             className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-[#F6E2E0] transition-colors"
           >
             <Package className="h-8 w-8 text-[#C8102E] mb-2" />
             <span className="text-sm font-medium text-[#000000]">Track Orders</span>
           </button>
-          <button 
+          <button
+            onClick={() => onTabChange('returns')}
+            className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-[#F6E2E0] transition-colors"
+          >
+            <RotateCcw className="h-8 w-8 text-[#C8102E] mb-2" />
+            <span className="text-sm font-medium text-[#000000]">Returns</span>
+          </button>
+          <button
             onClick={() => onTabChange('addresses')}
             className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-[#F6E2E0] transition-colors"
           >
             <MapPin className="h-8 w-8 text-[#C8102E] mb-2" />
-            <span className="text-sm font-medium text-[#000000]">Manage Addresses</span>
+            <span className="text-sm font-medium text-[#000000]">Addresses</span>
           </button>
-          <button 
+          <button
             onClick={() => onTabChange('reviews')}
             className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-[#F6E2E0] transition-colors"
           >
             <Star className="h-8 w-8 text-[#C8102E] mb-2" />
-            <span className="text-sm font-medium text-[#000000]">My Reviews</span>
-          </button>
-          <button 
-            onClick={() => onTabChange('settings')}
-            className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-[#F6E2E0] transition-colors"
-          >
-            <Settings className="h-8 w-8 text-[#C8102E] mb-2" />
-            <span className="text-sm font-medium text-[#000000]">Settings</span>
+            <span className="text-sm font-medium text-[#000000]">Reviews</span>
           </button>
         </div>
       </div>

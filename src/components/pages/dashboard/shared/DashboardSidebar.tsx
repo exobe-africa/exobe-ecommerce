@@ -1,6 +1,6 @@
 "use client";
 
-import { User, Package, MapPin, Star, Bell, Settings, LogOut } from 'lucide-react';
+import { User, Package, MapPin, Star, Bell, Settings, LogOut, RotateCcw } from 'lucide-react';
 import { User as UserType } from './types';
 
 interface DashboardSidebarProps {
@@ -12,6 +12,7 @@ interface DashboardSidebarProps {
 const menuItems = [
   { id: 'overview', label: 'Account Overview', icon: User },
   { id: 'orders', label: 'Order History', icon: Package },
+  { id: 'returns', label: 'Returns & Refunds', icon: RotateCcw },
   { id: 'addresses', label: 'My Addresses', icon: MapPin },
   { id: 'reviews', label: 'My Reviews', icon: Star },
   { id: 'notifications', label: 'Notifications', icon: Bell },

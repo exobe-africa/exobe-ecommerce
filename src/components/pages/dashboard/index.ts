@@ -6,6 +6,8 @@ export { default as DeleteConfirmationModal } from './DeleteConfirmationModal';
 export { default as LeaveReviewModal } from './LeaveReviewModal';
 export { default as TrackPackageModal } from './TrackPackageModal';
 export { default as ReturnItemModal } from './ReturnItemModal';
+export { default as ReturnDetailsModal } from './ReturnDetailsModal';
+export { default as CancelReturnModal } from './CancelReturnModal';
 
 // Shared components
 export * from './shared';
@@ -17,3 +19,4 @@ export { AddressesTab } from './tabs/addresses';
 export { ReviewsTab } from './tabs/reviews';
 export { NotificationsTab } from './tabs/notifications';
 export { SettingsTab } from './tabs/settings';
+export { ReturnsTab } from './tabs/returns';
