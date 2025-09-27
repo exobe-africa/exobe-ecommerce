@@ -21,11 +21,11 @@ export default function ContactPage() {
         <ContactMethodsSection />
 
         <section className="mb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <ContactFormSection />
+          <ContactFormSection />
+        </section>
 
-            <OfficeLocationsSection />
-          </div>
+        <section className="mb-20">
+          <OfficeLocationsSection />
         </section>
 
         <DepartmentDirectorySection />

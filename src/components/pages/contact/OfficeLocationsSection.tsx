@@ -1,102 +1,115 @@
 "use client";
 
-import { Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Shield, Clock, Truck, HeadphonesIcon, Award, CheckCircle } from 'lucide-react';
 
-const officeLocations = [
+const commitments = [
   {
-    city: 'Johannesburg',
-    address: '123 Sandton Drive, Sandton City',
-    postal: 'Sandton, 2196, South Africa',
-    phone: '+27 11 123 4567',
-    email: 'jhb@exobe.africa',
-    hours: 'Mon-Fri: 8AM-6PM, Sat: 9AM-2PM',
-    isHeadquarters: true
+    icon: Shield,
+    title: 'Secure Shopping',
+    description: 'Your personal and payment information is protected with industry-leading security measures.',
+    color: 'bg-blue-500'
   },
   {
-    city: 'Cape Town',
-    address: '456 Victoria & Alfred Waterfront',
-    postal: 'Cape Town, 8001, South Africa',
-    phone: '+27 21 987 6543',
-    email: 'cpt@exobe.africa',
-    hours: 'Mon-Fri: 8AM-6PM, Sat: 9AM-2PM',
-    isHeadquarters: false
+    icon: Truck,
+    title: 'Fast Delivery',
+    description: 'Quick and reliable delivery across South Africa with real-time tracking for all orders.',
+    color: 'bg-green-500'
   },
   {
-    city: 'Durban',
-    address: '789 Gateway Theatre of Shopping',
-    postal: 'Umhlanga, 4319, South Africa',
-    phone: '+27 31 555 7890',
-    email: 'dbn@exobe.africa',
-    hours: 'Mon-Fri: 8AM-6PM, Sat: 9AM-2PM',
-    isHeadquarters: false
+    icon: HeadphonesIcon,
+    title: '24/7 Support',
+    description: 'Our dedicated support team is available around the clock to assist you with any questions.',
+    color: 'bg-purple-500'
+  },
+  {
+    icon: Award,
+    title: 'Quality Guarantee',
+    description: 'We stand behind every product we sell with comprehensive warranties and return policies.',
+    color: 'bg-orange-500'
   }
+];
+
+const supportStats = [
+  { number: '99.8%', label: 'Customer Satisfaction' },
+  { number: '24/7', label: 'Support Available' },
+  { number: '<2hrs', label: 'Average Response Time' },
+  { number: '50K+', label: 'Happy Customers' }
 ];
 
 const OfficeLocationsSection = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-[#000000] mb-4">Visit Our Offices</h2>
-        <p className="text-[#4A4A4A]">
-          Meet us in person at one of our convenient locations across South Africa.
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#000000] mb-4">Why Choose eXobe?</h2>
+        <p className="text-[#4A4A4A] text-sm sm:text-base">
+          We're committed to providing you with the best online shopping experience in South Africa.
         </p>
       </div>
 
-      {officeLocations.map((office, index) => (
-        <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-[#C8102E] rounded-lg flex items-center justify-center">
-                <MapPin className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-[#000000]">{office.city}</h3>
-                {office.isHeadquarters && (
-                  <span className="inline-block bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full">
-                    HEADQUARTERS
-                  </span>
-                )}
+      {/* Commitments Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
+        {commitments.map((commitment, index) => {
+          const IconComponent = commitment.icon;
+          return (
+            <div key={index} className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-start space-x-3 sm:space-x-4">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${commitment.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                  <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#000000] mb-2">{commitment.title}</h3>
+                  <p className="text-[#4A4A4A] text-sm sm:text-base leading-relaxed">{commitment.description}</p>
+                </div>
               </div>
             </div>
+          );
+        })}
+      </div>
+
+      {/* Support Statistics */}
+      <div className="bg-gradient-to-r from-[#C8102E] to-[#A00E26] rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white">
+        <div className="text-center mb-6 sm:mb-8">
+          <h3 className="text-xl sm:text-2xl font-bold mb-2">Our Support Promise</h3>
+          <p className="text-red-100 text-sm sm:text-base">
+            Delivering exceptional service that exceeds your expectations
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {supportStats.map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2">{stat.number}</div>
+              <div className="text-red-100 text-xs sm:text-sm font-medium">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Contact Assurance */}
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="flex items-start space-x-3 sm:space-x-4">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
           </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-start space-x-3">
-              <MapPin className="h-5 w-5 text-[#4A4A4A] mt-0.5" />
-              <div>
-                <p className="text-[#000000] font-medium">{office.address}</p>
-                <p className="text-[#4A4A4A] text-sm">{office.postal}</p>
+          <div className="flex-1">
+            <h3 className="text-lg sm:text-xl font-bold text-[#000000] mb-2">Get in Touch Today</h3>
+            <p className="text-[#4A4A4A] text-sm sm:text-base mb-4 leading-relaxed">
+              Whether you have a question about a product, need help with an order, or want to provide feedback, 
+              we're here to help. Choose your preferred contact method above and we'll get back to you promptly.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-4 w-4 text-[#4A4A4A]" />
+                <span className="text-[#4A4A4A]">Quick response guaranteed</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Shield className="h-4 w-4 text-[#4A4A4A]" />
+                <span className="text-[#4A4A4A]">Your privacy is protected</span>
               </div>
             </div>
-            
-            <div className="flex items-center space-x-3">
-              <Phone className="h-5 w-5 text-[#4A4A4A]" />
-              <a href={`tel:${office.phone}`} className="text-[#C8102E] font-medium hover:underline">
-                {office.phone}
-              </a>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <Mail className="h-5 w-5 text-[#4A4A4A]" />
-              <a href={`mailto:${office.email}`} className="text-[#C8102E] font-medium hover:underline">
-                {office.email}
-              </a>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <Clock className="h-5 w-5 text-[#4A4A4A]" />
-              <span className="text-[#4A4A4A]">{office.hours}</span>
-            </div>
-          </div>
-          
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <button className="text-[#C8102E] font-semibold hover:text-[#A00E26] transition-colors flex items-center">
-              Get Directions
-              <ArrowRight className="h-4 w-4 ml-1" />
-            </button>
           </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 };

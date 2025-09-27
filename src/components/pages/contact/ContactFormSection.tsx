@@ -57,7 +57,7 @@ const ContactFormSection = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-[#000000] mb-4">Send Us a Message</h2>
         <p className="text-[#4A4A4A]">
@@ -88,7 +88,7 @@ const ContactFormSection = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
                 placeholder="Enter your full name"
               />
             </div>
@@ -103,7 +103,7 @@ const ContactFormSection = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
                 placeholder="Enter your email address"
               />
             </div>
@@ -119,7 +119,7 @@ const ContactFormSection = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
                 placeholder="Enter your phone number"
               />
             </div>
@@ -132,7 +132,7 @@ const ContactFormSection = () => {
                 name="department"
                 value={formData.department}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000]"
               >
                 {departments.map((dept, index) => (
                   <option key={index} value={dept.email}>{dept.name}</option>
@@ -151,7 +151,7 @@ const ContactFormSection = () => {
               value={formData.subject}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
               placeholder="What's this about?"
             />
           </div>
@@ -166,7 +166,7 @@ const ContactFormSection = () => {
               onChange={handleInputChange}
               required
               rows={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors resize-none text-[#000000] placeholder-gray-700"
               placeholder="Tell us more about your inquiry..."
             />
           </div>
