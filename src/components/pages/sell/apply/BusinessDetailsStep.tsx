@@ -18,12 +18,22 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
   onInputChange,
   setFormData
 }) => {
+  const isRetailer = formData.sellerType === 'retailer';
+  const isWholesaler = formData.sellerType === 'wholesaler';
+
   return (
     <div className="space-y-8">
       <div className="text-center">
         <FileText className="h-16 w-16 text-[#C8102E] mx-auto mb-4" />
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#000000] mb-2">Business Details</h2>
-        <p className="text-[#4A4A4A] text-lg">Tell us about your business</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#000000] mb-2">
+          {isWholesaler ? 'Wholesale Business Details' : 'Business Details'}
+        </h2>
+        <p className="text-[#4A4A4A] text-lg">
+          {isWholesaler 
+            ? 'Tell us about your wholesale business operations' 
+            : 'Tell us about your business'
+          }
+        </p>
       </div>
 
       <div className="space-y-6">
@@ -126,10 +136,18 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
 
         <div>
           <label className="block text-sm font-semibold text-[#000000] mb-4">
-            Monthly Revenue (Optional)
+            {isWholesaler ? 'Monthly Wholesale Revenue (Optional)' : 'Monthly Revenue (Optional)'}
           </label>
           <div className="space-y-2">
-            {[
+            {(isWholesaler ? [
+              { value: 'under-50k', label: 'Less than R50k' },
+              { value: '50k-200k', label: 'R50k - R200k' },
+              { value: '200k-500k', label: 'R200k - R500k' },
+              { value: '500k-1m', label: 'R500k - R1 Million' },
+              { value: '1m-5m', label: 'R1 Million - R5 Million' },
+              { value: '5m-10m', label: 'R5 Million - R10 Million' },
+              { value: '10m-plus', label: 'R10 Million +' }
+            ] : [
               { value: 'under-20k', label: 'Less than R20k' },
               { value: '20k-50k', label: 'R20k - R50k' },
               { value: '50k-100k', label: 'R50k - R100k' },
@@ -137,7 +155,7 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
               { value: '500k-1m', label: 'R500k - R1 Million' },
               { value: '1m-2.5m', label: 'R1 Million - R2.5 Million' },
               { value: '2.5m-plus', label: 'R2.5 Million +' }
-            ].map((option) => (
+            ]).map((option) => (
               <RadioButton
                 key={option.value}
                 id={`monthlyRevenue-${option.value}`}
@@ -152,6 +170,146 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
               />
             ))}
           </div>
+        </div>
+
+        {/* Additional questions for retailers */}
+        {isRetailer && (
+          <>
+            <div>
+              <label className="block text-sm font-semibold text-[#000000] mb-4">
+                Do you have physical stores?
+              </label>
+              <div className="space-y-3">
+                {[
+                  { value: 'yes', label: 'Yes, I have physical store(s)' },
+                  { value: 'no', label: 'No, I operate online only' },
+                  { value: 'planning', label: 'Planning to open physical stores' }
+                ].map((option) => (
+                  <RadioButton
+                    key={option.value}
+                    id={`physicalStores-${option.value}`}
+                    name="physicalStores"
+                    value={option.value}
+                    checked={formData.physicalStores === option.value}
+                    onChange={(value) => setFormData(prev => ({ ...prev, physicalStores: value }))}
+                    label={option.label}
+                    variant="card"
+                    size="md"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {formData.physicalStores === 'yes' && (
+              <div>
+                <label className="block text-sm font-semibold text-[#000000] mb-2">
+                  Number of Physical Stores
+                </label>
+                <select
+                  name="numberOfStores"
+                  value={formData.numberOfStores}
+                  onChange={onInputChange}
+                  className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
+                >
+                  <option value="">Select number of stores</option>
+                  <option value="1">1 store</option>
+                  <option value="2-5">2-5 stores</option>
+                  <option value="6-10">6-10 stores</option>
+                  <option value="11-plus">11+ stores</option>
+                </select>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Additional questions for wholesalers */}
+        {isWholesaler && (
+          <>
+            <div>
+              <label className="block text-sm font-semibold text-[#000000] mb-4">
+                Do you currently supply to retailers?
+              </label>
+              <div className="space-y-3">
+                {[
+                  { value: 'yes-many', label: 'Yes, I supply to many retailers' },
+                  { value: 'yes-few', label: 'Yes, I supply to a few retailers' },
+                  { value: 'no-ready', label: 'No, but I am ready to start' },
+                  { value: 'no-new', label: 'No, this would be my first wholesale venture' }
+                ].map((option) => (
+                  <RadioButton
+                    key={option.value}
+                    id={`supplierToRetailers-${option.value}`}
+                    name="supplierToRetailers"
+                    value={option.value}
+                    checked={formData.supplierToRetailers === option.value}
+                    onChange={(value) => setFormData(prev => ({ ...prev, supplierToRetailers: value }))}
+                    label={option.label}
+                    variant="card"
+                    size="md"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#000000] mb-4">
+                Do you operate on other B2B marketplaces?
+              </label>
+              <div className="space-y-3">
+                {[
+                  { value: 'yes-multiple', label: 'Yes, on multiple B2B platforms' },
+                  { value: 'yes-one', label: 'Yes, on one other platform' },
+                  { value: 'no-first', label: 'No, eXobe would be my first B2B marketplace' }
+                ].map((option) => (
+                  <RadioButton
+                    key={option.value}
+                    id={`otherMarketplaces-${option.value}`}
+                    name="otherMarketplaces"
+                    value={option.value}
+                    checked={formData.otherMarketplaces === option.value}
+                    onChange={(value) => setFormData(prev => ({ ...prev, otherMarketplaces: value }))}
+                    label={option.label}
+                    variant="card"
+                    size="md"
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Business experience context */}
+        <div className={`p-4 rounded-lg ${
+          isWholesaler 
+            ? 'bg-green-50 border border-green-200' 
+            : 'bg-blue-50 border border-blue-200'
+        }`}>
+          <h4 className={`font-semibold mb-2 ${
+            isWholesaler ? 'text-green-800' : 'text-blue-800'
+          }`}>
+            {isWholesaler ? 'Wholesale Business Verification:' : 'Retail Business Verification:'}
+          </h4>
+          <ul className={`text-sm space-y-1 ${
+            isWholesaler ? 'text-green-700' : 'text-blue-700'
+          }`}>
+            {isWholesaler ? (
+              <>
+                <li>• We may request business registration documents</li>
+                <li>• Product samples or catalogs may be required</li>
+                <li>• Trade references may be contacted</li>
+                <li>• Minimum order capabilities will be verified</li>
+                <li>• Quality standards compliance will be assessed</li>
+              </>
+            ) : (
+              <>
+                <li>• We may request business registration documents</li>
+                <li>• Product authenticity may be verified</li>
+                <li>• Customer service capabilities will be assessed</li>
+                <li>• Return/refund policies will be reviewed</li>
+                <li>• Marketing and branding compliance will be checked</li>
+              </>
+            )}
+          </ul>
         </div>
       </div>
     </div>

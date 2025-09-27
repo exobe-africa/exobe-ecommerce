@@ -29,6 +29,7 @@ export default function SellerApplicationPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState<FormData>({
+    sellerType: '',
     businessType: '',
     applicantType: '',
     firstName: '',
@@ -103,6 +104,7 @@ export default function SellerApplicationPage() {
 
     switch (step) {
       case 1:
+        if (!formData.sellerType) newErrors.sellerType = 'Please select whether you are applying as a retailer or wholesaler';
         if (!formData.businessType) newErrors.businessType = 'Please select a business type';
         if (!formData.applicantType) newErrors.applicantType = 'Please select how you are applying';
         break;

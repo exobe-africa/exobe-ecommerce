@@ -1,4 +1,5 @@
 export { default as SellHeroSection } from './SellHeroSection';
+export { default as SellerTypesSection } from './SellerTypesSection';
 export { default as BenefitsSection } from './BenefitsSection';
 export { default as HowItWorksSection } from './HowItWorksSection';
 export { default as SuccessStoriesSection } from './SuccessStoriesSection';

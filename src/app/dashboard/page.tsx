@@ -22,9 +22,10 @@ import {
   Truck,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  RotateCcw
 } from 'lucide-react';
-import { AddressModal, OrderDetailsModal, ReviewModal, DeleteConfirmationModal, LeaveReviewModal, TrackPackageModal } from '../../components/pages/dashboard';
+import { AddressModal, OrderDetailsModal, ReviewModal, DeleteConfirmationModal, LeaveReviewModal, TrackPackageModal, ReturnItemModal } from '../../components/pages/dashboard';
 import { PhoneInput } from '../../components/common';
 
 interface Address {
@@ -66,7 +67,9 @@ export default function CustomerDashboard() {
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showLeaveReviewModal, setShowLeaveReviewModal] = useState(false);
   const [showTrackPackageModal, setShowTrackPackageModal] = useState(false);
+  const [showReturnModal, setShowReturnModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [returnOrder, setReturnOrder] = useState<any>(null);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
@@ -293,6 +296,11 @@ export default function CustomerDashboard() {
     setShowTrackPackageModal(true);
   };
 
+  const handleReturnRequest = (order: any) => {
+    setReturnOrder(order);
+    setShowReturnModal(true);
+  };
+
   const handlePhoneChange = (value: string) => {
     // This would typically update user profile data
     console.log('Phone changed:', value);
@@ -512,6 +520,63 @@ export default function CustomerDashboard() {
                   </div>
                 </div>
 
+                {/* Active Returns */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+                  <div className="p-6 border-b border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-semibold text-[#000000]">Active Returns</h2>
+                      <span className="text-sm text-[#4A4A4A]">2 pending</span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      {/* Mock return data */}
+                      <div className="flex items-center justify-between p-4 bg-orange-50 rounded-xl border border-orange-200">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                            <RotateCcw className="h-5 w-5 text-orange-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-[#000000]">Return Request #RTN-001</p>
+                            <p className="text-sm text-[#4A4A4A]">Order ORD-2024-001 • Submitted 2 days ago</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Under Review
+                          </span>
+                          <p className="text-sm text-[#4A4A4A] mt-1">R1299.00</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-200">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-[#000000]">Return Request #RTN-002</p>
+                            <p className="text-sm text-[#4A4A4A]">Order ORD-2024-003 • Approved</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Pickup Scheduled
+                          </span>
+                          <p className="text-sm text-[#4A4A4A] mt-1">R899.00</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <button className="text-[#C8102E] hover:text-[#A00E26] font-medium text-sm flex items-center space-x-1">
+                        <span>View all returns</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Quick Actions */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-xl font-semibold text-[#000000] mb-4">Quick Actions</h2>
@@ -594,12 +659,20 @@ export default function CustomerDashboard() {
                             View Details
                           </button>
                           {order.status === 'delivered' && (
-                            <button 
-                              onClick={() => handleLeaveReview(order)}
-                              className="flex-1 border border-[#C8102E] text-[#C8102E] px-6 py-3 rounded-xl font-medium hover:bg-[#F6E2E0] transition-colors"
-                            >
-                              Leave Review
-                            </button>
+                            <>
+                              <button 
+                                onClick={() => handleLeaveReview(order)}
+                                className="flex-1 border border-[#C8102E] text-[#C8102E] px-6 py-3 rounded-xl font-medium hover:bg-[#F6E2E0] transition-colors"
+                              >
+                                Leave Review
+                              </button>
+                              <button 
+                                onClick={() => handleReturnRequest(order)}
+                                className="flex-1 border border-orange-500 text-orange-600 px-6 py-3 rounded-xl font-medium hover:bg-orange-50 transition-colors"
+                              >
+                                Return Item
+                              </button>
+                            </>
                           )}
                           {order.status === 'shipped' && (
                             <button 
@@ -1131,6 +1204,22 @@ export default function CustomerDashboard() {
         trackingNumber={selectedOrder?.trackingNumber || ''}
         orderId={selectedOrder?.id || ''}
         orderDate={selectedOrder?.date || ''}
+      />
+
+      {/* Return Item Modal */}
+      <ReturnItemModal
+        isOpen={showReturnModal}
+        onClose={() => {
+          setShowReturnModal(false);
+          setReturnOrder(null);
+        }}
+        order={returnOrder}
+        onSubmit={(returnData) => {
+          console.log('Return request submitted:', returnData);
+          // Here you would typically send the return request to your API
+          setShowReturnModal(false);
+          setReturnOrder(null);
+        }}
       />
     </div>
   );

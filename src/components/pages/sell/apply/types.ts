@@ -1,4 +1,5 @@
 export interface FormData {
+  sellerType: string;
   businessType: string;
   applicantType: string;
   firstName: string;
@@ -32,4 +33,6 @@ export interface FormData {
   businessSummary: string;
   howDidYouHear: string;
   agreeToTerms: boolean;
+  minimumOrderQty?: string;
+  leadTimes?: string;
 }

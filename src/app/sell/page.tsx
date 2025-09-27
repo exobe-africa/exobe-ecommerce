@@ -1,5 +1,6 @@
 import {
   SellHeroSection,
+  SellerTypesSection,
   BenefitsSection,
   HowItWorksSection,
   SuccessStoriesSection,
@@ -16,9 +17,8 @@ export default function SellOnExobePage() {
   ];
   return (
     <div className="min-h-screen bg-gray-50">
-
-      
       <SellHeroSection stats={stats} />
+      <SellerTypesSection />
       <BenefitsSection />
       <HowItWorksSection />
       <SuccessStoriesSection />

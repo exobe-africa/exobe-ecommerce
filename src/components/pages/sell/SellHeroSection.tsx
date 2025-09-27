@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Store, ArrowRight } from 'lucide-react';
+import { Store, ArrowRight, Warehouse } from 'lucide-react';
 import { QuickStats } from '../../common/index';
 
 interface Stat {
@@ -22,8 +22,13 @@ const SellHeroSection: React.FC<SellHeroSectionProps> = ({ stats }) => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
               Sell on eXobe
             </h1>
-            <p className="text-xl sm:text-2xl text-red-100 mb-8">
-              Join South Africa's fastest-growing marketplace and reach millions of customers
+            <p className="text-xl sm:text-2xl text-red-100 mb-4">
+              Join South Africa's fastest-growing marketplace
+            </p>
+            <p className="text-lg text-red-100 mb-8 leading-relaxed">
+              Whether you're a <span className="font-semibold text-white">retailer</span> selling directly to consumers 
+              or a <span className="font-semibold text-white">wholesaler</span> supplying to businesses, 
+              we have the perfect platform to grow your sales and reach new markets.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/sell/apply">
@@ -45,8 +50,17 @@ const SellHeroSection: React.FC<SellHeroSectionProps> = ({ stats }) => {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
               <div className="text-center mb-6">
                 <Store className="h-16 w-16 text-white mx-auto mb-4" />
-                <h3 className="text-2xl font-bold">Ready to Start?</h3>
-                <p className="text-red-100">Join thousands of successful sellers</p>
+                <h3 className="text-2xl font-bold">Two Ways to Sell</h3>
+                <div className="space-y-2 text-red-100">
+                  <p className="flex items-center justify-center">
+                    <Store className="h-4 w-4 mr-2" />
+                    <span className="font-medium">Retailer:</span> Direct to consumers
+                  </p>
+                  <p className="flex items-center justify-center">
+                    <Warehouse className="h-4 w-4 mr-2" />
+                    <span className="font-medium">Wholesaler:</span> Supply to retailers
+                  </p>
+                </div>
               </div>
               <QuickStats
                 stats={stats}
