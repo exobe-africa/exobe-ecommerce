@@ -104,7 +104,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
               name="type"
               value={formData.type}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] font-medium"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000]"
             >
               <option value="home">Home</option>
               <option value="work">Work</option>
@@ -122,7 +122,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
               value={formData.name}
               onChange={handleInputChange}
               placeholder="e.g., Home Address, Office"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
               required
             />
           </div>
@@ -137,7 +137,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
               value={formData.street}
               onChange={handleInputChange}
               placeholder="123 Main Street"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
               required
             />
           </div>
@@ -153,7 +153,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
                 value={formData.city}
                 onChange={handleInputChange}
                 placeholder="Johannesburg"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                 required
               />
             </div>
@@ -167,7 +167,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
                 value={formData.postalCode}
                 onChange={handleInputChange}
                 placeholder="2001"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                 required
               />
             </div>
@@ -181,7 +181,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
               name="province"
               value={formData.province}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] font-medium"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000]"
             >
               {provinces.map((province) => (
                 <option key={province} value={province}>

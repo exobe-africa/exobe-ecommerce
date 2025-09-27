@@ -151,7 +151,7 @@ export default function PhoneInput({
           required={required}
           disabled={disabled}
           className={`
-            w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-600 font-medium
+            w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500
             ${showIcon ? 'pl-12' : 'px-4'}
             ${error ? 'border-red-500' : 'border-gray-300'}
             ${disabled ? 'bg-gray-100 cursor-not-allowed text-gray-600' : 'hover:border-gray-400'}

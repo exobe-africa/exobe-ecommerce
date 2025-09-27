@@ -381,7 +381,7 @@ export default function CustomerDashboard() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="lg:w-1/4">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden lg:sticky lg:top-8">
               <div className="p-6 border-b border-gray-100">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-[#C8102E] rounded-full flex items-center justify-center">
@@ -886,7 +886,7 @@ export default function CustomerDashboard() {
                           <input
                             type="text"
                             defaultValue="John"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                           />
                         </div>
                         <div>
@@ -896,7 +896,7 @@ export default function CustomerDashboard() {
                           <input
                             type="text"
                             defaultValue="Doe"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                           />
                         </div>
                       </div>
@@ -908,7 +908,7 @@ export default function CustomerDashboard() {
                         <input
                           type="email"
                           defaultValue={user.email}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                         />
                       </div>
                       
@@ -927,7 +927,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="date"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                         />
                       </div>
                       
@@ -963,7 +963,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                         />
                       </div>
                       
@@ -973,7 +973,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                         />
                       </div>
                       
@@ -983,7 +983,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                         />
                       </div>
                       

@@ -121,7 +121,7 @@ export default function ReviewModal({ isOpen, onClose, review, onSave }: ReviewM
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience with this product..."
               rows={5}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent resize-none text-[#000000] placeholder-gray-600 font-medium"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent resize-none text-[#000000] placeholder-gray-500"
               required
               maxLength={500}
             />
