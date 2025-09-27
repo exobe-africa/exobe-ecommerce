@@ -4,7 +4,7 @@ import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
 import CartDrawer from "../components/common/CartDrawer";
-import WhatsAppButton from "../components/common/WhatsAppButton";
+import HelpChatWidget from "../components/common/HelpChatWidget";
 import ScrollToTop from "../components/common/ScrollToTop";
 import LayoutContent from "./LayoutContent";
 
@@ -48,7 +48,7 @@ export default function RootLayout({
             {children}
           </LayoutContent>
           <CartDrawer />
-          <WhatsAppButton />
+          <HelpChatWidget position="bottom-right" />
         </WishlistProvider>
         </CartProvider>
       </body>
