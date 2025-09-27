@@ -194,7 +194,7 @@ export default function LeaveReviewModal({
                       onChange={(e) => handleCommentChange(item.id, e.target.value)}
                       placeholder={`Share your experience with ${item.name}...`}
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent resize-none text-[#000000] placeholder-gray-600 font-medium"
                       maxLength={500}
                     />
                     <div className="flex justify-between items-center mt-2">

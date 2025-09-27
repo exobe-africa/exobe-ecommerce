@@ -35,20 +35,24 @@ export default function PhoneInput({
   const [displayValue, setDisplayValue] = useState(value);
 
   const formatPhoneNumber = (input: string): string => {
+    // Remove all non-digit characters
     const numbers = input.replace(/\D/g, '');
     
     let formattedNumbers = numbers;
     
+    // Handle different input formats
     if (numbers.startsWith('27')) {
       formattedNumbers = numbers;
     } else if (numbers.startsWith('0')) {
       formattedNumbers = '27' + numbers.substring(1);
-    } else if (numbers.length > 0) {
+    } else if (numbers.length > 0 && !numbers.startsWith('27')) {
       formattedNumbers = '27' + numbers;
     }
     
+    // Limit to 11 digits (27 + 9 digits)
     formattedNumbers = formattedNumbers.substring(0, 11);
     
+    // Format as +27 XX XXX XXXX
     if (formattedNumbers.length >= 2) {
       let formatted = '+27';
       const remaining = formattedNumbers.substring(2);
@@ -83,6 +87,24 @@ export default function PhoneInput({
     
     setDisplayValue(formatted);
     onChange(getCleanValue(formatted));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Allow: backspace, delete, tab, escape, enter
+    if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+        // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+        (e.keyCode === 65 && e.ctrlKey === true) ||
+        (e.keyCode === 67 && e.ctrlKey === true) ||
+        (e.keyCode === 86 && e.ctrlKey === true) ||
+        (e.keyCode === 88 && e.ctrlKey === true) ||
+        // Allow: home, end, left, right
+        (e.keyCode >= 35 && e.keyCode <= 39)) {
+      return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+      e.preventDefault();
+    }
   };
 
   const handleInputBlur = () => {
@@ -123,15 +145,16 @@ export default function PhoneInput({
           name={name}
           value={displayValue}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
           placeholder={placeholder}
           required={required}
           disabled={disabled}
           className={`
-            w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500
+            w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-600 font-medium
             ${showIcon ? 'pl-12' : 'px-4'}
             ${error ? 'border-red-500' : 'border-gray-300'}
-            ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:border-gray-400'}
+            ${disabled ? 'bg-gray-100 cursor-not-allowed text-gray-600' : 'hover:border-gray-400'}
           `}
         />
         

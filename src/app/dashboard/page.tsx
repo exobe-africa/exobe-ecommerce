@@ -25,6 +25,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { AddressModal, OrderDetailsModal, ReviewModal, DeleteConfirmationModal, LeaveReviewModal, TrackPackageModal } from '../../components/pages/dashboard';
+import { PhoneInput } from '../../components/common';
 
 interface Address {
   id: number;
@@ -290,6 +291,11 @@ export default function CustomerDashboard() {
   const handleTrackPackage = (order: any) => {
     setSelectedOrder(order);
     setShowTrackPackageModal(true);
+  };
+
+  const handlePhoneChange = (value: string) => {
+    // This would typically update user profile data
+    console.log('Phone changed:', value);
   };
 
   // Mock reviews state
@@ -614,7 +620,7 @@ export default function CustomerDashboard() {
             {activeTab === 'addresses' && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
                 <div className="p-6 border-b border-gray-100">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
                       <h2 className="text-xl font-semibold text-[#000000]">My Addresses</h2>
                       <p className="text-[#4A4A4A] mt-1">Manage your delivery addresses</p>
@@ -624,7 +630,7 @@ export default function CustomerDashboard() {
                         setSelectedAddress(null);
                         setShowAddressModal(true);
                       }}
-                      className="bg-[#C8102E] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
+                      className="bg-[#C8102E] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors whitespace-nowrap self-start sm:self-auto"
                     >
                       Add New Address
                     </button>
@@ -880,7 +886,7 @@ export default function CustomerDashboard() {
                           <input
                             type="text"
                             defaultValue="John"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                           />
                         </div>
                         <div>
@@ -890,7 +896,7 @@ export default function CustomerDashboard() {
                           <input
                             type="text"
                             defaultValue="Doe"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                           />
                         </div>
                       </div>
@@ -902,20 +908,18 @@ export default function CustomerDashboard() {
                         <input
                           type="email"
                           defaultValue={user.email}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                         />
                       </div>
                       
-                      <div>
-                        <label className="block text-sm font-medium text-[#000000] mb-2">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          defaultValue={user.phone}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
-                        />
-                      </div>
+                      <PhoneInput
+                        id="phone"
+                        name="phone"
+                        value={user.phone}
+                        onChange={handlePhoneChange}
+                        label="Phone Number"
+                        className="w-full"
+                      />
                       
                       <div>
                         <label className="block text-sm font-medium text-[#000000] mb-2">
@@ -923,7 +927,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="date"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                         />
                       </div>
                       
@@ -959,7 +963,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                         />
                       </div>
                       
@@ -969,7 +973,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                         />
                       </div>
                       
@@ -979,7 +983,7 @@ export default function CustomerDashboard() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-600 font-medium"
                         />
                       </div>
                       
@@ -1000,7 +1004,7 @@ export default function CustomerDashboard() {
                     <p className="text-red-500 mt-1">Irreversible and destructive actions</p>
                   </div>
                   <div className="p-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div>
                         <h3 className="font-semibold text-[#000000]">Delete Account</h3>
                         <p className="text-sm text-[#4A4A4A] mt-1">
@@ -1009,7 +1013,7 @@ export default function CustomerDashboard() {
                       </div>
                       <button
                         onClick={() => setShowDeleteModal(true)}
-                        className="bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors"
+                        className="bg-red-600 text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-red-700 transition-colors whitespace-nowrap self-start sm:self-auto"
                       >
                         Delete Account
                       </button>
@@ -1042,14 +1046,14 @@ export default function CustomerDashboard() {
                 reviews, and saved addresses will be permanently removed.
               </p>
               
-              <div className="flex space-x-3">
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+                  className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
-                <button className="flex-1 bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors">
+                <button className="flex-1 bg-red-600 text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-red-700 transition-colors">
                   Delete Account
                 </button>
               </div>
