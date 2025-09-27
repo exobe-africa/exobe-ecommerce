@@ -331,7 +331,7 @@ export default function Navbar() {
                   )}
                 </button>
               </Link>
-              <Link href="/auth/login">
+              <Link href="/dashboard">
                 <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
                   <User className="h-6 w-6 text-[#4A4A4A]" />
                 </button>
@@ -561,15 +561,14 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
-                  <button
-                    onClick={() => {
-                      setShowMobileMenu(false);
-                    }}
+                  <Link
+                    href="/dashboard"
+                    onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
                   >
                     <User className="h-6 w-6 mr-3" />
-                    My Orders
-                  </button>
+                    My Account
+                  </Link>
                   <Link
                     href="/help-center"
                     onClick={closeMobileMenu}

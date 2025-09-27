@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LoginHeader, LoginForm, SignUpLink } from '../../../components/pages/auth/login';
+import { BackToHomeLink, SocialButtons, AuthFooter } from '../../../components/common';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({

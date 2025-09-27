@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { RegisterHeader, RegisterForm, PasswordRequirements, TermsAndNewsletter, SignInLink } from '../../../components/pages/auth/register';
-
+import { BackToHomeLink, SocialButtons, AuthFooter } from '../../../components/common';
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     firstName: '',
