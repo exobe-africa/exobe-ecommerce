@@ -204,7 +204,7 @@ export default function Navbar() {
             <nav className="hidden lg:flex items-center space-x-8">
               <a href="/categories" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Shop by Categories</a>
               <a href="#" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Deals</a>
-              <a href="#" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Orders</a>
+              <Link href="/dashboard?tab=orders" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Orders</Link>
             </nav>
 
           <div className="hidden md:flex items-center flex-1 max-w-lg mx-8">
@@ -568,6 +568,14 @@ export default function Navbar() {
                   >
                     <User className="h-6 w-6 mr-3" />
                     My Account
+                  </Link>
+                  <Link
+                    href="/dashboard?tab=orders"
+                    onClick={closeMobileMenu}
+                    className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                  >
+                    <span className="text-2xl mr-3">📦</span>
+                    My Orders
                   </Link>
                   <Link
                     href="/help-center"

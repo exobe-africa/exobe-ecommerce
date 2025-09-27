@@ -4,13 +4,13 @@ import { Phone, Mail, MessageCircle } from 'lucide-react';
 
 const contactMethods = [
   {
-    title: 'Live Chat',
+    title: 'WhatsApp',
     subtitle: 'Get instant help',
-    description: 'Chat with our friendly support team for immediate assistance',
+    description: 'Message us on WhatsApp for quick questions and immediate assistance',
     availability: 'Available 24/7',
     icon: MessageCircle,
-    color: 'bg-green-500',
-    action: 'Start Chat',
+    color: 'bg-green-600',
+    action: '+27 82 123 4567',
     highlight: true
   },
   {
@@ -32,16 +32,6 @@ const contactMethods = [
     color: 'bg-purple-500',
     action: 'support@exobe.africa',
     highlight: false
-  },
-  {
-    title: 'WhatsApp',
-    subtitle: 'Quick messaging',
-    description: 'Message us on WhatsApp for quick questions and updates',
-    availability: 'Mon-Fri: 8AM-6PM',
-    icon: MessageCircle,
-    color: 'bg-green-600',
-    action: '+27 82 123 4567',
-    highlight: false
   }
 ];
 
@@ -55,7 +45,7 @@ const ContactMethodsSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {contactMethods.map((method, index) => {
           const IconComponent = method.icon;
           return (
