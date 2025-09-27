@@ -36,9 +36,10 @@ interface OrderDetailsModalProps {
   onClose: () => void;
   order: Order | null;
   onLeaveReview?: (order: Order) => void;
+  onTrackPackage?: (order: Order) => void;
 }
 
-export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveReview }: OrderDetailsModalProps) {
+export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveReview, onTrackPackage }: OrderDetailsModalProps) {
   if (!isOpen || !order) return null;
 
   const getStatusColor = (status: string) => {
@@ -247,8 +248,14 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
                 Leave Review
               </button>
             )}
-            {order.status === 'shipped' && (
-              <button className="flex-1 border border-blue-500 text-blue-600 px-6 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors">
+            {order.status === 'shipped' && onTrackPackage && (
+              <button 
+                onClick={() => {
+                  onTrackPackage(order);
+                  onClose();
+                }}
+                className="flex-1 border border-blue-500 text-blue-600 px-6 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
+              >
                 Track Package
               </button>
             )}

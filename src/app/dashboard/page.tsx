@@ -24,7 +24,7 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { AddressModal, OrderDetailsModal, ReviewModal, DeleteConfirmationModal, LeaveReviewModal } from '../../components/pages/dashboard';
+import { AddressModal, OrderDetailsModal, ReviewModal, DeleteConfirmationModal, LeaveReviewModal, TrackPackageModal } from '../../components/pages/dashboard';
 
 interface Address {
   id: number;
@@ -64,6 +64,7 @@ export default function CustomerDashboard() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showLeaveReviewModal, setShowLeaveReviewModal] = useState(false);
+  const [showTrackPackageModal, setShowTrackPackageModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
@@ -284,6 +285,11 @@ export default function CustomerDashboard() {
 
     setReviews(prev => [...prev, ...reviewsToAdd]);
     setSelectedOrder(null);
+  };
+
+  const handleTrackPackage = (order: any) => {
+    setSelectedOrder(order);
+    setShowTrackPackageModal(true);
   };
 
   // Mock reviews state
@@ -590,7 +596,10 @@ export default function CustomerDashboard() {
                             </button>
                           )}
                           {order.status === 'shipped' && (
-                            <button className="flex-1 border border-blue-500 text-blue-600 px-6 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors">
+                            <button 
+                              onClick={() => handleTrackPackage(order)}
+                              className="flex-1 border border-blue-500 text-blue-600 px-6 py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
+                            >
                               Track Package
                             </button>
                           )}
@@ -1069,6 +1078,7 @@ export default function CustomerDashboard() {
         }}
         order={selectedOrder}
         onLeaveReview={handleLeaveReview}
+        onTrackPackage={handleTrackPackage}
       />
 
       {/* Review Edit Modal */}
@@ -1105,6 +1115,18 @@ export default function CustomerDashboard() {
         orderItems={selectedOrder?.items || []}
         orderId={selectedOrder?.id || ''}
         onSubmit={handleSubmitReviews}
+      />
+
+      {/* Track Package Modal */}
+      <TrackPackageModal
+        isOpen={showTrackPackageModal}
+        onClose={() => {
+          setShowTrackPackageModal(false);
+          setSelectedOrder(null);
+        }}
+        trackingNumber={selectedOrder?.trackingNumber || ''}
+        orderId={selectedOrder?.id || ''}
+        orderDate={selectedOrder?.date || ''}
       />
     </div>
   );
