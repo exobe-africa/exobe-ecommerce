@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { ShoppingBag, CreditCard, RotateCcw, User, Star, Shield, Truck, Clock, MessageCircle, Phone, Mail } from 'lucide-react';
+import { ShoppingBag, CreditCard, RotateCcw, User, Star, Shield, Truck, Clock } from 'lucide-react';
 import {
   HelpCenterHero,
   PopularArticles,
@@ -148,7 +148,7 @@ const contactMethods = [
     title: 'WhatsApp Support',
     description: 'Message us on WhatsApp for help',
     availability: 'Available 24/7',
-    icon: MessageCircle,
+    icon: 'MessageCircle',
     color: 'bg-green-500',
     action: 'Chat on WhatsApp',
     whatsappNumber: '+27821234567'
@@ -157,7 +157,7 @@ const contactMethods = [
     title: 'Phone Support',
     description: 'Call us for immediate help',
     availability: 'Mon-Fri: 8AM-8PM, Sat-Sun: 9AM-5PM',
-    icon: Phone,
+    icon: 'Phone',
     color: 'bg-blue-500',
     action: 'Call +27 11 123 4567'
   },
@@ -165,7 +165,7 @@ const contactMethods = [
     title: 'Email Support',
     description: 'Send us a detailed message',
     availability: 'Response within 24 hours',
-    icon: Mail,
+    icon: 'Mail',
     color: 'bg-purple-500',
     action: 'Send Email'
   }

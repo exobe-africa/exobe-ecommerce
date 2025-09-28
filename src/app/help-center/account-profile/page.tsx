@@ -72,7 +72,7 @@ const contactMethods = [
     title: 'Email Support',
     description: 'Send us a detailed message',
     availability: 'Response within 24 hours',
-    icon: Mail,
+    icon: 'Mail',
     color: 'bg-purple-500',
     action: 'Send Email'
   }
