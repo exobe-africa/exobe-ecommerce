@@ -6,6 +6,7 @@ import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle, ShoppingBag, Sm
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useUser } from "../../context/UserContext";
+import { useUI } from "../../context/UIContext";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -13,6 +14,7 @@ export default function Navbar() {
   const { state, toggleCart } = useCart();
   const { state: wishlistState } = useWishlist();
   const { user, isLoggedIn, logout } = useUser();
+  const { isMobileMenuOpen, setMobileMenuOpen } = useUI();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
   const [isMobileMenuAnimating, setIsMobileMenuAnimating] = useState(false);
@@ -26,6 +28,7 @@ export default function Navbar() {
 
   const closeMobileMenu = () => {
     setShowMobileMenu(false);
+    setMobileMenuOpen(false);
   };
 
   const sampleProducts = [
@@ -183,7 +186,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 lg:h-24">
             <button 
-              onClick={() => setShowMobileMenu(true)}
+              onClick={() => {
+                setShowMobileMenu(true);
+                setMobileMenuOpen(true);
+              }}
               className="lg:hidden p-3 rounded-md hover:bg-gray-100 touch-manipulation"
             >
               <Menu className="h-6 w-6 text-[#4A4A4A]" />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from '../../context/CartContext';
+import { useUI } from '../../context/UIContext';
 import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,6 +21,7 @@ const formatVariant = (variant?: { [key: string]: string | undefined }) => {
 
 export default function CartDrawer() {
   const { state, removeItem, updateQuantity, closeCart, clearCart } = useCart();
+  const { setCartOpen } = useUI();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -30,11 +32,13 @@ export default function CartDrawer() {
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.height = '100%';
+      setCartOpen(true);
     } else {
       document.body.style.overflow = 'unset';
       document.body.style.position = 'unset';
       document.body.style.width = 'unset';
       document.body.style.height = 'unset';
+      setCartOpen(false);
     }
 
     return () => {
@@ -43,7 +47,7 @@ export default function CartDrawer() {
       document.body.style.width = 'unset';
       document.body.style.height = 'unset';
     };
-  }, [state.isOpen]);
+  }, [state.isOpen, setCartOpen]);
 
   useEffect(() => {
     if (state.isOpen) {
