@@ -130,6 +130,19 @@ const ProductCard = ({
                 -{Math.round(((originalPrice - price) / originalPrice) * 100)}%
               </div>
             )}
+
+            {/* Wishlist Button */}
+            <button
+              onClick={handleWishlistToggle}
+              className="absolute top-2 left-2 bg-white/90 hover:bg-white rounded-full p-1.5 sm:p-2 shadow-md transition-all duration-300 hover:scale-110 z-10"
+              title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+            >
+              <Heart className={`h-3 w-3 sm:h-4 sm:w-4 transition-colors ${
+                isInWishlist 
+                  ? 'fill-[#C8102E] text-[#C8102E]' 
+                  : 'text-[#4A4A4A] hover:text-[#C8102E]'
+              }`} />
+            </button>
           </div>
         </Link>
         
