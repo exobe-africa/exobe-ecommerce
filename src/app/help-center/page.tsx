@@ -146,7 +146,7 @@ const popularArticles = [
 const contactMethods = [
   {
     title: 'WhatsApp Support',
-    description: 'Message us on WhatsApp for instant help',
+    description: 'Message us on WhatsApp for help',
     availability: 'Available 24/7',
     icon: MessageCircle,
     color: 'bg-green-500',
