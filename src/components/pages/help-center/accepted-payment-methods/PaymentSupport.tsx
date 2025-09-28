@@ -15,7 +15,7 @@ interface PaymentSupportProps {
 const PaymentSupport: React.FC<PaymentSupportProps> = ({
   title = "Payment Support",
   description = "Having trouble with payments? Our support team is available to help you complete your purchase.",
-  chatButtonText = "Live Chat Support",
+  chatButtonText = "WhatsApp Support",
   phoneButtonText = "Call +27 11 123 4567",
   phoneNumber = "+27 11 123 4567",
   onChatClick,
@@ -24,6 +24,10 @@ const PaymentSupport: React.FC<PaymentSupportProps> = ({
   const handleChatClick = () => {
     if (onChatClick) {
       onChatClick();
+    } else {
+      const message = "Hi! I need help with payment issues on eXobe. Can you please assist me?";
+      const whatsappUrl = `https://wa.me/27821234567?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
     }
   };
 

@@ -32,7 +32,7 @@ const ContactHeroSection = () => {
 
           <QuickStats
             stats={[
-              { number: '24/7', label: 'Live Chat Support' },
+              { number: '24/7', label: 'WhatsApp Support' },
               { number: '< 24hrs', label: 'Email Response' },
               { number: '3', label: 'Office Locations' },
               { number: '50k+', label: 'Happy Customers' }

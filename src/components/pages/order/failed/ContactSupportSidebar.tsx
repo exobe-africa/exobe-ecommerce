@@ -19,7 +19,7 @@ const ContactSupportSidebar = () => {
         <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
           <MessageCircle className="h-5 w-5 text-[#C8102E]" />
           <div>
-            <p className="font-medium text-[#000000]">Live Chat</p>
+            <p className="font-medium text-[#000000]">WhatsApp Support</p>
             <p className="text-sm text-[#4A4A4A]">Available 24/7</p>
           </div>
         </div>

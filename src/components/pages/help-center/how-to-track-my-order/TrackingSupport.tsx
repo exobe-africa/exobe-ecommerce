@@ -15,7 +15,7 @@ interface TrackingSupportProps {
 const TrackingSupport: React.FC<TrackingSupportProps> = ({
   title = "Still need help?",
   description = "If you're having trouble tracking your order or have any questions, our support team is here to help.",
-  primaryButtonText = "Live Chat",
+  primaryButtonText = "WhatsApp Support",
   secondaryButtonText = "Call +27 11 123 4567",
   phoneNumber = "+27 11 123 4567",
   onPrimaryClick,
@@ -24,6 +24,10 @@ const TrackingSupport: React.FC<TrackingSupportProps> = ({
   const handlePrimaryClick = () => {
     if (onPrimaryClick) {
       onPrimaryClick();
+    } else {
+      const message = "Hi! I need help tracking my order. Can you please assist me?";
+      const whatsappUrl = `https://wa.me/27821234567?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
     }
   };
 
