@@ -102,14 +102,16 @@ export default function CartDrawer() {
       />
 
       <div 
-        className={`fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 transform transition-all duration-300 ease-in-out shadow-xl flex flex-col ${
+        className={`fixed right-0 top-0 w-full max-w-md bg-white z-50 transform transition-all duration-300 ease-in-out shadow-xl flex flex-col ${
           state.isOpen && !isAnimating ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ 
           position: 'fixed',
-          height: '100vh',
-          overscrollBehavior: 'contain'
-        }}
+          height: '100dvh',
+          maxHeight: '100dvh',
+          overscrollBehavior: 'contain',
+          minHeight: '100dvh'
+        } as React.CSSProperties}
         onTouchMove={(e) => {
           const target = e.target as HTMLElement;
           const scrollableArea = target.closest('[data-scrollable]');
@@ -137,7 +139,7 @@ export default function CartDrawer() {
 
         <div className={`flex flex-col flex-1 min-h-0 transition-all duration-300 delay-200 ${
           state.isOpen && !isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`}>
+        }`} style={{ minHeight: 0 }}>
           {state.items.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-8 text-center">
               <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#F6E2E0] rounded-full flex items-center justify-center mb-4 sm:mb-6">
@@ -162,6 +164,10 @@ export default function CartDrawer() {
               <div 
                 className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4 pb-4" 
                 data-scrollable="true"
+                style={{ 
+                  minHeight: 0,
+                  maxHeight: 'calc(100dvh - 250px)' // Use dynamic viewport height
+                } as React.CSSProperties}
               >
                 {state.items.map((item) => (
                   <div key={item.uniqueId || item.id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
@@ -238,7 +244,11 @@ export default function CartDrawer() {
                 ))}
               </div>
 
-              <div className="border-t border-gray-200 p-4 sm:p-4 bg-white shadow-lg flex-shrink-0">
+              <div className="border-t border-gray-200 p-4 sm:p-4 bg-white shadow-lg flex-shrink-0" style={{ 
+                position: 'sticky',
+                bottom: 0,
+                zIndex: 10
+              }}>
                 <div className="mb-4 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
                   {(() => {
                     const freeDeliveryThreshold = 499;
@@ -324,7 +334,7 @@ export default function CartDrawer() {
                   <Link href="/checkout" className="block">
                     <button 
                       onClick={closeCart}
-                      className="w-full bg-[#C8102E] text-white py-3.5 rounded-full font-semibold hover:bg-[#A00E26] transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center group touch-manipulation text-base sm:text-lg"
+                      className="w-full bg-[#C8102E] text-white py-3.5 rounded-full font-semibold hover:bg-[#A00E26] transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center group touch-manipulation text-base sm:text-lg min-h-[48px]"
                     >
                       Proceed to Checkout
                       <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
@@ -334,7 +344,7 @@ export default function CartDrawer() {
                   <Link href="/cart" className="block">
                     <button
                       onClick={closeCart}
-                      className="w-full bg-white border-2 border-[#C8102E] text-[#C8102E] py-3 rounded-full font-semibold hover:bg-[#C8102E] hover:text-white transition-all duration-300 touch-manipulation text-base shadow-md hover:shadow-lg flex items-center justify-center group"
+                      className="w-full bg-white border-2 border-[#C8102E] text-[#C8102E] py-3 rounded-full font-semibold hover:bg-[#C8102E] hover:text-white transition-all duration-300 touch-manipulation text-base shadow-md hover:shadow-lg flex items-center justify-center group min-h-[44px]"
                     >
                       <ShoppingBag className="mr-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                       View Cart
@@ -343,7 +353,7 @@ export default function CartDrawer() {
 
                   <button
                     onClick={closeCart}
-                    className="w-full bg-gray-100 text-[#4A4A4A] py-2.5 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 active:scale-95 touch-manipulation text-sm sm:text-base"
+                    className="w-full bg-gray-100 text-[#4A4A4A] py-2.5 rounded-full font-medium hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 active:scale-95 touch-manipulation text-sm sm:text-base min-h-[40px]"
                   >
                     Continue Shopping
                   </button>
