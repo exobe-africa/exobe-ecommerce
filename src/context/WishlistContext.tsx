@@ -12,6 +12,7 @@ export interface WishlistItem {
   reviews?: number;
   inStock?: boolean;
   addedAt: string;
+  brand?: string;
   description?: string;
   variants?: any;
   availableLocations?: string[];
