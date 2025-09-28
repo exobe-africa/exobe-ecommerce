@@ -2,20 +2,7 @@
 
 import { AlertCircle } from 'lucide-react';
 import { ProductCard } from '../../common/index';
-
-interface WishlistItem {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  rating?: number;
-  reviews?: number;
-  inStock?: boolean;
-  addedAt: string;
-  brand?: string;
-}
+import type { WishlistItem } from '../../../context/WishlistContext';
 
 interface WishlistGridProps {
   items: WishlistItem[];
