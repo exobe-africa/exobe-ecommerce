@@ -327,7 +327,7 @@ export default function Navbar() {
                 <button className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
                   <Heart className="h-6 w-6 text-[#4A4A4A]" />
                   {wishlistState.totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
                       {wishlistState.totalItems > 99 ? '99+' : wishlistState.totalItems}
                     </span>
                   )}
