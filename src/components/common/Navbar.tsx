@@ -7,6 +7,7 @@ import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useUser } from "../../context/UserContext";
 import { useUI } from "../../context/UIContext";
+import { useScrollDirection } from "../../hooks/useScrollDirection";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -15,6 +16,7 @@ export default function Navbar() {
   const { state: wishlistState } = useWishlist();
   const { user, isLoggedIn, logout } = useUser();
   const { isMobileMenuOpen, setMobileMenuOpen } = useUI();
+  const { isVisible: isHeaderVisible } = useScrollDirection({ threshold: 10 });
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
   const [isMobileMenuAnimating, setIsMobileMenuAnimating] = useState(false);
@@ -156,7 +158,10 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
-      <div className="bg-[#000000] text-white py-2">
+      {/* Top Black Header - Hidden on mobile scroll down */}
+      <div className={`bg-[#000000] text-white py-2 transition-transform duration-300 ease-in-out md:transform-none ${
+        isHeaderVisible ? 'translate-y-0' : 'md:translate-y-0 -translate-y-full'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="hidden md:block">
