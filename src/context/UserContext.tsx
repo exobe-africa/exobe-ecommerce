@@ -42,7 +42,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Load user data from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('exobeUser');
