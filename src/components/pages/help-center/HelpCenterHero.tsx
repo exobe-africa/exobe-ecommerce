@@ -20,6 +20,16 @@ const HelpCenterHero: React.FC<HelpCenterHeroProps> = ({
 }) => {
   const shouldRenderSearch = typeof searchQuery === 'string' && typeof onSearchChange === 'function';
 
+  const heroIconMap = {
+    orders: ShoppingBag,
+    payments: CreditCard,
+    returns: RotateCcw,
+    account: UserIcon,
+    products: Star,
+    technical: Shield,
+  } as const;
+  type HeroIconKey = keyof typeof heroIconMap;
+
   return (
     <section className="bg-gradient-to-br from-[#000000] to-[#4A4A4A] text-white py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -36,18 +46,13 @@ const HelpCenterHero: React.FC<HelpCenterHeroProps> = ({
         {Icon && (
           <div className="flex items-center justify-center mb-5">
             <div className="w-14 h-14 rounded-xl bg-[#C8102E] flex items-center justify-center">
-              {typeof Icon === 'string' ? (
-                (({
-                  orders: ShoppingBag,
-                  payments: CreditCard,
-                  returns: RotateCcw,
-                  account: UserIcon,
-                  products: Star,
-                  technical: Shield,
-                } as const)[Icon as keyof any] || Shield)({ className: 'h-7 w-7 text-white' })
-              ) : (
-                <Icon className="h-7 w-7 text-white" />
-              )}
+              {(() => {
+                const ResolvedIcon: React.ElementType =
+                  typeof Icon === 'string'
+                    ? (heroIconMap[(Icon as HeroIconKey)] ?? Shield)
+                    : Icon;
+                return <ResolvedIcon className="h-7 w-7 text-white" />;
+              })()}
             </div>
           </div>
         )}
