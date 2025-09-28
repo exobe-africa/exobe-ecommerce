@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import ReturnDetailsModal from '../../ReturnDetailsModal';
 import CancelReturnModal from '../../CancelReturnModal';
+import ReturnsMobileFiltersModal from './ReturnsMobileFiltersModal';
 
 interface ReturnRequest {
   id: string;
@@ -155,6 +156,7 @@ export default function ReturnsTab({ onViewReturn }: ReturnsTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [selectedReturn, setSelectedReturn] = useState<ReturnRequest | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -237,84 +239,47 @@ export default function ReturnsTab({ onViewReturn }: ReturnsTabProps) {
           </div>
         </div>
 
-        {/* Filters and Sort */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-4">
-          {/* Filter Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-sm font-medium text-[#4A4A4A] transition-colors"
-            >
-              <Filter className="h-4 w-4" />
-              <span>Filter: {filterOptions.find(f => f.value === filterBy)?.label}</span>
-              <ChevronDown className={`h-4 w-4 transition-transform ${showFilterDropdown ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {showFilterDropdown && (
-              <div className="absolute left-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
-                <div className="py-2">
-                  {filterOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setFilterBy(option.value as FilterOption);
-                        setShowFilterDropdown(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${
-                        filterBy === option.value 
-                          ? 'text-[#C8102E] bg-[#F6E2E0] font-medium' 
-                          : 'text-[#4A4A4A]'
-                      }`}
-                    >
-                      <span>{option.label}</span>
-                      <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">{option.count}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+        {/* Filters Toolbar - Wishlist Style */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mt-4">
+          <div className="flex items-center space-x-4">
+            <span className="text-[#4A4A4A] font-medium">
+              Showing {sortedReturns.length} of {mockReturns.length} returns
+            </span>
           </div>
 
-          {/* Sort Dropdown */}
-          <div className="relative">
+          <div className="flex items-center space-x-4">
             <button
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-sm font-medium text-[#4A4A4A] transition-colors"
+              onClick={() => setShowMobileFilters(true)}
+              className="md:hidden bg-[#4A4A4A] text-white px-4 py-2 rounded-lg font-medium flex items-center"
             >
-              <ArrowUpDown className="h-4 w-4" />
-              <span>Sort: {sortOptions.find(s => s.value === sortBy)?.label}</span>
-              <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
             </button>
-            
-            {showSortDropdown && (
-              <div className="absolute left-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
-                <div className="py-2">
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSortBy(option.value as SortOption);
-                        setShowSortDropdown(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                        sortBy === option.value 
-                          ? 'text-[#C8102E] bg-[#F6E2E0] font-medium' 
-                          : 'text-[#4A4A4A]'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Results Summary */}
-        <div className="mt-4 flex items-center justify-between text-sm text-[#4A4A4A]">
-          <span>{sortedReturns.length} {sortedReturns.length === 1 ? 'return' : 'returns'} found</span>
-          <span>Sorted by {sortOptions.find(s => s.value === sortBy)?.label.toLowerCase()}</span>
+            <div className="hidden md:flex items-center space-x-4">
+              <select
+                value={filterBy}
+                onChange={(e) => setFilterBy(e.target.value as FilterOption)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
+              >
+                {filterOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label} ({option.count})
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000]"
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -452,6 +417,18 @@ export default function ReturnsTab({ onViewReturn }: ReturnsTabProps) {
         onConfirm={confirmCancelReturn}
         returnId={cancelReturnId}
         returnAmount={cancelReturnAmount}
+      />
+
+      {/* Mobile Filters Modal */}
+      <ReturnsMobileFiltersModal
+        isOpen={showMobileFilters}
+        filterBy={filterBy}
+        sortBy={sortBy}
+        filterOptions={filterOptions}
+        sortOptions={sortOptions}
+        onClose={() => setShowMobileFilters(false)}
+        onFilterChange={(value) => setFilterBy(value as FilterOption)}
+        onSortChange={(value) => setSortBy(value as SortOption)}
       />
     </div>
   );
