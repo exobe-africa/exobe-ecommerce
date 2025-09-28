@@ -2,7 +2,7 @@
 
 import { useCart } from '../../context/CartContext';
 import { useUI } from '../../context/UIContext';
-import { X, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -25,6 +25,7 @@ export default function CartDrawer() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isDeliveryExpanded, setIsDeliveryExpanded] = useState(false);
 
   useEffect(() => {
     if (state.isOpen) {
@@ -249,7 +250,7 @@ export default function CartDrawer() {
                 bottom: 0,
                 zIndex: 10
               }}>
-                <div className="mb-4 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
+                <div className="mb-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200 overflow-hidden">
                   {(() => {
                     const freeDeliveryThreshold = 499;
                     const currentTotal = state.totalPrice;
@@ -259,7 +260,11 @@ export default function CartDrawer() {
 
                     return (
                       <div>
-                        <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        {/* Accordion Header */}
+                        <button
+                          onClick={() => setIsDeliveryExpanded(!isDeliveryExpanded)}
+                          className="w-full p-3 sm:p-4 flex items-center justify-between hover:bg-white/50 transition-colors"
+                        >
                           <div className="flex items-center space-x-2">
                             <div className={`p-1.5 sm:p-2 rounded-full ${isEligible ? 'bg-green-500' : 'bg-blue-500'}`}>
                               {isEligible ? (
@@ -276,47 +281,61 @@ export default function CartDrawer() {
                               {isEligible ? 'Free Delivery Unlocked!' : 'Free Delivery'}
                             </span>
                           </div>
-                          <span className={`text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full ${
-                            isEligible 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-blue-100 text-blue-800'
-                          }`}>
-                            {isEligible ? 'Qualified ✓' : `R${remainingAmount.toFixed(2)} to go`}
-                          </span>
-                        </div>
-
-                        <div className="mb-2 sm:mb-3">
-                          <div className="flex justify-between items-center mb-1 sm:mb-2">
-                            <span className="text-xs sm:text-sm text-gray-600">R0</span>
-                            <span className="text-xs sm:text-sm font-medium text-gray-700">R{freeDeliveryThreshold}</span>
+                          <div className="flex items-center space-x-2">
+                            <span className={`text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full ${
+                              isEligible 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-blue-100 text-blue-800'
+                            }`}>
+                              {isEligible ? 'Qualified ✓' : `R${remainingAmount.toFixed(2)} to go`}
+                            </span>
+                            {isDeliveryExpanded ? (
+                              <ChevronUp className="h-4 w-4 text-gray-500" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4 text-gray-500" />
+                            )}
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2.5 sm:h-3 overflow-hidden">
-                            <div 
-                              className={`h-2.5 sm:h-3 rounded-full transition-all duration-700 ease-out ${
-                                isEligible 
-                                  ? 'bg-gradient-to-r from-green-400 to-green-500' 
-                                  : 'bg-gradient-to-r from-blue-400 to-blue-500'
-                              }`}
-                              style={{ width: `${progress}%` }}
-                            >
-                              {progress > 0 && (
-                                <div className="h-full bg-white bg-opacity-20 animate-pulse"></div>
+                        </button>
+
+                        {/* Accordion Content */}
+                        <div className={`transition-all duration-300 ease-in-out ${
+                          isDeliveryExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                        } overflow-hidden`}>
+                          <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+                            <div className="mb-2 sm:mb-3">
+                              <div className="flex justify-between items-center mb-1 sm:mb-2">
+                                <span className="text-xs sm:text-sm text-gray-600">R0</span>
+                                <span className="text-xs sm:text-sm font-medium text-gray-700">R{freeDeliveryThreshold}</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2.5 sm:h-3 overflow-hidden">
+                                <div 
+                                  className={`h-2.5 sm:h-3 rounded-full transition-all duration-700 ease-out ${
+                                    isEligible 
+                                      ? 'bg-gradient-to-r from-green-400 to-green-500' 
+                                      : 'bg-gradient-to-r from-blue-400 to-blue-500'
+                                  }`}
+                                  style={{ width: `${progress}%` }}
+                                >
+                                  {progress > 0 && (
+                                    <div className="h-full bg-white bg-opacity-20 animate-pulse"></div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="text-center">
+                              {isEligible ? (
+                                <p className="text-xs sm:text-sm text-green-700 font-medium">
+                                  🎉 Congratulations! Your order qualifies for free delivery
+                                </p>
+                              ) : (
+                                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                  Add <span className="font-semibold text-blue-600">R{remainingAmount.toFixed(2)}</span> more to get 
+                                  <span className="font-semibold text-green-600"> FREE delivery</span>
+                                </p>
                               )}
                             </div>
                           </div>
-                        </div>
-
-                        <div className="text-center">
-                          {isEligible ? (
-                            <p className="text-xs sm:text-sm text-green-700 font-medium">
-                              🎉 Congratulations! Your order qualifies for free delivery
-                            </p>
-                          ) : (
-                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                              Add <span className="font-semibold text-blue-600">R{remainingAmount.toFixed(2)}</span> more to get 
-                              <span className="font-semibold text-green-600"> FREE delivery</span>
-                            </p>
-                          )}
                         </div>
                       </div>
                     );
