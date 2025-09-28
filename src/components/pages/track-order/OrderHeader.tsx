@@ -1,7 +1,8 @@
 "use client";
 
+import { CheckCircle, Truck, Clock, AlertCircle } from 'lucide-react';
 import { Order } from './types';
-import { getStatusColor, getStatusIcon, formatCurrency, formatDate } from './utils';
+import { getStatusColor, getStatusIconType, formatCurrency, formatDate } from './utils';
 
 interface OrderHeaderProps {
   order: Order;
@@ -17,7 +18,10 @@ export default function OrderHeader({ order }: OrderHeaderProps) {
         </div>
         <div className="text-right">
           <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border font-medium ${getStatusColor(order.status)}`}>
-            {getStatusIcon(order.status)}
+            {getStatusIconType(order.status) === 'CheckCircle' && <CheckCircle className="h-5 w-5" />}
+            {getStatusIconType(order.status) === 'Truck' && <Truck className="h-5 w-5" />}
+            {getStatusIconType(order.status) === 'Clock' && <Clock className="h-5 w-5" />}
+            {getStatusIconType(order.status) === 'AlertCircle' && <AlertCircle className="h-5 w-5" />}
             <span className="capitalize">{order.status}</span>
           </div>
           <p className="text-2xl font-bold text-[#000000] mt-2">{formatCurrency(order.total)}</p>

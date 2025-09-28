@@ -1,5 +1,3 @@
-import { CheckCircle, Truck, Clock, AlertCircle } from 'lucide-react';
-
 export const getStatusColor = (status: string) => {
   switch (status) {
     case 'delivered': return 'text-green-600 bg-green-50 border-green-200';
@@ -10,13 +8,13 @@ export const getStatusColor = (status: string) => {
   }
 };
 
-export const getStatusIcon = (status: string) => {
+export const getStatusIconType = (status: string) => {
   switch (status) {
-    case 'delivered': return <CheckCircle className="h-5 w-5" />;
-    case 'shipped': return <Truck className="h-5 w-5" />;
-    case 'processing': return <Clock className="h-5 w-5" />;
-    case 'cancelled': return <AlertCircle className="h-5 w-5" />;
-    default: return <Clock className="h-5 w-5" />;
+    case 'delivered': return 'CheckCircle';
+    case 'shipped': return 'Truck';
+    case 'processing': return 'Clock';
+    case 'cancelled': return 'AlertCircle';
+    default: return 'Clock';
   }
 };
 
