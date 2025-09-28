@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#4A4A4A] text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
             <Image
               src="/eXobe Main Logo - Red & Black.png"
@@ -59,6 +59,16 @@ export default function Footer() {
               <li><Link href="/category/fashion" className="hover:text-[#C8102E] transition-colors">Fashion</Link></li>
               <li><Link href="/category/home-garden" className="hover:text-[#C8102E] transition-colors">Home & Garden</Link></li>
               <li><Link href="/category/sports" className="hover:text-[#C8102E] transition-colors">Sports</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold text-lg mb-4">Order Management</h3>
+            <ul className="space-y-2 text-gray-300">
+              <li><Link href="/track-order" className="hover:text-[#C8102E] transition-colors">Track My Order</Link></li>
+              <li><Link href="/return-request" className="hover:text-[#C8102E] transition-colors">Return Item</Link></li>
+              <li><Link href="/dashboard" className="hover:text-[#C8102E] transition-colors">My Account</Link></li>
+              <li><Link href="/wishlist" className="hover:text-[#C8102E] transition-colors">My Wishlist</Link></li>
             </ul>
           </div>
           
