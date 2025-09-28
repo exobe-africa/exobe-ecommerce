@@ -147,7 +147,7 @@ export default function GuestCheckoutModal({ isOpen, onClose, onContinueAsGuest 
           
           <button
             onClick={onContinueAsGuest}
-            className="w-full mt-3 text-[#4A4A4A] hover:text-[#000000] font-medium text-sm py-2 transition-colors"
+            className="w-full mt-3 text-[#4A4A4A] hover:text-[#000000] font-medium text-sm py-2 transition-colors underline hover:no-underline"
           >
             Continue as Guest (you'll miss out on benefits above)
           </button>

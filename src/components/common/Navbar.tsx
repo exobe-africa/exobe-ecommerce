@@ -190,7 +190,7 @@ export default function Navbar() {
             </button>
 
             <div className="flex items-center">
-              <a href="/" className="flex items-center">
+              <Link href="/" className="flex items-center">
                 <Image
                   src="/eXobe Main Logo - Red & Black.png"
                   alt="eXobe"
@@ -200,12 +200,12 @@ export default function Navbar() {
                   priority
                   style={{ minWidth: '40px', minHeight: '40px' }}
                 />
-              </a>
+              </Link>
             </div>
 
             <nav className="hidden lg:flex items-center space-x-8">
-              <a href="/categories" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Shop by Categories</a>
-              <a href="#" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Deals</a>
+              <Link href="/categories" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Shop by Categories</Link>
+              <Link href="/deals" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Deals</Link>
               <Link href="/dashboard?tab=orders" className="text-[#4A4A4A] hover:text-[#C8102E] font-medium transition-colors">Orders</Link>
             </nav>
 
