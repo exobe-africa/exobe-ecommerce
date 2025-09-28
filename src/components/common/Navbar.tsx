@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle, ShoppingBag, Smartphone, Shirt, Home, Dumbbell, UserPlus, LogOut, Package } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useUser } from "../../context/UserContext";
@@ -493,10 +493,10 @@ export default function Navbar() {
                 <Image
                   src="/eXobe Main Logo - Red & Black.png"
                   alt="eXobe"
-                  width={140}
-                  height={140}
-                  className="h-10 w-10 object-contain bg-white rounded p-0.5"
-                  style={{ minWidth: '40px', minHeight: '40px' }}
+                  width={180}
+                  height={180}
+                  className="h-16 w-16 object-contain bg-white rounded p-1"
+                  style={{ minWidth: '60px', minHeight: '60px' }}
                 />
               </Link>
               <button
@@ -517,7 +517,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors touch-manipulation"
                   >
-                    <span className="text-2xl mr-3">🛍️</span>
+                    <ShoppingBag className="h-6 w-6 mr-3 text-[#C8102E]" />
                     Shop by Categories
                   </Link>
                   <Link
@@ -525,7 +525,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors touch-manipulation"
                   >
-                    <span className="text-2xl mr-3">📱</span>
+                    <Smartphone className="h-6 w-6 mr-3 text-[#4A4A4A]" />
                     Electronics
                   </Link>
                   <Link
@@ -533,7 +533,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors touch-manipulation"
                   >
-                    <span className="text-2xl mr-3">👕</span>
+                    <Shirt className="h-6 w-6 mr-3 text-[#4A4A4A]" />
                     Fashion
                   </Link>
                   <Link
@@ -541,7 +541,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors touch-manipulation"
                   >
-                    <span className="text-2xl mr-3">🏠</span>
+                    <Home className="h-6 w-6 mr-3 text-[#4A4A4A]" />
                     Home & Garden
                   </Link>
                   <Link
@@ -549,7 +549,7 @@ export default function Navbar() {
                     onClick={closeMobileMenu}
                     className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors touch-manipulation"
                   >
-                    <span className="text-2xl mr-3">⚽</span>
+                    <Dumbbell className="h-6 w-6 mr-3 text-[#4A4A4A]" />
                     Sports & Fitness
                   </Link>
                 </div>
@@ -588,8 +588,16 @@ export default function Navbar() {
                         onClick={closeMobileMenu}
                         className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
                       >
-                        <span className="text-2xl mr-3">📦</span>
+                        <ShoppingCart className="h-6 w-6 mr-3 text-[#4A4A4A]" />
                         My Orders
+                      </Link>
+                      <Link
+                        href="/track-order"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <Package className="h-6 w-6 mr-3 text-[#4A4A4A]" />
+                        Track My Order
                       </Link>
                       <button
                         onClick={() => {
@@ -598,7 +606,7 @@ export default function Navbar() {
                         }}
                         className="flex items-center py-3 px-4 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full touch-manipulation text-left"
                       >
-                        <span className="text-2xl mr-3">🚪</span>
+                        <LogOut className="h-6 w-6 mr-3" />
                         Sign Out
                       </button>
                     </>
@@ -617,8 +625,16 @@ export default function Navbar() {
                         onClick={closeMobileMenu}
                         className="flex items-center py-3 px-4 bg-[#C8102E] text-white hover:bg-[#A00E26] rounded-lg transition-colors w-full touch-manipulation"
                       >
-                        <span className="text-2xl mr-3">✨</span>
+                        <UserPlus className="h-6 w-6 mr-3" />
                         Create Account
+                      </Link>
+                      <Link
+                        href="/track-order"
+                        onClick={closeMobileMenu}
+                        className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                      >
+                        <Package className="h-6 w-6 mr-3 text-[#4A4A4A]" />
+                        Track My Order
                       </Link>
                     </>
                   )}
