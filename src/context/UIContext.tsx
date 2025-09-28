@@ -5,8 +5,10 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 interface UIState {
   isMobileMenuOpen: boolean;
   isCartOpen: boolean;
+  isWishlistFiltersOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   setCartOpen: (open: boolean) => void;
+  setWishlistFiltersOpen: (open: boolean) => void;
 }
 
 const UIContext = createContext<UIState | undefined>(undefined);
@@ -14,14 +16,17 @@ const UIContext = createContext<UIState | undefined>(undefined);
 export function UIProvider({ children }: { children: ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isWishlistFiltersOpen, setIsWishlistFiltersOpen] = useState(false);
 
   return (
     <UIContext.Provider
       value={{
         isMobileMenuOpen,
         isCartOpen,
+        isWishlistFiltersOpen,
         setMobileMenuOpen: setIsMobileMenuOpen,
         setCartOpen: setIsCartOpen,
+        setWishlistFiltersOpen: setIsWishlistFiltersOpen,
       }}
     >
       {children}

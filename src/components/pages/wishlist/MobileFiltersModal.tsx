@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from 'react';
 import { SortDropdown } from '../../common/index';
+import { useUI } from '../../../context/UIContext';
 
 interface FilterOption {
   value: string;
@@ -34,10 +36,18 @@ const MobileFiltersModal: React.FC<MobileFiltersModalProps> = ({
   onFilterChange,
   onSortChange
 }) => {
+  const { setWishlistFiltersOpen } = useUI();
+
+  useEffect(() => {
+    if (setWishlistFiltersOpen) {
+      setWishlistFiltersOpen(isOpen);
+    }
+  }, [isOpen, setWishlistFiltersOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 md:hidden">
       <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 sm:p-6 max-h-[80vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-[#000000]">Filters & Sort</h3>

@@ -282,7 +282,7 @@ interface HelpChatWidgetProps {
 }
 
 export default function HelpChatWidget({ position = 'bottom-left' }: HelpChatWidgetProps) {
-  const { isMobileMenuOpen, isCartOpen } = useUI();
+  const { isMobileMenuOpen, isCartOpen, isWishlistFiltersOpen } = useUI();
   const [isOpen, setIsOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'main' | 'category' | 'contact'>('main');
   const [selectedCategory, setSelectedCategory] = useState<HelpOption | null>(null);
@@ -335,8 +335,8 @@ export default function HelpChatWidget({ position = 'bottom-left' }: HelpChatWid
     option.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Hide chat widget on mobile when menu or cart is open
-  const shouldHide = isMobileMenuOpen || isCartOpen;
+  // Hide chat widget on mobile when menu, cart, or wishlist filters is open
+  const shouldHide = isMobileMenuOpen || isCartOpen || isWishlistFiltersOpen;
 
   return (
     <>
