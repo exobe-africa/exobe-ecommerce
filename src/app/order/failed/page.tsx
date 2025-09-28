@@ -13,6 +13,14 @@ import {
   AlternativePaymentMethods
 } from '../../../components/pages/order/failed';
 
+interface ErrorDetails {
+  title: string;
+  subtitle: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: 'red' | 'orange';
+  description: string;
+}
+
 export default function OrderFailedPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,7 +38,7 @@ export default function OrderFailedPage() {
     setRetryCount(retry);
   }, [searchParams]);
 
-  const getErrorDetails = () => {
+  const getErrorDetails = (): ErrorDetails => {
     switch (errorType) {
       case 'payment':
         return {
