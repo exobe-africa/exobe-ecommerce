@@ -2,7 +2,7 @@ import {
   HelpCenterHero,
   ContactSupport
 } from '../../../components/pages/help-center';
-import { Shield, Smartphone, Monitor, RefreshCw, Accessibility, Settings, MessageCircle, Phone, Mail } from 'lucide-react';
+import { Shield, Smartphone, Monitor, RefreshCw, Accessibility, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 const technicalArticles = [
@@ -55,7 +55,7 @@ const contactMethods = [
     title: 'WhatsApp Support',
     description: 'Message us on WhatsApp for instant help',
     availability: 'Available 24/7',
-    icon: MessageCircle,
+    icon: 'MessageCircle',
     color: 'bg-green-500',
     action: 'Chat on WhatsApp',
     whatsappNumber: '+27821234567'
@@ -64,7 +64,7 @@ const contactMethods = [
     title: 'Phone Support',
     description: 'Call us for immediate help',
     availability: 'Mon-Fri: 8AM-8PM, Sat-Sun: 9AM-5PM',
-    icon: Phone,
+    icon: 'Phone',
     color: 'bg-blue-500',
     action: 'Call +27 11 123 4567'
   },
@@ -72,7 +72,7 @@ const contactMethods = [
     title: 'Email Support',
     description: 'Send us a detailed message',
     availability: 'Response within 24 hours',
-    icon: Mail,
+    icon: 'Mail',
     color: 'bg-purple-500',
     action: 'Send Email'
   }
@@ -84,7 +84,7 @@ export default function TechnicalSupportPage() {
       <HelpCenterHero 
         title="Technical Support"
         description="Everything you need to know about website issues, app problems, and technical help."
-        icon={Shield}
+        icon="technical"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

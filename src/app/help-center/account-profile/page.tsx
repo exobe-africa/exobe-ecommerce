@@ -2,7 +2,7 @@ import {
   HelpCenterHero,
   ContactSupport
 } from '../../../components/pages/help-center';
-import { User, Key, Edit, Shield, Mail, Trash2, MessageCircle, Phone } from 'lucide-react';
+import { User, Key, Edit, Shield, Mail, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 
 const accountArticles = [
@@ -55,7 +55,7 @@ const contactMethods = [
     title: 'WhatsApp Support',
     description: 'Message us on WhatsApp for instant help',
     availability: 'Available 24/7',
-    icon: MessageCircle,
+    icon: 'MessageCircle',
     color: 'bg-green-500',
     action: 'Chat on WhatsApp',
     whatsappNumber: '+27821234567'
@@ -64,7 +64,7 @@ const contactMethods = [
     title: 'Phone Support',
     description: 'Call us for immediate help',
     availability: 'Mon-Fri: 8AM-8PM, Sat-Sun: 9AM-5PM',
-    icon: Phone,
+    icon: 'Phone',
     color: 'bg-blue-500',
     action: 'Call +27 11 123 4567'
   },
@@ -84,11 +84,10 @@ export default function AccountProfilePage() {
       <HelpCenterHero 
         title="Account & Profile"
         description="Everything you need to know about managing your account, profile, and login issues."
-        icon={User}
+        icon="account"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Featured Articles */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-[#000000] mb-6">Featured Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -117,7 +116,6 @@ export default function AccountProfilePage() {
           </div>
         </section>
 
-        {/* All Articles */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-[#000000] mb-6">All Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -145,7 +143,6 @@ export default function AccountProfilePage() {
           </div>
         </section>
 
-        {/* Quick Actions */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-[#000000] mb-6">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

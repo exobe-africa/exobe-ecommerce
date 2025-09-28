@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from 'lucide-react';
+import { Search, ShoppingBag, CreditCard, RotateCcw, User as UserIcon, Star, Shield } from 'lucide-react';
 import { Breadcrumb } from '../../common/index';
 
 interface HelpCenterHeroProps {
@@ -8,7 +8,7 @@ interface HelpCenterHeroProps {
   onSearchChange?: (query: string) => void;
   title?: string;
   description?: string;
-  icon?: React.ElementType;
+  icon?: React.ElementType | string;
 }
 
 const HelpCenterHero: React.FC<HelpCenterHeroProps> = ({
@@ -36,7 +36,18 @@ const HelpCenterHero: React.FC<HelpCenterHeroProps> = ({
         {Icon && (
           <div className="flex items-center justify-center mb-5">
             <div className="w-14 h-14 rounded-xl bg-[#C8102E] flex items-center justify-center">
-              <Icon className="h-7 w-7 text-white" />
+              {typeof Icon === 'string' ? (
+                (({
+                  orders: ShoppingBag,
+                  payments: CreditCard,
+                  returns: RotateCcw,
+                  account: UserIcon,
+                  products: Star,
+                  technical: Shield,
+                } as const)[Icon as keyof any] || Shield)({ className: 'h-7 w-7 text-white' })
+              ) : (
+                <Icon className="h-7 w-7 text-white" />
+              )}
             </div>
           </div>
         )}

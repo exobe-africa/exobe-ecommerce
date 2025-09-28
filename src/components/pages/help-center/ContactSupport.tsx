@@ -2,12 +2,18 @@
 
 import { Phone, Mail, MessageCircle } from 'lucide-react';
 
+const iconMap = {
+  MessageCircle,
+  Phone,
+  Mail,
+};
+
 const defaultContactMethods = [
   {
     title: 'WhatsApp Support',
     description: 'Message us on WhatsApp for instant help',
     availability: 'Available 24/7',
-    icon: MessageCircle,
+    icon: 'MessageCircle',
     color: 'bg-green-500',
     action: 'Chat on WhatsApp',
     whatsappNumber: '+27821234567'
@@ -16,7 +22,7 @@ const defaultContactMethods = [
     title: 'Phone Support',
     description: 'Call us for immediate help',
     availability: 'Mon-Fri: 8AM-8PM, Sat-Sun: 9AM-5PM',
-    icon: Phone,
+    icon: 'Phone',
     color: 'bg-blue-500',
     action: 'Call +27 11 123 4567'
   },
@@ -24,7 +30,7 @@ const defaultContactMethods = [
     title: 'Email Support',
     description: 'Send us a detailed message',
     availability: 'Response within 24 hours',
-    icon: Mail,
+    icon: 'Mail',
     color: 'bg-purple-500',
     action: 'Send Email'
   }
@@ -34,7 +40,7 @@ interface ContactMethod {
   title: string;
   description: string;
   availability: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: string;
   color: string;
   action: string;
   whatsappNumber?: string;
@@ -79,7 +85,7 @@ const ContactSupport: React.FC<ContactSupportProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {contactMethods.map((method, index) => {
-            const IconComponent = method.icon;
+            const IconComponent = iconMap[method.icon as keyof typeof iconMap] || MessageCircle;
             return (
               <div key={index} className="text-center p-6 rounded-xl border border-gray-200 hover:border-[#C8102E] transition-all duration-300 group">
                 <div className={`w-16 h-16 ${method.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
