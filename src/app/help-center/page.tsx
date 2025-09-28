@@ -145,12 +145,13 @@ const popularArticles = [
 
 const contactMethods = [
   {
-    title: 'Live Chat',
-    description: 'Chat with our support team',
+    title: 'WhatsApp Support',
+    description: 'Message us on WhatsApp for instant help',
     availability: 'Available 24/7',
     icon: MessageCircle,
     color: 'bg-green-500',
-    action: 'Start Chat'
+    action: 'Chat on WhatsApp',
+    whatsappNumber: '+27821234567'
   },
   {
     title: 'Phone Support',

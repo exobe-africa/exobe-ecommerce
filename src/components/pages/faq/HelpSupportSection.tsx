@@ -19,11 +19,18 @@ const HelpSupportSection = () => {
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <MessageCircle className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-xl font-semibold text-[#000000] mb-2">Live Chat</h3>
-            <p className="text-[#4A4A4A] mb-3">Get instant help from our support team</p>
+            <h3 className="text-xl font-semibold text-[#000000] mb-2">WhatsApp Support</h3>
+            <p className="text-[#4A4A4A] mb-3">Message us on WhatsApp for instant help</p>
             <p className="text-sm text-green-600 font-medium mb-4">Available 24/7</p>
-            <button className="bg-green-500 text-white px-6 py-2 rounded-full font-medium hover:bg-green-600 transition-colors">
-              Start Chat
+            <button 
+              onClick={() => {
+                const message = "Hi! I need help with a question from the eXobe FAQ. Can you please assist me?";
+                const whatsappUrl = `https://wa.me/27821234567?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+              }}
+              className="bg-green-500 text-white px-6 py-2 rounded-full font-medium hover:bg-green-600 transition-colors"
+            >
+              Chat on WhatsApp
             </button>
           </div>
 

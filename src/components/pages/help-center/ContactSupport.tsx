@@ -36,6 +36,7 @@ interface ContactMethod {
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   action: string;
+  whatsappNumber?: string;
 }
 
 interface ContactSupportProps {
@@ -52,7 +53,15 @@ const ContactSupport: React.FC<ContactSupportProps> = ({
   onContactClick
 }) => {
   const handleContactClick = (method: ContactMethod) => {
-    if (onContactClick) {
+    if (method.whatsappNumber) {
+      const message = "Hi! I need help with a question from the eXobe Help Center. Can you please assist me?";
+      const whatsappUrl = `https://wa.me/${method.whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    } else if (method.title === 'Phone Support') {
+      window.location.href = 'tel:+27111234567';
+    } else if (method.title === 'Email Support') {
+      window.location.href = 'mailto:support@exobe.africa';
+    } else if (onContactClick) {
       onContactClick(method);
     }
   };
