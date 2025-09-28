@@ -25,3 +25,8 @@ export { default as BackToHomeLink } from './BackToHomeLink';
 export { default as BackToLoginLink } from './BackToLoginLink';
 export { default as LocationChips } from './LocationChips';
 export { default as ProductQuickViewModal } from './ProductQuickViewModal';
+export { default as SupportSection } from './SupportSection';
+export { default as AccountBenefits } from './AccountBenefits';
+
+// Export shared utilities
+export * from './orderUtils';

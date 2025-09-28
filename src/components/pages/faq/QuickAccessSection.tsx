@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { Truck, RotateCcw, CreditCard, User, Shield } from 'lucide-react';
 
 const quickLinks = [
-  { title: 'Track Order', icon: Truck, link: '/help-center/how-to-track-my-order' },
-  { title: 'Returns', icon: RotateCcw, link: '/help-center/return-policy-and-conditions' },
+  { title: 'Track Order', icon: Truck, link: '/track-order' },
+  { title: 'Returns', icon: RotateCcw, link: '/return-request' },
   { title: 'Payment Methods', icon: CreditCard, link: '/help-center/accepted-payment-methods' },
   { title: 'Create Account', icon: User, link: '/help-center/how-to-create-an-account' },
   { title: 'Delivery Info', icon: Truck, link: '/help-center/delivery-times-and-areas' },

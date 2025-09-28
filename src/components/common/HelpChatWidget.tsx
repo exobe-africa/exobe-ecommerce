@@ -53,8 +53,8 @@ const helpOptions: HelpOption[] = [
         description: 'Check the status and location of your order',
         action: {
           type: 'link',
-          value: '/dashboard?tab=orders',
-          label: 'Go to Orders'
+          value: '/track-order',
+          label: 'Track Order'
         }
       },
       {
@@ -141,8 +141,8 @@ const helpOptions: HelpOption[] = [
         description: 'Initiate a return for your order',
         action: {
           type: 'link',
-          value: '/dashboard?tab=orders',
-          label: 'Go to Orders'
+          value: '/return-request',
+          label: 'Start Return Request'
         }
       },
       {

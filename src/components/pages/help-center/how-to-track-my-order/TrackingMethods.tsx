@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, Mail } from 'lucide-react';
+import { Search, Mail, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 
 const defaultMethods = [
   {
@@ -9,10 +10,10 @@ const defaultMethods = [
     icon: Search,
     bgColor: 'bg-[#C8102E]',
     steps: [
-      'Go to the eXobe website',
-      'Click on "Track Order" in the top menu',
-      'Enter your order number and email address',
-      'Click "Track" to view your order status'
+      'Visit our dedicated order tracking page',
+      'Enter your order number or tracking number',
+      'Enter the email address used for your order',
+      'Click "Track Order" to view your order status'
     ]
   },
   {
@@ -85,6 +86,22 @@ const TrackingMethods: React.FC<TrackingMethodsProps> = ({
             </div>
           );
         })}
+      </div>
+
+      {/* Track Order CTA */}
+      <div className="bg-gradient-to-r from-[#C8102E] to-[#A00E26] rounded-xl p-6 mb-8 text-center">
+        <h3 className="text-xl font-semibold text-white mb-3">Ready to Track Your Order?</h3>
+        <p className="text-white/90 mb-4">
+          Use our dedicated tracking page to get real-time updates on your order status.
+        </p>
+        <Link
+          href="/track-order"
+          className="inline-flex items-center bg-white text-[#C8102E] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+        >
+          <Search className="h-5 w-5 mr-2" />
+          Track Your Order Now
+          <ExternalLink className="h-4 w-4 ml-2" />
+        </Link>
       </div>
 
       {showTrackingInfo && (
