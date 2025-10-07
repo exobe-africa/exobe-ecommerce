@@ -11,8 +11,16 @@ export const useScrollDirection = (options: UseScrollDirectionOptions = {}) => {
   const { threshold = 10, initialDirection = 'up' } = options;
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>(initialDirection);
   const [isVisible, setIsVisible] = useState(true);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
+    if (!isClient) return;
+
     let lastScrollY = window.pageYOffset;
     let ticking = false;
 
@@ -39,7 +47,8 @@ export const useScrollDirection = (options: UseScrollDirectionOptions = {}) => {
     window.addEventListener('scroll', onScroll);
 
     return () => window.removeEventListener('scroll', onScroll);
-  }, [scrollDirection, threshold]);
+  }, [scrollDirection, threshold, isClient]);
 
-  return { scrollDirection, isVisible };
+  // Always return visible during SSR and initial client render
+  return { scrollDirection, isVisible: isClient ? isVisible : true };
 };

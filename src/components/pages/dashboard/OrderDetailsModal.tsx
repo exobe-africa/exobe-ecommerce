@@ -1,7 +1,9 @@
 "use client";
 
-import { X, Package, Truck, CheckCircle, Clock, AlertCircle, MapPin, CreditCard } from 'lucide-react';
+import { useState } from 'react';
+import { X, Package, Truck, CheckCircle, Clock, AlertCircle, MapPin, CreditCard, Download, FileText, Receipt } from 'lucide-react';
 import { useScrollLock } from '../../../hooks/useScrollLock';
+import { getInvoiceUrl, getReceiptUrl, downloadDocument } from '../../../lib/api/documents';
 
 interface OrderItem {
   id: number;
@@ -41,10 +43,52 @@ interface OrderDetailsModalProps {
 }
 
 export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveReview, onTrackPackage }: OrderDetailsModalProps) {
+  const [isDownloading, setIsDownloading] = useState<'invoice' | 'receipt' | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+  
   // Lock body scroll when modal is open
   useScrollLock(isOpen);
 
   if (!isOpen || !order) return null;
+
+  const handleDownloadInvoice = async () => {
+    try {
+      setIsDownloading('invoice');
+      setDownloadError(null);
+      
+      // Get invoice URL from API
+      const url = await getInvoiceUrl(order.id);
+      
+      // Download the invoice
+      await downloadDocument(url, `invoice-${order.id}.pdf`);
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      setDownloadError('Failed to download invoice. Please try again.');
+    } finally {
+      setIsDownloading(null);
+    }
+  };
+
+  const handleDownloadReceipt = async () => {
+    try {
+      setIsDownloading('receipt');
+      setDownloadError(null);
+      
+      // Get receipt URL from API
+      const url = await getReceiptUrl(order.id);
+      
+      // Download the receipt
+      await downloadDocument(url, `receipt-${order.id}.pdf`);
+    } catch (error) {
+      console.error('Error downloading receipt:', error);
+      setDownloadError('Failed to download receipt. Please try again.');
+    } finally {
+      setIsDownloading(null);
+    }
+  };
+
+  // Check if order is paid (can download receipt)
+  const isPaidOrder = order.status === 'delivered' || order.status === 'shipped';
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -267,6 +311,12 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
 
           {/* Sticky Footer */}
           <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 rounded-b-2xl">
+            {downloadError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                {downloadError}
+              </div>
+            )}
+            
             <div className="flex flex-col sm:flex-row gap-3">
               {order.status === 'delivered' && onLeaveReview && (
                 <button 
@@ -285,14 +335,53 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onLeaveRevie
                     onTrackPackage(order);
                     onClose();
                   }}
-                  className="flex-1 border border-blue-500 text-blue-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors"
+                  className="flex-1 border border-blue-500 text-blue-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-blue-50 transition-colors flex items-center justify-center space-x-2"
                 >
-                  Track Package
+                  <Truck className="h-4 w-4" />
+                  <span>Track Package</span>
                 </button>
               )}
-              <button className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
-                Download Invoice
+              
+              {/* Invoice Download Button */}
+              <button 
+                onClick={handleDownloadInvoice}
+                disabled={isDownloading === 'invoice'}
+                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              >
+                {isDownloading === 'invoice' ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full" />
+                    <span>Downloading...</span>
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4" />
+                    <span>Download Invoice</span>
+                  </>
+                )}
               </button>
+
+              {/* Receipt Download Button - Only for paid orders */}
+              {isPaidOrder && (
+                <button 
+                  onClick={handleDownloadReceipt}
+                  disabled={isDownloading === 'receipt'}
+                  className="flex-1 border border-green-500 text-green-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                >
+                  {isDownloading === 'receipt' ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-green-600 border-t-transparent rounded-full" />
+                      <span>Downloading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Receipt className="h-4 w-4" />
+                      <span>Download Receipt</span>
+                    </>
+                  )}
+                </button>
+              )}
+              
               {order.status === 'processing' && (
                 <button className="flex-1 border border-red-500 text-red-600 px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-red-50 transition-colors">
                   Cancel Order

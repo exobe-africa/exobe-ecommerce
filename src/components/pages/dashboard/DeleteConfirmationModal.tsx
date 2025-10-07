@@ -2,6 +2,7 @@
 
 import { AlertTriangle, X } from 'lucide-react';
 import { useScrollLock } from '../../../hooks/useScrollLock';
+import { Spinner } from '../../common/Spinner';
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface DeleteConfirmationModalProps {
   title: string;
   message: string;
   itemName?: string;
+  isLoading?: boolean;
 }
 
 export default function DeleteConfirmationModal({
@@ -18,7 +20,8 @@ export default function DeleteConfirmationModal({
   onConfirm,
   title,
   message,
-  itemName
+  itemName,
+  isLoading = false
 }: DeleteConfirmationModalProps) {
   // Lock body scroll when modal is open
   useScrollLock(isOpen);
@@ -59,18 +62,26 @@ export default function DeleteConfirmationModal({
           <div className="flex space-x-3">
             <button
               onClick={onClose}
-              className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+              disabled={isLoading}
+              className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               onClick={() => {
                 onConfirm();
-                onClose();
               }}
-              className="flex-1 bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors"
+              disabled={isLoading}
+              className="flex-1 bg-red-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              Delete
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
             </button>
           </div>
         </div>

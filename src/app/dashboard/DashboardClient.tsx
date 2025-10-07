@@ -1,7 +1,19 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useQuery, useMutation } from '@apollo/client/react';
+import {
+  DASHBOARD_ME,
+  DASHBOARD_ADDRESSES,
+  DASHBOARD_CREATE_ADDRESS,
+  DASHBOARD_UPDATE_ADDRESS,
+  DASHBOARD_DELETE_ADDRESS,
+  DASHBOARD_MY_ORDERS,
+} from '../../lib/api/dashboard';
+import { useAuthStore } from '../../store/auth';
+import { useToast } from '../../context/ToastContext';
+import { getUserFriendlyErrorMessage } from '../../lib/utils/errorMessages';
 import { 
   AddressModal, 
   OrderDetailsModal, 
@@ -30,10 +42,14 @@ import {
 export default function DashboardClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isAuthenticated } = useAuthStore();
+  const { showError, showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+  const [isDeletingAddress, setIsDeletingAddress] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
@@ -47,28 +63,7 @@ export default function DashboardClient() {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
-  const [addresses, setAddresses] = useState<Address[]>([
-    {
-      id: 1,
-      type: 'home',
-      name: 'Home Address',
-      street: '123 Main Street',
-      city: 'Johannesburg',
-      province: 'Gauteng',
-      postalCode: '2001',
-      isDefault: true
-    },
-    {
-      id: 2,
-      type: 'work',
-      name: 'Work Address',
-      street: '456 Business Ave',
-      city: 'Sandton',
-      province: 'Gauteng',
-      postalCode: '2146',
-      isDefault: false
-    }
-  ]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
 
   const [reviews, setReviews] = useState<Review[]>([
     {
@@ -89,85 +84,52 @@ export default function DashboardClient() {
     }
   ]);
 
-  const user: User = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+27 11 123 4567',
-    joinDate: '2024-01-15',
-    avatar: null,
-    totalOrders: 12,
-    totalSpent: 15750.00,
-    loyaltyPoints: 1575
-  };
+  const { data: meData } = useQuery(DASHBOARD_ME, { skip: !isAuthenticated });
+  const me = (meData as any)?.me;
+  const user: User = useMemo(() => {
+    const fullName = me?.name || `${me?.firstName ?? ''} ${me?.lastName ?? ''}`.trim() || (me?.email ?? '');
+    return {
+      name: fullName,
+      email: me?.email ?? '',
+      phone: me?.phone ?? '',
+      joinDate: new Date().toISOString().slice(0, 10),
+      avatar: null,
+      totalOrders: 0,
+      totalSpent: 0,
+      loyaltyPoints: 0,
+    };
+  }, [me]);
 
-  const orders: Order[] = [
-    {
-      id: 'ORD-2024-001',
-      date: '2024-03-15',
-      status: 'delivered',
-      total: 2499.00,
-      items: [
-        { id: 1, name: 'iPhone 15 Pro', image: '📱', price: 12999.00, quantity: 1, variant: '128GB, Natural Titanium' },
-        { id: 2, name: 'AirPods Pro', image: '🎧', price: 3999.00, quantity: 1 },
-        { id: 3, name: 'iPhone Case', image: '📱', price: 499.00, quantity: 1, variant: 'Clear' }
-      ],
-      trackingNumber: 'TRK123456789',
-      shippingAddress: {
-        name: 'John Doe',
-        street: '123 Main Street',
-        city: 'Johannesburg',
-        province: 'Gauteng',
-        postalCode: '2001'
-      },
-      paymentMethod: 'Credit Card ending in 4567',
-      subtotal: 2299.00,
-      shipping: 150.00,
-      tax: 50.00
-    },
-    {
-      id: 'ORD-2024-002',
-      date: '2024-03-10',
-      status: 'shipped',
-      total: 1299.00,
-      items: [
-        { id: 4, name: 'Nike Air Max 270', image: '👟', price: 1299.00, quantity: 1, variant: 'Size 9, Black/White' }
-      ],
-      trackingNumber: 'TRK987654321',
-      shippingAddress: {
-        name: 'John Doe',
-        street: '456 Business Ave',
-        city: 'Sandton',
-        province: 'Gauteng',
-        postalCode: '2146'
-      },
-      paymentMethod: 'Credit Card ending in 4567',
-      subtotal: 1199.00,
-      shipping: 100.00,
-      tax: 0.00
-    },
-    {
-      id: 'ORD-2024-003',
-      date: '2024-03-05',
-      status: 'processing',
-      total: 899.00,
-      items: [
-        { id: 5, name: 'Cotton T-Shirt', image: '👕', price: 299.00, quantity: 2, variant: 'Large, Navy Blue' },
-        { id: 6, name: 'Jeans', image: '👖', price: 599.00, quantity: 1, variant: '32W x 32L, Dark Blue' }
-      ],
+  const { data: ordersData } = useQuery(DASHBOARD_MY_ORDERS, { skip: !isAuthenticated });
+  const orders: Order[] = useMemo(() => {
+    const raw = (ordersData as any)?.myOrders ?? [];
+    return raw.map((o: any, idx: number) => ({
+      id: o.id,
+      date: new Date(o.created_at).toISOString().slice(0, 10),
+      status: o.status,
+      total: (o.total_cents ?? 0) / 100,
+      items: (o.items ?? []).map((it: any, i: number) => ({
+        id: i + 1,
+        name: it.title,
+        image: '🧾',
+        price: (it.price_cents ?? 0) / 100,
+        quantity: it.quantity,
+        variant: undefined,
+      })),
       trackingNumber: null,
       shippingAddress: {
-        name: 'John Doe',
-        street: '123 Main Street',
-        city: 'Johannesburg',
-        province: 'Gauteng',
-        postalCode: '2001'
+        name: user.name,
+        street: '',
+        city: '',
+        province: '',
+        postalCode: '',
       },
-      paymentMethod: 'Credit Card ending in 4567',
-      subtotal: 799.00,
-      shipping: 100.00,
-      tax: 0.00
-    }
-  ];
+      paymentMethod: '',
+      subtotal: (o.subtotal_cents ?? 0) / 100,
+      shipping: (o.shipping_cents ?? 0) / 100,
+      tax: (o.vat_cents ?? 0) / 100,
+    }));
+  }, [ordersData, user.name]);
 
   const handleAddressEdit = (address: Address) => {
     setSelectedAddress(address);
@@ -185,14 +147,70 @@ export default function DashboardClient() {
     setShowDeleteConfirmModal(true);
   };
 
-  const handleAddressSave = (addressData: Omit<Address, 'id'>) => {
-    if (selectedAddress) {
-      setAddresses(addresses.map(addr => 
-        addr.id === selectedAddress.id ? { ...addressData, id: selectedAddress.id } : addr
-      ));
-    } else {
-      const newAddress = { ...addressData, id: Date.now() };
-      setAddresses([...addresses, newAddress]);
+  const [createAddressMutation] = useMutation(DASHBOARD_CREATE_ADDRESS);
+  const [updateAddressMutation] = useMutation(DASHBOARD_UPDATE_ADDRESS);
+  const [deleteAddressMutation] = useMutation(DASHBOARD_DELETE_ADDRESS);
+
+  const { data: addressesData, refetch: refetchAddresses } = useQuery(
+    DASHBOARD_ADDRESSES,
+    { variables: { userId: me?.id ?? '' }, skip: !isAuthenticated || !me?.id }
+  );
+
+  useEffect(() => {
+    const raw = (addressesData as any)?.getUserAddresses ?? [];
+    const mapped: Address[] = raw.map((a: any, idx: number) => ({
+      id: idx + 1,
+      type: a.type,
+      name: a.type,
+      street: a.addressLine1,
+      city: a.city,
+      province: a.province ?? '',
+      postalCode: a.postalCode,
+      isDefault: idx === 0,
+    }));
+    setAddresses(mapped);
+  }, [addressesData]);
+
+  const handleAddressSave = async (addressData: Omit<Address, 'id'>) => {
+    setIsSavingAddress(true);
+    try {
+      if (selectedAddress) {
+        await updateAddressMutation({
+          variables: {
+            id: String(selectedAddress.id),
+            input: {
+              type: addressData.type,
+              addressLine1: addressData.street,
+              city: addressData.city,
+              province: addressData.province,
+              postalCode: addressData.postalCode,
+            },
+          },
+        });
+        showSuccess('Address updated successfully');
+      } else {
+        await createAddressMutation({
+          variables: {
+            input: {
+              userId: me?.id,
+              type: addressData.type,
+              addressLine1: addressData.street,
+              city: addressData.city,
+              province: addressData.province,
+              country: 'South Africa',
+              postalCode: addressData.postalCode,
+            },
+          },
+        });
+        showSuccess('Address added successfully');
+      }
+      await refetchAddresses();
+      setShowAddressModal(false);
+    } catch (err: any) {
+      const friendlyMessage = getUserFriendlyErrorMessage(err?.message || 'Failed to save address');
+      showError(friendlyMessage);
+    } finally {
+      setIsSavingAddress(false);
     }
     setSelectedAddress(null);
   };
@@ -229,13 +247,25 @@ export default function DashboardClient() {
     setSelectedReview(null);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteTarget?.type === 'review') {
       setReviews(reviews.filter(review => review.id !== deleteTarget.item.id));
+      showSuccess('Review deleted successfully');
     } else if (deleteTarget?.type === 'address') {
-      setAddresses(addresses.filter(addr => addr.id !== deleteTarget.item.id));
+      setIsDeletingAddress(true);
+      try {
+        await deleteAddressMutation({ variables: { id: String(deleteTarget.item.id) } });
+        await refetchAddresses();
+        showSuccess('Address deleted successfully');
+      } catch (err: any) {
+        const friendlyMessage = getUserFriendlyErrorMessage(err?.message || 'Failed to delete address');
+        showError(friendlyMessage);
+      } finally {
+        setIsDeletingAddress(false);
+      }
     }
     setDeleteTarget(null);
+    setShowDeleteConfirmModal(false);
   };
 
   const handleLeaveReview = (order: Order) => {
@@ -282,6 +312,12 @@ export default function DashboardClient() {
       setActiveTab(tab);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/auth/login?returnUrl=/dashboard');
+    }
+  }, [isAuthenticated, router]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -383,6 +419,7 @@ export default function DashboardClient() {
         }}
         address={selectedAddress || undefined}
         onSave={handleAddressSave}
+        isLoading={isSavingAddress}
       />
 
       <OrderDetailsModal
@@ -416,6 +453,7 @@ export default function DashboardClient() {
         title={deleteTarget?.title || ''}
         message={deleteTarget?.message || ''}
         itemName={deleteTarget?.itemName}
+        isLoading={isDeletingAddress}
       />
 
       <LeaveReviewModal

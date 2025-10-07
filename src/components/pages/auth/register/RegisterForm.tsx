@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { PhoneInput } from '../../../common/index';
+import { Spinner } from '../../../common/Spinner';
 
 interface RegisterFormProps {
   formData: {
@@ -16,13 +17,15 @@ interface RegisterFormProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onPhoneChange: (value: string) => void;
+  isLoading?: boolean;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ 
   formData, 
   onInputChange, 
   onSubmit, 
-  onPhoneChange 
+  onPhoneChange,
+  isLoading = false
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -158,14 +161,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
       <button
         type="submit"
-        disabled={!formData.agreeToTerms}
-        className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-          formData.agreeToTerms
+        disabled={!formData.agreeToTerms || isLoading}
+        className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center ${
+          formData.agreeToTerms && !isLoading
             ? 'bg-[#C8102E] text-white hover:bg-[#A00E26]'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >
-        Create Account
+        {isLoading ? (
+          <>
+            <Spinner size="sm" className="mr-2" />
+            Creating Account...
+          </>
+        ) : (
+          'Create Account'
+        )}
       </button>
     </form>
   );

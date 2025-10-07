@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle, ShoppingBag, Smartphone, Shirt, Home, Dumbbell, UserPlus, LogOut, Package } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
-import { useUser } from "../../context/UserContext";
+import { useAuthStore } from "../../store/auth";
 import { useUI } from "../../context/UIContext";
 import { useScrollDirection } from "../../hooks/useScrollDirection";
 import { useState, useEffect } from "react";
@@ -14,13 +14,19 @@ import { useRouter } from 'next/navigation';
 export default function Navbar() {
   const { state, toggleCart } = useCart();
   const { state: wishlistState } = useWishlist();
-  const { user, isLoggedIn, logout } = useUser();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const { isMobileMenuOpen, setMobileMenuOpen } = useUI();
   const { isVisible: isHeaderVisible } = useScrollDirection({ threshold: 10 });
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
   const [isMobileMenuAnimating, setIsMobileMenuAnimating] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  // Ensure client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -160,7 +166,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
       {/* Top Black Header - Hidden on mobile scroll down */}
       <div className={`bg-[#000000] text-white py-2 transition-transform duration-300 ease-in-out md:transform-none ${
-        isHeaderVisible ? 'translate-y-0' : 'md:translate-y-0 -translate-y-full'
+        isClient && !isHeaderVisible ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
@@ -344,7 +350,7 @@ export default function Navbar() {
                   )}
                 </button>
               </Link>
-              {isLoggedIn ? (
+              {isAuthenticated ? (
                 <Link href="/dashboard">
                   <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation relative">
                     <User className="h-6 w-6 text-[#C8102E]" />
@@ -583,7 +589,7 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
-                  {isLoggedIn ? (
+                  {isAuthenticated ? (
                     <>
                       <Link
                         href="/dashboard"

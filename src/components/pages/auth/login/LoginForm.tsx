@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { Checkbox } from '../../../common/index';
+import { Spinner } from '../../../common/Spinner';
 
 interface LoginFormProps {
   formData: {
@@ -11,9 +12,10 @@ interface LoginFormProps {
   };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
+  isLoading?: boolean;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit, isLoading = false }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -83,9 +85,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit
 
       <button
         type="submit"
-        className="w-full bg-[#C8102E] text-white py-3 rounded-lg font-semibold hover:bg-[#A00E26] transition-all duration-300 transform hover:scale-105 active:scale-95"
+        disabled={isLoading}
+        className="w-full bg-[#C8102E] text-white py-3 rounded-lg font-semibold hover:bg-[#A00E26] transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
       >
-        Sign In
+        {isLoading ? (
+          <>
+            <Spinner size="sm" className="mr-2" />
+            Signing In...
+          </>
+        ) : (
+          'Sign In'
+        )}
       </button>
     </form>
   );

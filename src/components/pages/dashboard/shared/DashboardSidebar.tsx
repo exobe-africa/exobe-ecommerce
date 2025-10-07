@@ -2,6 +2,8 @@
 
 import { User, Package, MapPin, Star, Bell, Settings, LogOut, RotateCcw } from 'lucide-react';
 import { User as UserType } from './types';
+import { useAuthStore } from '../../../../store/auth';
+import { useRouter } from 'next/navigation';
 
 interface DashboardSidebarProps {
   user: UserType;
@@ -20,6 +22,14 @@ const menuItems = [
 ];
 
 export default function DashboardSidebar({ user, activeTab, onTabChange }: DashboardSidebarProps) {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/auth/login');
+  };
+
   return (
     <div className="lg:w-1/4">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden lg:sticky lg:top-8">
@@ -57,7 +67,10 @@ export default function DashboardSidebar({ user, activeTab, onTabChange }: Dashb
           })}
           
           <div className="border-t border-gray-100 mt-4 pt-4">
-            <button className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left text-red-600 hover:bg-red-50 transition-all duration-200">
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left text-red-600 hover:bg-red-50 transition-all duration-200"
+            >
               <LogOut className="h-5 w-5" />
               <span>Sign Out</span>
             </button>

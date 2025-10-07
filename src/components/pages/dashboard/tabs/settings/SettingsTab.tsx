@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { User } from '../../shared/types';
 import { PhoneInput } from '../../../../common';
 
@@ -11,6 +11,39 @@ interface SettingsTabProps {
 }
 
 export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: SettingsTabProps) {
+  // Parse first and last name from user.name
+  const { firstName, lastName } = useMemo(() => {
+    const nameParts = user.name.trim().split(' ');
+    return {
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || ''
+    };
+  }, [user.name]);
+
+  const [formData, setFormData] = useState({
+    firstName,
+    lastName,
+    email: user.email,
+    phone: user.phone,
+    dateOfBirth: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setFormData(prev => ({ ...prev, phone: value }));
+    onPhoneChange(value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement profile update logic
+    console.log('Profile update:', formData);
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
@@ -19,7 +52,7 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
           <p className="text-[#4A4A4A] mt-1">Update your personal information</p>
         </div>
         <div className="p-6">
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-[#000000] mb-2">
@@ -27,7 +60,9 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
                 </label>
                 <input
                   type="text"
-                  defaultValue="John"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                 />
               </div>
@@ -37,7 +72,9 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
                 </label>
                 <input
                   type="text"
-                  defaultValue="Doe"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
                 />
               </div>
@@ -49,7 +86,9 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               </label>
               <input
                 type="email"
-                defaultValue={user.email}
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
               />
             </div>
@@ -57,8 +96,8 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
             <PhoneInput
               id="phone"
               name="phone"
-              value={user.phone}
-              onChange={onPhoneChange}
+              value={formData.phone}
+              onChange={handlePhoneChange}
               label="Phone Number"
               className="w-full"
             />
@@ -69,6 +108,9 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               </label>
               <input
                 type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
               />
             </div>

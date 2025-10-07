@@ -5,7 +5,10 @@ import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
 import { UserProvider } from "../context/UserContext";
 import { UIProvider } from "../context/UIContext";
+import { ToastProvider } from "../context/ToastContext";
 import CartDrawer from "../components/common/CartDrawer";
+import ApolloProviderWrapper from "../components/providers/ApolloProviderWrapper";
+import AuthBootstrap from "../components/providers/AuthBootstrap";
 import HelpChatWidget from "../components/common/HelpChatWidget";
 import ScrollToTop from "../components/common/ScrollToTop";
 import LayoutContent from "./LayoutContent";
@@ -53,10 +56,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ApolloProviderWrapper>
+        <ToastProvider>
         <UIProvider>
         <UserProvider>
         <CartProvider>
         <WishlistProvider>
+          <AuthBootstrap />
           <ScrollToTop />
           <LayoutContent>
             {children}
@@ -67,6 +73,8 @@ export default function RootLayout({
         </CartProvider>
         </UserProvider>
         </UIProvider>
+        </ToastProvider>
+        </ApolloProviderWrapper>
       </body>
     </html>
   );

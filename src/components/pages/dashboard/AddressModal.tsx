@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, MapPin } from 'lucide-react';
 import { Checkbox } from '../../common';
 import { useScrollLock } from '../../../hooks/useScrollLock';
+import { Spinner } from '../../common/Spinner';
 
 interface Address {
   id?: number;
@@ -21,9 +22,10 @@ interface AddressModalProps {
   onClose: () => void;
   address?: Address;
   onSave: (address: Address) => void;
+  isLoading?: boolean;
 }
 
-export default function AddressModal({ isOpen, onClose, address, onSave }: AddressModalProps) {
+export default function AddressModal({ isOpen, onClose, address, onSave, isLoading = false }: AddressModalProps) {
   const [formData, setFormData] = useState<Address>(
     address || {
       type: 'home',
@@ -206,15 +208,24 @@ export default function AddressModal({ isOpen, onClose, address, onSave }: Addre
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+                disabled={isLoading}
+                className="flex-1 border border-gray-300 text-[#4A4A4A] px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors"
+                disabled={isLoading}
+                className="flex-1 bg-[#C8102E] text-white px-6 py-2.5 sm:py-3 rounded-xl font-medium hover:bg-[#A00E26] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {address ? 'Update Address' : 'Add Address'}
+                {isLoading ? (
+                  <>
+                    <Spinner size="sm" className="mr-2" />
+                    {address ? 'Updating...' : 'Adding...'}
+                  </>
+                ) : (
+                  address ? 'Update Address' : 'Add Address'
+                )}
               </button>
             </div>
           </div>
