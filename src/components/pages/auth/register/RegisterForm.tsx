@@ -18,6 +18,7 @@ interface RegisterFormProps {
   onSubmit: (e: React.FormEvent) => void;
   onPhoneChange: (value: string) => void;
   isLoading?: boolean;
+  errors?: Record<string, string>;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ 
@@ -25,7 +26,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   onInputChange, 
   onSubmit, 
   onPhoneChange,
-  isLoading = false
+  isLoading = false,
+  errors = {}
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -45,11 +47,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               name="firstName"
               value={formData.firstName}
               onChange={onInputChange}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+              aria-invalid={!!errors.firstName}
+              className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+                errors.firstName
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+              }`}
               placeholder="John"
               required
             />
           </div>
+          {errors.firstName && <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
         </div>
         <div>
           <label htmlFor="lastName" className="block text-sm font-semibold text-[#000000] mb-2">
@@ -63,11 +71,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               name="lastName"
               value={formData.lastName}
               onChange={onInputChange}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+              aria-invalid={!!errors.lastName}
+              className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+                errors.lastName
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+              }`}
               placeholder="Doe"
               required
             />
           </div>
+          {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>}
         </div>
       </div>
 
@@ -83,11 +97,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             name="email"
             value={formData.email}
             onChange={onInputChange}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+            aria-invalid={!!errors.email}
+            className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+              errors.email
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+            }`}
             placeholder="john@example.com"
             required
           />
         </div>
+        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
       </div>
 
       <PhoneInput
@@ -97,6 +117,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         onChange={onPhoneChange}
         label="Phone Number"
         required
+        error={errors.phone}
       />
 
       <div>
@@ -111,7 +132,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             name="password"
             value={formData.password}
             onChange={onInputChange}
-            className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+            aria-invalid={!!errors.password}
+            className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+              errors.password
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+            }`}
             placeholder="Create a strong password"
             required
           />
@@ -127,6 +153,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             )}
           </button>
         </div>
+        {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
       </div>
 
       <div>
@@ -141,7 +168,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={onInputChange}
-            className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+            aria-invalid={!!errors.confirmPassword}
+            className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+              errors.confirmPassword
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+            }`}
             placeholder="Confirm your password"
             required
           />
@@ -157,6 +189,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             )}
           </button>
         </div>
+        {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>}
       </div>
 
       <button

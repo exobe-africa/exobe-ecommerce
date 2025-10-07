@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { X, MapPin } from 'lucide-react';
 import { Checkbox } from '../../common';
 import { useScrollLock } from '../../../hooks/useScrollLock';
@@ -38,6 +38,22 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
     }
   );
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = useMemo(() => {
+    return (data: Address) => {
+      const next: Record<string, string> = {};
+      if (!data.type) next.type = 'Please select an address type';
+      if (!data.name || data.name.trim().length < 2) next.name = 'Please enter a valid address name';
+      if (!data.street || data.street.trim().length < 3) next.street = 'Please enter a valid street address';
+      if (!data.city || data.city.trim().length < 2) next.city = 'Please enter a valid city';
+      if (!data.province) next.province = 'Please select a province';
+      if (!data.postalCode) next.postalCode = 'Please enter a postal code';
+      else if (!/^\d{4}$/.test(String(data.postalCode))) next.postalCode = 'Postal code must be 4 digits';
+      return next;
+    };
+  }, []);
+
   useScrollLock(isOpen);
 
   const provinces = [
@@ -58,12 +74,18 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
     }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const nextErrors = validate(formData);
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
     onSave(formData);
-    onClose();
+    // Don't close here - let parent close on success
   };
 
   if (!isOpen) return null;
@@ -105,12 +127,14 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               name="type"
               value={formData.type}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000]"
+              aria-invalid={!!errors.type}
+              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
             >
               <option value="home">Home</option>
               <option value="work">Work</option>
               <option value="other">Other</option>
             </select>
+            {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
           </div>
 
           <div>
@@ -123,9 +147,11 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               value={formData.name}
               onChange={handleInputChange}
               placeholder="e.g., Home Address, Office"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+              aria-invalid={!!errors.name}
+              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
               required
             />
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
           </div>
 
           <div>
@@ -138,9 +164,11 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               value={formData.street}
               onChange={handleInputChange}
               placeholder="123 Main Street"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+              aria-invalid={!!errors.street}
+              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${errors.street ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
               required
             />
+            {errors.street && <p className="mt-1 text-sm text-red-600">{errors.street}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -154,9 +182,11 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
                 value={formData.city}
                 onChange={handleInputChange}
                 placeholder="Johannesburg"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+                aria-invalid={!!errors.city}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${errors.city ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
                 required
               />
+              {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-[#000000] mb-2">
@@ -168,9 +198,13 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
                 value={formData.postalCode}
                 onChange={handleInputChange}
                 placeholder="2001"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+                aria-invalid={!!errors.postalCode}
+                inputMode="numeric"
+                pattern="\\d{4}"
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${errors.postalCode ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
                 required
               />
+              {errors.postalCode && <p className="mt-1 text-sm text-red-600">{errors.postalCode}</p>}
             </div>
           </div>
 
@@ -182,7 +216,8 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               name="province"
               value={formData.province}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000]"
+              aria-invalid={!!errors.province}
+              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] ${errors.province ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
             >
               {provinces.map((province) => (
                 <option key={province} value={province}>
@@ -190,6 +225,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
                 </option>
               ))}
             </select>
+            {errors.province && <p className="mt-1 text-sm text-red-600">{errors.province}</p>}
           </div>
 
           <Checkbox

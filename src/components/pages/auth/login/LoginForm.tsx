@@ -13,9 +13,10 @@ interface LoginFormProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   isLoading?: boolean;
+  errors?: Record<string, string>;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit, isLoading = false }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit, isLoading = false, errors = {} }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -32,11 +33,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit
             name="email"
             value={formData.email}
             onChange={onInputChange}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+            aria-invalid={!!errors.email}
+            className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+              errors.email
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+            }`}
             placeholder="Enter your email"
             required
           />
         </div>
+        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
       </div>
 
       <div>
@@ -51,7 +58,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit
             name="password"
             value={formData.password}
             onChange={onInputChange}
-            className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors bg-white text-[#000000] placeholder-gray-500"
+            aria-invalid={!!errors.password}
+            className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors bg-white text-[#000000] placeholder-gray-500 ${
+              errors.password
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+            }`}
             placeholder="Enter your password"
             required
           />
@@ -67,6 +79,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ formData, onInputChange, onSubmit
             )}
           </button>
         </div>
+        {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
       </div>
 
       <div className="flex items-center justify-between">

@@ -27,19 +27,56 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
     phone: user.phone,
     dateOfBirth: ''
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear field error on change
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handlePhoneChange = (value: string) => {
     setFormData(prev => ({ ...prev, phone: value }));
     onPhoneChange(value);
+    // Clear phone error on change
+    if (validationErrors.phone) {
+      setValidationErrors(prev => ({ ...prev, phone: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.firstName.trim()) {
+      errors.firstName = 'First name is required';
+    } else if (formData.firstName.trim().length < 2) {
+      errors.firstName = 'First name must be at least 2 characters';
+    }
+    if (!formData.lastName.trim()) {
+      errors.lastName = 'Last name is required';
+    } else if (formData.lastName.trim().length < 2) {
+      errors.lastName = 'Last name must be at least 2 characters';
+    }
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (formData.phone && !/^\+27\s?\d{2}\s?\d{3}\s?\d{4}$/.test(formData.phone.replace(/\s/g, ''))) {
+      errors.phone = 'Please enter a valid South African phone number';
+    }
+    return errors;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
     // TODO: Implement profile update logic
     console.log('Profile update:', formData);
   };
@@ -63,8 +100,14 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+                  aria-invalid={!!validationErrors.firstName}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                    validationErrors.firstName
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                  }`}
                 />
+                {validationErrors.firstName && <p className="mt-1 text-sm text-red-600">{validationErrors.firstName}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-[#000000] mb-2">
@@ -75,8 +118,14 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+                  aria-invalid={!!validationErrors.lastName}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                    validationErrors.lastName
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                  }`}
                 />
+                {validationErrors.lastName && <p className="mt-1 text-sm text-red-600">{validationErrors.lastName}</p>}
               </div>
             </div>
             
@@ -89,8 +138,14 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent text-[#000000] placeholder-gray-500"
+                aria-invalid={!!validationErrors.email}
+                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                  validationErrors.email
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                }`}
               />
+              {validationErrors.email && <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>}
             </div>
             
             <PhoneInput
@@ -100,6 +155,7 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               onChange={handlePhoneChange}
               label="Phone Number"
               className="w-full"
+              error={validationErrors.phone}
             />
             
             <div>

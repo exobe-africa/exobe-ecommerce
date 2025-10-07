@@ -17,6 +17,7 @@ export default function LoginPage() {
     password: '',
     rememberMe: false
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -24,6 +25,10 @@ export default function LoginPage() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    // Clear field error on change
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   useEffect(() => {
@@ -32,8 +37,28 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, router]);
 
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      errors.password = 'Password must be at least 8 characters';
+    }
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
     try {
       clearError();
       await login({ email: formData.email, password: formData.password });
@@ -60,6 +85,7 @@ export default function LoginPage() {
               onInputChange={handleInputChange}
               onSubmit={handleSubmit}
               isLoading={isLoading}
+              errors={validationErrors}
             />
 
             <SocialButtons />
