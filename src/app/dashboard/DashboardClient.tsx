@@ -159,9 +159,9 @@ export default function DashboardClient() {
   useEffect(() => {
     const raw = (addressesData as any)?.getUserAddresses ?? [];
     const mapped: Address[] = raw.map((a: any, idx: number) => ({
-      id: idx + 1,
+      id: a.id,
       type: a.type,
-      name: a.type,
+      name: a.addressLine2 || a.type,
       street: a.addressLine1,
       city: a.city,
       province: a.province ?? '',
@@ -181,6 +181,7 @@ export default function DashboardClient() {
             input: {
               type: addressData.type,
               addressLine1: addressData.street,
+              addressLine2: addressData.name || undefined,
               city: addressData.city,
               province: addressData.province,
               postalCode: addressData.postalCode,
@@ -192,9 +193,9 @@ export default function DashboardClient() {
         await createAddressMutation({
           variables: {
             input: {
-              userId: me?.id,
               type: addressData.type,
               addressLine1: addressData.street,
+              addressLine2: addressData.name || undefined,
               city: addressData.city,
               province: addressData.province,
               country: 'South Africa',
@@ -207,7 +208,11 @@ export default function DashboardClient() {
       await refetchAddresses();
       setShowAddressModal(false);
     } catch (err: any) {
-      const friendlyMessage = getUserFriendlyErrorMessage(err?.message || 'Failed to save address');
+      const firstGql = (err?.graphQLErrors && err.graphQLErrors[0]) || undefined;
+      const serverMsg = (firstGql?.extensions?.response?.message as any) || firstGql?.message;
+      const messageText = Array.isArray(serverMsg) ? serverMsg.join(', ') : (serverMsg || err?.message);
+      const friendlyMessage = getUserFriendlyErrorMessage(messageText || 'Failed to save address');
+      console.error('Address save failed:', { err, messageText });
       showError(friendlyMessage);
     } finally {
       setIsSavingAddress(false);

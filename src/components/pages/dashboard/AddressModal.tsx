@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { X, MapPin } from 'lucide-react';
 import { Checkbox } from '../../common';
 import { useScrollLock } from '../../../hooks/useScrollLock';
@@ -28,11 +28,11 @@ interface AddressModalProps {
 export default function AddressModal({ isOpen, onClose, address, onSave, isLoading = false }: AddressModalProps) {
   const [formData, setFormData] = useState<Address>(
     address || {
-      type: 'home',
+      type: '',
       name: '',
       street: '',
       city: '',
-      province: 'Gauteng',
+      province: '',
       postalCode: '',
       isDefault: false
     }
@@ -43,18 +43,34 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
   const validate = useMemo(() => {
     return (data: Address) => {
       const next: Record<string, string> = {};
-      if (!data.type) next.type = 'Please select an address type';
+      if (!data.type || data.type === '') next.type = 'Please select an address type';
       if (!data.name || data.name.trim().length < 2) next.name = 'Please enter a valid address name';
       if (!data.street || data.street.trim().length < 3) next.street = 'Please enter a valid street address';
       if (!data.city || data.city.trim().length < 2) next.city = 'Please enter a valid city';
-      if (!data.province) next.province = 'Please select a province';
-      if (!data.postalCode) next.postalCode = 'Please enter a postal code';
-      else if (!/^\d{4}$/.test(String(data.postalCode))) next.postalCode = 'Postal code must be 4 digits';
+      if (!data.province || data.province === '') next.province = 'Please select a province';
+      if (!data.postalCode || data.postalCode.trim() === '') next.postalCode = 'Please enter a postal code';
+      else if (!/^\d{4}$/.test(String(data.postalCode).trim())) next.postalCode = 'Postal code must be 4 digits';
       return next;
     };
   }, []);
 
   useScrollLock(isOpen);
+
+  // Reset form when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(address || {
+        type: '',
+        name: '',
+        street: '',
+        city: '',
+        province: '',
+        postalCode: '',
+        isDefault: false
+      });
+      setErrors({});
+    }
+  }, [isOpen, address]);
 
   const provinces = [
     'Eastern Cape',
@@ -130,6 +146,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               aria-invalid={!!errors.type}
               className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] ${errors.type ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
             >
+              <option value="" disabled>Select address type</option>
               <option value="home">Home</option>
               <option value="work">Work</option>
               <option value="other">Other</option>
@@ -200,7 +217,8 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
                 placeholder="2001"
                 aria-invalid={!!errors.postalCode}
                 inputMode="numeric"
-                pattern="\\d{4}"
+                maxLength={4}
+                minLength={4}
                 className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${errors.postalCode ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
                 required
               />
@@ -219,6 +237,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
               aria-invalid={!!errors.province}
               className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] ${errors.province ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'}`}
             >
+              <option value="">Select province</option>
               {provinces.map((province) => (
                 <option key={province} value={province}>
                   {province}

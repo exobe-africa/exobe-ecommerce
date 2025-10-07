@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Building,
@@ -23,11 +23,14 @@ import {
   FormData
 } from '../../../components/pages/sell/apply';
 import { ApplicationHelpSection, ApplicationSuccessModal } from '../../../components/common';
+import { getUserFriendlyErrorMessage } from '../../../lib/utils/errorMessages';
+import { useApplicationsStore } from '../../../store/applications';
 
 export default function SellerApplicationPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>({
     sellerType: '',
     businessType: '',
@@ -66,6 +69,8 @@ export default function SellerApplicationPage() {
   });
 
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+
+  const { applySeller, isSubmitting, error: globalSubmitError, clearError } = useApplicationsStore();
 
   const steps = [
     { id: 1, name: 'Business Type', icon: Building, description: 'Tell us about your business structure' },
@@ -171,11 +176,54 @@ export default function SellerApplicationPage() {
     scrollToTop();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateStep(currentStep)) {
-      console.log('Seller application:', formData);
-      setShowSuccessModal(true);
+      setSubmitError(null);
+      // Map frontend form fields to backend input naming
+      const input = {
+        businessType: formData.businessType,
+        applicantType: formData.applicantType,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        landline: formData.landline || null,
+        identificationType: formData.identificationType,
+        businessName: formData.businessName,
+        businessRegistration: formData.businessRegistration || null,
+        saIdNumber: formData.saIdNumber || null,
+        vatRegistered: formData.vatRegistered,
+        vatNumber: formData.vatNumber || null,
+        monthlyRevenue: formData.monthlyRevenue || null,
+        physicalStores: formData.physicalStores || null,
+        numberOfStores: formData.numberOfStores || null,
+        supplierToRetailers: formData.supplierToRetailers || null,
+        otherMarketplaces: formData.otherMarketplaces || null,
+        address: formData.address,
+        city: formData.city,
+        province: formData.province,
+        postalCode: formData.postalCode,
+        uniqueProducts: formData.uniqueProducts || null,
+        primaryCategory: formData.primaryCategory,
+        stockType: formData.stockType,
+        productDescription: formData.productDescription,
+        ownedBrands: formData.ownedBrands || null,
+        resellerBrands: formData.resellerBrands || null,
+        website: formData.website || null,
+        socialMedia: formData.socialMedia || null,
+        businessSummary: formData.businessSummary,
+        howDidYouHear: formData.howDidYouHear,
+        agreeToTerms: !!formData.agreeToTerms,
+      } as const;
+
+      try {
+        await applySeller(formData.sellerType === 'wholesaler' ? 'wholesaler' : 'retailer', input as any);
+        setShowSuccessModal(true);
+      } catch (err: any) {
+        const message = getUserFriendlyErrorMessage(err?.message || 'Submission failed');
+        setSubmitError(message);
+      }
     }
   };
 
@@ -269,7 +317,14 @@ export default function SellerApplicationPage() {
             onPrevious={handlePrevious}
             onNext={handleNext}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
+          {submitError && (
+            <p className="mt-4 text-red-600 text-sm">{submitError}</p>
+          )}
+          {!submitError && globalSubmitError && (
+            <p className="mt-4 text-red-600 text-sm">{getUserFriendlyErrorMessage(globalSubmitError)}</p>
+          )}
         </form>
 
         <ApplicationHelpSection
