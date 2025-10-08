@@ -26,8 +26,8 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm }: Delet
           </div>
           
           <p className="text-[#4A4A4A] mb-6">
-            Are you sure you want to delete your account? All your data, including order history, 
-            reviews, and saved addresses will be permanently removed.
+            Are you sure you want to delete your account? Your personal information will be removed, 
+            but your order history will be preserved for record-keeping purposes.
           </p>
           
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">

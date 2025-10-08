@@ -144,4 +144,16 @@ export const DASHBOARD_UPDATE_PASSWORD = gql`
   }
 `;
 
+export const DASHBOARD_CHECK_EMAIL_EXISTS = gql`
+  mutation CheckEmailExists($input: CheckEmailExistsInput!) {
+    checkEmailExists(input: $input)
+  }
+`;
+
+export const DASHBOARD_DELETE_ACCOUNT = gql`
+  mutation DeleteMyAccount {
+    deleteMyAccount
+  }
+`;
+
 
