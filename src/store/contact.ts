@@ -24,33 +24,26 @@ export interface Department {
 }
 
 interface ContactState {
-  // Form data
   formData: ContactFormData;
 
-  // UI state
   isSubmitting: boolean;
   isSubmitted: boolean;
   validationErrors: ValidationErrors;
 
-  // Static data
   departments: Department[];
 
-  // Actions
   setFormData: (data: Partial<ContactFormData>) => void;
   setValidationErrors: (errors: ValidationErrors) => void;
   clearValidationErrors: () => void;
   resetForm: () => void;
   validateAndSetErrors: (data: ContactFormData) => void;
 
-  // GraphQL operations
   sendMessage: (data: ContactFormData) => Promise<{ success: boolean; error?: string }>;
 
-  // Validation
   validateForm: (data: ContactFormData) => ValidationErrors;
 }
 
 export const useContactStore = create<ContactState>((set, get) => ({
-  // Initial state
   formData: {
     name: '',
     email: '',
@@ -73,7 +66,6 @@ export const useContactStore = create<ContactState>((set, get) => ({
     { name: 'Careers', email: 'careers@exobe.africa', icon: 'Award' }
   ],
 
-  // Setters
   setFormData: (data) => set((state) => ({
     formData: { ...state.formData, ...data }
   })),
@@ -100,7 +92,6 @@ export const useContactStore = create<ContactState>((set, get) => ({
     set({ validationErrors: errors });
   },
 
-  // Validation
   validateForm: (data) => {
     const errors: ValidationErrors = {};
 
@@ -135,7 +126,6 @@ export const useContactStore = create<ContactState>((set, get) => ({
     return errors;
   },
 
-  // GraphQL operations
   sendMessage: async (data) => {
     set({ isSubmitting: true, validationErrors: {} });
 
