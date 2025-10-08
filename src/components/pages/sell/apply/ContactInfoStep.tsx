@@ -9,6 +9,7 @@ interface ContactInfoStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
@@ -16,6 +17,7 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
   formData,
   errors,
   onInputChange,
+  onInputBlur,
   setFormData
 }) => {
   return (
@@ -37,8 +39,11 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
               name="firstName"
               value={formData.firstName}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-              placeholder="Enter your first name"
+              onBlur={() => onInputBlur('firstName')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.firstName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
+              placeholder="Enter your first name (minimum 2 characters)"
             />
             {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
           </div>
@@ -51,8 +56,11 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
               name="lastName"
               value={formData.lastName}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-              placeholder="Enter your last name"
+              onBlur={() => onInputBlur('lastName')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
+              placeholder="Enter your last name (minimum 2 characters)"
             />
             {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
           </div>
@@ -69,8 +77,11 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
               name="email"
               value={formData.email}
               onChange={onInputChange}
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-              placeholder="your@email.com"
+              onBlur={() => onInputBlur('email')}
+              className={`w-full pl-12 pr-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
+              placeholder="your@email.com (must be valid email format)"
             />
           </div>
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -83,6 +94,7 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
               name="phone"
               value={formData.phone}
               onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
+              onBlur={() => onInputBlur('phone')}
               label="Mobile Phone *"
               required
               showIcon={false}
@@ -100,8 +112,9 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
                 name="landline"
                 value={formData.landline}
                 onChange={onInputChange}
+                onBlur={() => onInputBlur('landline')}
                 className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-                placeholder="+27 11 123 4567"
+                placeholder="+27 11 123 4567 (optional)"
               />
             </div>
           </div>

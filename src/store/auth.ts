@@ -23,6 +23,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
   login: (input: { email: string; password: string }) => Promise<void>;
   register: (input: {
     email: string;
@@ -58,6 +60,10 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      hasHydrated: false,
+      setHasHydrated(value) {
+        set({ hasHydrated: value });
+      },
       async login(input) {
         set({ isLoading: true, error: null });
         try {
@@ -116,6 +122,10 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "exobe-auth",
       partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+      onRehydrateStorage: () => (state, error) => {
+        // Mark hydration complete regardless of success/failure so UI can proceed
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

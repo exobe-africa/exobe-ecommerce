@@ -42,7 +42,7 @@ import {
 export default function DashboardClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, hasHydrated } = useAuthStore();
   const { showError, showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   
@@ -84,7 +84,7 @@ export default function DashboardClient() {
     }
   ]);
 
-  const { data: meData } = useQuery(DASHBOARD_ME, { skip: !isAuthenticated });
+  const { data: meData } = useQuery(DASHBOARD_ME, { skip: !hasHydrated || !isAuthenticated });
   const me = (meData as any)?.me;
   const user: User = useMemo(() => {
     const fullName = me?.name || `${me?.firstName ?? ''} ${me?.lastName ?? ''}`.trim() || (me?.email ?? '');
@@ -100,7 +100,7 @@ export default function DashboardClient() {
     };
   }, [me]);
 
-  const { data: ordersData } = useQuery(DASHBOARD_MY_ORDERS, { skip: !isAuthenticated });
+  const { data: ordersData } = useQuery(DASHBOARD_MY_ORDERS, { skip: !hasHydrated || !isAuthenticated });
   const orders: Order[] = useMemo(() => {
     const raw = (ordersData as any)?.myOrders ?? [];
     return raw.map((o: any, idx: number) => ({
@@ -153,7 +153,7 @@ export default function DashboardClient() {
 
   const { data: addressesData, refetch: refetchAddresses } = useQuery(
     DASHBOARD_ADDRESSES,
-    { variables: { userId: me?.id ?? '' }, skip: !isAuthenticated || !me?.id }
+    { variables: { userId: me?.id ?? '' }, skip: !hasHydrated || !isAuthenticated || !me?.id }
   );
 
   useEffect(() => {
@@ -319,10 +319,11 @@ export default function DashboardClient() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (!hasHydrated) return;
     if (!isAuthenticated) {
       router.replace('/auth/login?returnUrl=/dashboard');
     }
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, router]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);

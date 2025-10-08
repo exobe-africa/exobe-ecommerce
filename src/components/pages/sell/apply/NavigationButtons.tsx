@@ -10,6 +10,7 @@ interface NavigationButtonsProps {
   onNext: () => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting?: boolean;
+  isStepComplete?: boolean;
 }
 
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({
@@ -18,7 +19,8 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   onPrevious,
   onNext,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  isStepComplete = true
 }) => {
   const isLastStep = currentStep === totalSteps;
   const isFirstStep = currentStep === 1;
@@ -39,7 +41,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
         <button
           type="submit"
           onClick={onSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isStepComplete}
           className="flex items-center justify-center px-8 py-4 bg-[#C8102E] text-white rounded-full font-semibold hover:bg-[#A00E26] transition-colors text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Upload className="h-5 w-5 mr-2" />
@@ -49,7 +51,8 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center justify-center px-8 py-4 bg-[#C8102E] text-white rounded-full font-semibold hover:bg-[#A00E26] transition-colors text-lg shadow-lg"
+          disabled={!isStepComplete}
+          className="flex items-center justify-center px-8 py-4 bg-[#C8102E] text-white rounded-full font-semibold hover:bg-[#A00E26] transition-colors text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Next
           <ArrowRight className="h-5 w-5 ml-2" />

@@ -40,20 +40,67 @@ export interface SellerApplicationInputState {
   agreeToTerms: boolean;
 }
 
+export interface ValidationErrors {
+  [key: string]: string;
+}
+
 interface ApplicationsState {
   isSubmitting: boolean;
   error: string | null;
+  fieldErrors: ValidationErrors;
   lastSubmittedId: string | null;
   applySeller: (sellerType: "retailer" | "wholesaler", input: SellerApplicationInputState) => Promise<string>;
   clearError: () => void;
+  clearFieldErrors: () => void;
+}
+
+// Parse GraphQL validation errors
+function parseValidationErrors(error: any): { message: string; fieldErrors: ValidationErrors } {
+  let message = "Submission failed. Please check all required fields.";
+  const fieldErrors: ValidationErrors = {};
+
+  if (error?.graphQLErrors?.length > 0) {
+    const graphQLError = error.graphQLErrors[0];
+
+    // Check for validation errors from class-validator
+    if (graphQLError?.extensions?.exception?.response?.message) {
+      const validationMessages = graphQLError.extensions.exception.response.message;
+
+      if (Array.isArray(validationMessages)) {
+        // Parse validation messages and extract field names
+        validationMessages.forEach((msg: string) => {
+          // Try to extract field name from message (e.g., "firstName must be at least 2 characters")
+          const fieldMatch = msg.match(/^(\w+)\s/);
+          if (fieldMatch) {
+            const fieldName = fieldMatch[1];
+            fieldErrors[fieldName] = msg;
+          }
+        });
+        message = validationMessages.join(', ') || message;
+      } else if (typeof validationMessages === 'string') {
+        message = validationMessages;
+      }
+    } else if (graphQLError?.extensions?.exception?.message) {
+      // Nest may put message here as array or string
+      const exMsg = graphQLError.extensions.exception.message;
+      message = Array.isArray(exMsg) ? exMsg.join(', ') : exMsg || message;
+    } else if (graphQLError?.message) {
+      message = graphQLError.message;
+    }
+  } else if (error?.message) {
+    message = error.message;
+  }
+
+  return { message, fieldErrors };
 }
 
 export const useApplicationsStore = create<ApplicationsState>()((set, get) => ({
   isSubmitting: false,
   error: null,
+  fieldErrors: {},
   lastSubmittedId: null,
   async applySeller(sellerType, input) {
-    set({ isSubmitting: true, error: null });
+    set({ isSubmitting: true, error: null, fieldErrors: {} });
     try {
       const client = getApolloClient();
       const mutation = sellerType === "wholesaler" ? APPLY_WHOLESALER : APPLY_RETAILER;
@@ -63,13 +110,16 @@ export const useApplicationsStore = create<ApplicationsState>()((set, get) => ({
       set({ isSubmitting: false, lastSubmittedId: id || null });
       return id;
     } catch (err: any) {
-      const message = err?.message || "Submission failed";
-      set({ isSubmitting: false, error: message });
+      const { message, fieldErrors } = parseValidationErrors(err);
+      set({ isSubmitting: false, error: message, fieldErrors });
       throw err;
     }
   },
   clearError() {
     set({ error: null });
+  },
+  clearFieldErrors() {
+    set({ fieldErrors: {} });
   },
 }));
 

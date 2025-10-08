@@ -9,6 +9,7 @@ interface BusinessTypeStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
@@ -16,6 +17,7 @@ const BusinessTypeStep: React.FC<BusinessTypeStepProps> = ({
   formData,
   errors,
   onInputChange,
+  onInputBlur,
   setFormData
 }) => {
   return (

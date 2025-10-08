@@ -75,15 +75,8 @@ export default function ApplicationSuccessModal({
   const currentConfig = config[applicationType];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div 
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100"
-        style={{
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)'
-        }}
-      >
-        {/* Header */}
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100">
         <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-t-2xl text-center">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="h-10 w-10 text-green-500" />
@@ -92,7 +85,6 @@ export default function ApplicationSuccessModal({
           <p className="text-green-100 mt-2">{currentConfig.subtitle}</p>
         </div>
 
-        {/* Content */}
         <div className="p-6 text-center">
           <div className="mb-6">
             <h4 className="text-lg font-semibold text-[#000000] mb-3">What happens next?</h4>

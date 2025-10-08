@@ -8,12 +8,14 @@ interface AddressStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
 }
 
 const AddressStep: React.FC<AddressStepProps> = ({
   formData,
   errors,
-  onInputChange
+  onInputChange,
+  onInputBlur
 }) => {
   const provinces = [
     'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 
@@ -38,8 +40,11 @@ const AddressStep: React.FC<AddressStepProps> = ({
             name="address"
             value={formData.address}
             onChange={onInputChange}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-            placeholder="Enter your business address"
+            onBlur={() => onInputBlur('address')}
+            className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+              errors.address ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+            }`}
+            placeholder="Enter your business address (street name and number)"
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
@@ -54,8 +59,11 @@ const AddressStep: React.FC<AddressStepProps> = ({
               name="city"
               value={formData.city}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-              placeholder="City"
+              onBlur={() => onInputBlur('city')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.city ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
+              placeholder="City (e.g. Johannesburg)"
             />
             {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
           </div>
@@ -67,7 +75,10 @@ const AddressStep: React.FC<AddressStepProps> = ({
               name="province"
               value={formData.province}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
+              onBlur={() => onInputBlur('province')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.province ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
             >
               <option value="">Select Province</option>
               {provinces.map(province => (
@@ -85,8 +96,11 @@ const AddressStep: React.FC<AddressStepProps> = ({
               name="postalCode"
               value={formData.postalCode}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-              placeholder="Postal Code"
+              onBlur={() => onInputBlur('postalCode')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.postalCode ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
+              placeholder="Postal Code (4 digits)"
             />
             {errors.postalCode && <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>}
           </div>

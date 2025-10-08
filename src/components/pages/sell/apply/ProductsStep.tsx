@@ -9,6 +9,7 @@ interface ProductsStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
@@ -16,6 +17,7 @@ const ProductsStep: React.FC<ProductsStepProps> = ({
   formData,
   errors,
   onInputChange,
+  onInputBlur,
   setFormData
 }) => {
   const categories = [
@@ -67,7 +69,10 @@ const ProductsStep: React.FC<ProductsStepProps> = ({
             name="primaryCategory"
             value={formData.primaryCategory}
             onChange={onInputChange}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
+            onBlur={() => onInputBlur('primaryCategory')}
+            className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+              errors.primaryCategory ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+            }`}
           >
             <option value="">Select Primary Category</option>
             {categories.map(category => (

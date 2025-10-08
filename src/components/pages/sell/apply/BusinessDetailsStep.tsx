@@ -9,6 +9,7 @@ interface BusinessDetailsStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
@@ -16,6 +17,7 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
   formData,
   errors,
   onInputChange,
+  onInputBlur,
   setFormData
 }) => {
   const isRetailer = formData.sellerType === 'retailer';
@@ -46,7 +48,10 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
             name="businessName"
             value={formData.businessName}
             onChange={onInputChange}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
+            onBlur={() => onInputBlur('businessName')}
+            className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+              errors.businessName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+            }`}
             placeholder={formData.applicantType === 'individual' ? 'Enter your trading name' : 'Enter your registered business name'}
           />
           {errors.businessName && <p className="text-red-500 text-sm mt-1">{errors.businessName}</p>}
@@ -79,8 +84,11 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
                 name="saIdNumber"
                 value={formData.saIdNumber}
                 onChange={onInputChange}
-                className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-                placeholder="e.g. 8001015009087 (13 digits)"
+                onBlur={() => onInputBlur('saIdNumber')}
+                className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                  errors.saIdNumber ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+                }`}
+                placeholder="e.g. 8001015009087 (exactly 13 digits)"
                 maxLength={13}
                 pattern="\d{13}"
               />
@@ -127,7 +135,10 @@ const BusinessDetailsStep: React.FC<BusinessDetailsStepProps> = ({
               name="vatNumber"
               value={formData.vatNumber}
               onChange={onInputChange}
-              className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
+              onBlur={() => onInputBlur('vatNumber')}
+              className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+                errors.vatNumber ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+              }`}
               placeholder="Enter your VAT number"
             />
             {errors.vatNumber && <p className="text-red-500 text-sm mt-1">{errors.vatNumber}</p>}

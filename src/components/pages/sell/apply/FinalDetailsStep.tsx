@@ -10,6 +10,7 @@ interface FinalDetailsStepProps {
   formData: FormData;
   errors: { [key: string]: string };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onInputBlur: (fieldName: string) => void;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
@@ -17,6 +18,7 @@ const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
   formData,
   errors,
   onInputChange,
+  onInputBlur,
   setFormData
 }) => {
   return (
@@ -36,9 +38,12 @@ const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
             name="businessSummary"
             value={formData.businessSummary}
             onChange={onInputChange}
+            onBlur={() => onInputBlur('businessSummary')}
             rows={5}
-            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] bg-white text-[#000000] text-lg"
-            placeholder="Tell us about your business, what makes it unique, what products you want to sell on eXobe, and any special requirements or certifications you have..."
+            className={`w-full px-4 py-4 border rounded-lg focus:outline-none focus:ring-2 bg-white text-[#000000] text-lg ${
+              errors.businessSummary ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#C8102E]'
+            }`}
+            placeholder="Tell us about your business, what makes it unique, what products you want to sell on eXobe, and any special requirements or certifications you have... (minimum 20 characters)"
           />
           <div className="text-sm text-[#4A4A4A] mt-2">
             What makes your business or products unique?<br/>
