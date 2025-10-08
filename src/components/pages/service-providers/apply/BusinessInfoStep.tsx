@@ -8,14 +8,12 @@ interface BusinessInfoStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
 }
 
 const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
   formData,
   errors,
-  onInputChange,
-  setFormData
+  onInputChange
 }) => {
   return (
     <div className="space-y-8">
@@ -69,7 +67,13 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
                 name="vatRegistered"
                 value={option.value}
                 checked={formData.vatRegistered === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, vatRegistered: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'vatRegistered', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="card"
                 size="md"

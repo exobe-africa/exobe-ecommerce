@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
+import {
   User,
   Briefcase,
   MapPin,
@@ -20,56 +20,33 @@ import {
   PortfolioStep,
   FinalDetailsStep,
   NavigationButtons,
-  ServiceProviderFormData,
   StepData
 } from '../../../components/pages/service-providers/apply';
 import { ApplicationHelpSection } from '@/components/common';
 import { ApplicationSuccessModal } from '@/components/common';
+import { useServiceProviderApplicationStore } from '../../../store/serviceProviderApplications';
+import { useToast } from '../../../context/ToastContext';
 
 export default function ServiceProviderApplicationPage() {
   const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [formData, setFormData] = useState<ServiceProviderFormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
-    idNumber: '',
-    identificationType: '',
-    serviceCategories: [],
-    primaryService: '',
-    experience: '',
-    qualifications: '',
-    portfolio: '',
-    hourlyRate: '',
-    availability: '',
-    address: '',
-    city: '',
-    province: '',
-    postalCode: '',
-    serviceRadius: '',
-    transportMode: '',
-    businessName: '',
-    businessRegistration: '',
-    vatRegistered: '',
-    vatNumber: '',
-    bankDetails: '',
-    emergencyContact: '',
-    workSamples: '',
-    clientReferences: '',
-    certifications: '',
-    insurance: '',
-    backgroundCheck: '',
-    motivation: '',
-    goals: '',
-    howDidYouHear: '',
-    agreeToTerms: false,
-    agreeToBackground: false
-  });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    isSubmitted,
+    provinces,
+    serviceCategories,
+    identificationTypes,
+    setFormData,
+    setErrors,
+    submitApplication,
+    validateStep,
+    resetForm
+  } = useServiceProviderApplicationStore();
 
   const steps: StepData[] = [
     { id: 1, name: 'Personal Info', icon: User, description: 'Tell us about yourself' },
@@ -80,101 +57,30 @@ export default function ServiceProviderApplicationPage() {
     { id: 6, name: 'Final Details', icon: CheckCircle, description: 'Complete your application' }
   ];
 
-  const provinces = [
-    'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 
-    'Limpopo', 'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape'
-  ];
-
-  const serviceCategories = [
-    "Home Maintenance", "Home Improvement", "Beauty & Wellness", "Photography",
-    "Tech Support", "Automotive", "Food & Catering", "Education & Tutoring",
-    "Fitness & Health", "Childcare", "Moving & Delivery", "Entertainment",
-    "Cleaning Services", "Pet Care", "Event Planning", "Other"
-  ];
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
-    
+
     let processedValue = value;
-    
+
     if (name === 'idNumber') {
       processedValue = value.replace(/\D/g, '').slice(0, 13);
     }
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : processedValue
-    }));
+
+    setFormData({ [name]: type === 'checkbox' ? checked : processedValue } as any);
 
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors({ [name]: '' });
     }
   };
 
   const handleCategoryChange = (category: string) => {
-    setFormData(prev => ({
-      ...prev,
-      serviceCategories: prev.serviceCategories.includes(category)
-        ? prev.serviceCategories.filter(c => c !== category)
-        : [...prev.serviceCategories, category]
-    }));
-  };
+    const currentCategories = formData.serviceCategories;
+    const newCategories = currentCategories.includes(category)
+      ? currentCategories.filter(c => c !== category)
+      : [...currentCategories, category];
 
-  const validateStep = (step: number): boolean => {
-    const newErrors: {[key: string]: string} = {};
-
-    switch (step) {
-      case 1:
-        if (!formData.firstName) newErrors.firstName = 'First name is required';
-        if (!formData.lastName) newErrors.lastName = 'Last name is required';
-        if (!formData.email) newErrors.email = 'Email is required';
-        if (!formData.phone) newErrors.phone = 'Phone number is required';
-        if (!formData.idNumber) {
-          newErrors.idNumber = 'ID number is required';
-        } else {
-          const saIdRegex = /^\d{13}$/;
-          if (!saIdRegex.test(formData.idNumber.replace(/\s/g, ''))) {
-            newErrors.idNumber = 'ID number must be exactly 13 digits';
-          }
-        }
-        if (!formData.identificationType) newErrors.identificationType = 'Please select identification type';
-        break;
-      case 2:
-        if (formData.serviceCategories.length === 0) newErrors.serviceCategories = 'Please select at least one service category';
-        if (!formData.primaryService) newErrors.primaryService = 'Please specify your primary service';
-        if (!formData.experience) newErrors.experience = 'Please specify your experience level';
-        if (!formData.hourlyRate) newErrors.hourlyRate = 'Please provide your hourly rate';
-        break;
-      case 3:
-        if (!formData.address) newErrors.address = 'Address is required';
-        if (!formData.city) newErrors.city = 'City is required';
-        if (!formData.province) newErrors.province = 'Province is required';
-        if (!formData.postalCode) newErrors.postalCode = 'Postal code is required';
-        if (!formData.serviceRadius) newErrors.serviceRadius = 'Please specify your service radius';
-        break;
-      case 4:
-        if (!formData.vatRegistered) newErrors.vatRegistered = 'Please specify VAT registration status';
-        if (formData.vatRegistered === 'yes' && !formData.vatNumber) {
-          newErrors.vatNumber = 'VAT number is required';
-        }
-        break;
-      case 5:
-        // Portfolio step is mostly optional but we can add validations if needed
-        break;
-      case 6:
-        if (!formData.motivation) newErrors.motivation = 'Please tell us why you want to join';
-        if (!formData.howDidYouHear) newErrors.howDidYouHear = 'Please tell us how you heard about us';
-        if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
-        if (!formData.agreeToBackground) newErrors.agreeToBackground = 'You must agree to background check';
-        break;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setFormData({ serviceCategories: newCategories });
   };
 
   const scrollToTop = () => {
@@ -185,7 +91,8 @@ export default function ServiceProviderApplicationPage() {
   };
 
   const handleNext = () => {
-    if (validateStep(currentStep)) {
+    const stepErrors = validateStep(currentStep);
+    if (Object.keys(stepErrors).length === 0) {
       setCurrentStep(prev => Math.min(prev + 1, steps.length));
       scrollToTop();
     }
@@ -196,11 +103,21 @@ export default function ServiceProviderApplicationPage() {
     scrollToTop();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateStep(currentStep)) {
-      console.log('Service provider application:', formData);
+
+    const stepErrors = validateStep(currentStep);
+    if (Object.keys(stepErrors).length > 0) {
+      return;
+    }
+
+    const result = await submitApplication(formData);
+    if (result.success) {
+      showSuccess('Application submitted successfully! We\'ll review it within 3-5 business days.');
+      resetForm();
       setShowSuccessModal(true);
+    } else {
+      showError(result.error || 'Failed to submit application. Please try again.');
     }
   };
 
@@ -208,6 +125,7 @@ export default function ServiceProviderApplicationPage() {
     setShowSuccessModal(false);
     router.push('/service-providers');
   };
+
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -217,7 +135,7 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
+            identificationTypes={identificationTypes}
           />
         );
       case 2:
@@ -226,7 +144,6 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
             serviceCategories={serviceCategories}
             onCategoryChange={handleCategoryChange}
           />
@@ -237,7 +154,6 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
             provinces={provinces}
           />
         );
@@ -247,7 +163,6 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
           />
         );
       case 5:
@@ -256,7 +171,6 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
           />
         );
       case 6:
@@ -265,7 +179,6 @@ export default function ServiceProviderApplicationPage() {
             formData={formData}
             errors={errors}
             onInputChange={handleInputChange}
-            setFormData={setFormData}
           />
         );
       default:
@@ -299,6 +212,7 @@ export default function ServiceProviderApplicationPage() {
             onPrevious={handlePrevious}
             onNext={handleNext}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         </form>
 

@@ -9,14 +9,12 @@ interface FinalDetailsStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
 }
 
 const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
   formData,
   errors,
-  onInputChange,
-  setFormData
+  onInputChange
 }) => {
   return (
     <div className="space-y-8">
@@ -76,7 +74,13 @@ const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
                 name="howDidYouHear"
                 value={option.value}
                 checked={formData.howDidYouHear === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, howDidYouHear: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'howDidYouHear', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="default"
                 size="sm"
@@ -92,7 +96,13 @@ const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
             id="agreeToTerms"
             name="agreeToTerms"
             checked={formData.agreeToTerms}
-            onChange={(checked) => setFormData(prev => ({ ...prev, agreeToTerms: checked }))}
+            onChange={(checked) => {
+              // Also trigger the main onInputChange to clear validation errors
+              const syntheticEvent = {
+                target: { name: 'agreeToTerms', value: checked.toString() }
+              } as React.ChangeEvent<HTMLInputElement>;
+              onInputChange(syntheticEvent);
+            }}
             required
             label={
               <span className="text-sm leading-relaxed">
@@ -114,7 +124,13 @@ const FinalDetailsStep: React.FC<FinalDetailsStepProps> = ({
             id="agreeToBackground"
             name="agreeToBackground"
             checked={formData.agreeToBackground}
-            onChange={(checked) => setFormData(prev => ({ ...prev, agreeToBackground: checked }))}
+            onChange={(checked) => {
+              // Also trigger the main onInputChange to clear validation errors
+              const syntheticEvent = {
+                target: { name: 'agreeToBackground', value: checked.toString() }
+              } as React.ChangeEvent<HTMLInputElement>;
+              onInputChange(syntheticEvent);
+            }}
             required
             label={
               <span className="text-sm leading-relaxed">

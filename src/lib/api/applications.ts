@@ -16,4 +16,11 @@ export const APPLY_WHOLESALER = gql`
   }
 `;
 
+export const APPLY_SERVICE_PROVIDER = gql`
+  mutation ApplyServiceProvider($input: ServiceProviderApplicationInput!) {
+    applyServiceProvider(input: $input) {
+      id
+    }
+  }
+`;
 

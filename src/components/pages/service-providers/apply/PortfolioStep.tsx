@@ -8,14 +8,12 @@ interface PortfolioStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
 }
 
 const PortfolioStep: React.FC<PortfolioStepProps> = ({
   formData,
   errors,
-  onInputChange,
-  setFormData
+  onInputChange
 }) => {
   return (
     <div className="space-y-8">
@@ -84,7 +82,13 @@ const PortfolioStep: React.FC<PortfolioStepProps> = ({
                 name="insurance"
                 value={option.value}
                 checked={formData.insurance === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, insurance: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'insurance', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="card"
                 size="md"
@@ -109,7 +113,13 @@ const PortfolioStep: React.FC<PortfolioStepProps> = ({
                 name="backgroundCheck"
                 value={option.value}
                 checked={formData.backgroundCheck === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, backgroundCheck: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'backgroundCheck', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="card"
                 size="md"

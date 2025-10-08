@@ -8,14 +8,14 @@ interface PersonalInfoStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
+  identificationTypes?: string[];
 }
 
 const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   formData,
   errors,
   onInputChange,
-  setFormData
+  identificationTypes = []
 }) => {
   return (
     <div className="space-y-8">
@@ -80,7 +80,13 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
             id="phone"
             name="phone"
             value={formData.phone}
-            onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
+            onChange={(value) => {
+              // Also trigger the main onInputChange to clear validation errors
+              const syntheticEvent = {
+                target: { name: 'phone', value }
+              } as React.ChangeEvent<HTMLInputElement>;
+              onInputChange(syntheticEvent);
+            }}
             label="Mobile Phone *"
             required
             showIcon={false}
@@ -123,7 +129,13 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                 name="identificationType"
                 value={option.value}
                 checked={formData.identificationType === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, identificationType: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'identificationType', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="card"
                 size="md"

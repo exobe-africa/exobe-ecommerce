@@ -8,7 +8,6 @@ interface LocationStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
   provinces: string[];
 }
 
@@ -16,7 +15,6 @@ const LocationStep: React.FC<LocationStepProps> = ({
   formData,
   errors,
   onInputChange,
-  setFormData,
   provinces
 }) => {
   return (
@@ -109,7 +107,13 @@ const LocationStep: React.FC<LocationStepProps> = ({
                 name="serviceRadius"
                 value={option.value}
                 checked={formData.serviceRadius === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, serviceRadius: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'serviceRadius', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="card"
                 size="md"
@@ -137,7 +141,13 @@ const LocationStep: React.FC<LocationStepProps> = ({
                 name="transportMode"
                 value={option.value}
                 checked={formData.transportMode === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, transportMode: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'transportMode', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="default"
                 size="sm"

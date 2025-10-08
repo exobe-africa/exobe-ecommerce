@@ -8,7 +8,6 @@ interface ServicesStepProps {
   formData: ServiceProviderFormData;
   errors: {[key: string]: string};
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  setFormData: React.Dispatch<React.SetStateAction<ServiceProviderFormData>>;
   serviceCategories: string[];
   onCategoryChange: (category: string) => void;
 }
@@ -17,7 +16,6 @@ const ServicesStep: React.FC<ServicesStepProps> = ({
   formData,
   errors,
   onInputChange,
-  setFormData,
   serviceCategories,
   onCategoryChange
 }) => {
@@ -82,7 +80,13 @@ const ServicesStep: React.FC<ServicesStepProps> = ({
                 name="experience"
                 value={option.value}
                 checked={formData.experience === option.value}
-                onChange={(value) => setFormData(prev => ({ ...prev, experience: value }))}
+                onChange={(value) => {
+                  // Also trigger the main onInputChange to clear validation errors
+                  const syntheticEvent = {
+                    target: { name: 'experience', value }
+                  } as React.ChangeEvent<HTMLSelectElement>;
+                  onInputChange(syntheticEvent);
+                }}
                 label={option.label}
                 variant="default"
                 size="sm"
