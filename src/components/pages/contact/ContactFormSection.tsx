@@ -1,59 +1,56 @@
 "use client";
 
-import { useState } from 'react';
-import { Send, CheckCircle, Building2, Headphones, Shield, Users, Globe, Award } from 'lucide-react';
+import { Send, CheckCircle } from 'lucide-react';
+import { useContactStore } from '../../../store/contact';
+import { useToast } from '../../../context/ToastContext';
 
-const departments = [
-  { name: 'Sales & Product Inquiries', email: 'sales@exobe.africa', icon: Building2 },
-  { name: 'Customer Support', email: 'support@exobe.africa', icon: Headphones },
-  { name: 'Returns & Exchanges', email: 'returns@exobe.africa', icon: Shield },
-  { name: 'Corporate & Partnerships', email: 'corporate@exobe.africa', icon: Users },
-  { name: 'Media & Press', email: 'media@exobe.africa', icon: Globe },
-  { name: 'Careers', email: 'careers@exobe.africa', icon: Award }
-];
+// Import the store again for direct access
+import { useContactStore as useContactStoreDirect } from '../../../store/contact';
 
 const ContactFormSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    department: 'support@exobe.africa',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { showSuccess, showError } = useToast();
+
+  const {
+    formData,
+    isSubmitting,
+    isSubmitted,
+    validationErrors,
+    departments,
+    setFormData,
+    sendMessage,
+    validateAndSetErrors,
+    resetForm
+  } = useContactStore();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData({ [name]: value } as any);
+
+    if (validationErrors[name]) {
+      const newErrors = { ...validationErrors };
+      delete newErrors[name];
+      useContactStoreDirect.setState({ validationErrors: newErrors });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        department: 'support@exobe.africa',
-        message: ''
-      });
-    }, 5000);
+
+    validateAndSetErrors(formData);
+    const errors = Object.keys(useContactStoreDirect.getState().validationErrors);
+    if (errors.length > 0) {
+      return;
+    }
+
+    const result = await sendMessage(formData);
+    if (result.success) {
+      showSuccess('Message sent successfully! We\'ll get back to you within 24 hours.');
+      setTimeout(() => {
+        resetForm();
+      }, 3000);
+    } else {
+      showError(result.error || 'Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -88,9 +85,14 @@ const ContactFormSection = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors text-[#000000] placeholder-gray-700 ${
+                  validationErrors.name
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                }`}
                 placeholder="Enter your full name"
               />
+              {validationErrors.name && <p className="mt-1 text-sm text-red-600">{validationErrors.name}</p>}
             </div>
             
             <div>
@@ -103,9 +105,14 @@ const ContactFormSection = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors text-[#000000] placeholder-gray-700 ${
+                  validationErrors.email
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                }`}
                 placeholder="Enter your email address"
               />
+              {validationErrors.email && <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>}
             </div>
           </div>
 
@@ -119,9 +126,14 @@ const ContactFormSection = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors text-[#000000] placeholder-gray-700 ${
+                  validationErrors.phone
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                }`}
                 placeholder="Enter your phone number"
               />
+              {validationErrors.phone && <p className="mt-1 text-sm text-red-600">{validationErrors.phone}</p>}
             </div>
             
             <div>
@@ -151,9 +163,14 @@ const ContactFormSection = () => {
               value={formData.subject}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors text-[#000000] placeholder-gray-700"
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors text-[#000000] placeholder-gray-700 ${
+                validationErrors.subject
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+              }`}
               placeholder="What's this about?"
             />
+            {validationErrors.subject && <p className="mt-1 text-sm text-red-600">{validationErrors.subject}</p>}
           </div>
 
           <div>
@@ -166,9 +183,14 @@ const ContactFormSection = () => {
               onChange={handleInputChange}
               required
               rows={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent transition-colors resize-none text-[#000000] placeholder-gray-700"
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors resize-none text-[#000000] placeholder-gray-700 ${
+                validationErrors.message
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+              }`}
               placeholder="Tell us more about your inquiry..."
             />
+            {validationErrors.message && <p className="mt-1 text-sm text-red-600">{validationErrors.message}</p>}
           </div>
 
           <button

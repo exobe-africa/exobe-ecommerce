@@ -155,5 +155,3 @@ export const DASHBOARD_DELETE_ACCOUNT = gql`
     deleteMyAccount
   }
 `;
-
-
