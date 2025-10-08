@@ -2,7 +2,7 @@
 
 import { AlertCircle } from 'lucide-react';
 import { ProductCard } from '../../common/index';
-import type { WishlistItem } from '../../../context/WishlistContext';
+import type { WishlistItem } from '../../../store/wishlist';
 
 interface WishlistGridProps {
   items: WishlistItem[];
@@ -47,37 +47,25 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
         <ProductCard
           key={item.id}
           id={item.id}
-          name={item.name}
-          price={item.price}
-          originalPrice={item.originalPrice}
-          image={item.image}
-          category={item.category}
-          brand={item.brand || 'eXobe'}
-          rating={item.rating || 0}
-          reviews={item.reviews || 0}
-          inStock={item.inStock !== false}
-          addedAt={new Date(item.addedAt)}
+          name={`Product ${item.product_id}`}
+          price={0} // TODO: Add price when product details are available
+          originalPrice={undefined}
+          image={''} // TODO: Add image when product details are available
+          category={''} // TODO: Add category when available
+          brand={'eXobe'}
+          rating={0} // TODO: Add rating when available
+          reviews={0} // TODO: Add reviews when available
+          inStock={true} // TODO: Add stock info when available
+          addedAt={new Date(item.created_at)}
           variant="wishlist"
           viewMode={viewMode}
-          description={item.description}
-          variants={item.variants}
-          availableLocations={item.availableLocations}
+          description={''} // TODO: Add description when available
+          variants={[]} // TODO: Add variants when available
+          availableLocations={[]} // TODO: Add location info when available
           onAddToCart={onAddToCart}
           onQuickViewAddToCart={(product, selectedVariants, quantity, currentLocations) => {
-            // Adapt wishlist item -> add to cart with selected variants
-            for (let i = 0; i < quantity; i++) {
-              onAddToCart({
-                ...item,
-                id: product.id as string,
-                name: product.name,
-                price: product.price,
-                originalPrice: product.originalPrice,
-                image: product.image,
-                category: product.category,
-                variant: selectedVariants as any,
-                availableLocations: currentLocations as any,
-              } as any);
-            }
+            // TODO: Implement when product details are available
+            console.log('Quick view add to cart not implemented yet');
           }}
           onRemoveFromWishlist={onRemoveFromWishlist}
           showWishlistDate={true}

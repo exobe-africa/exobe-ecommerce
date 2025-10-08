@@ -31,7 +31,8 @@ interface ProductVariants {
   [key: string]: VariantOption[] | undefined;
 }
 import { useCart } from '../../../context/CartContext';
-import { useWishlist } from '../../../context/WishlistContext';
+import { useWishlistStore } from '../../../store/wishlist';
+import { useAuthStore } from '../../../store/auth';
 import LocationChips from '../../../components/common/LocationChips';
 
 const products = [
@@ -193,7 +194,13 @@ export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const { addItem } = useCart();
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    openAuthModal
+  } = useWishlistStore();
   const [quantity, setQuantity] = useState(1);
   
   // Variant state management
@@ -391,21 +398,17 @@ export default function ProductPage() {
 
   const handleWishlistToggle = () => {
     if (!product) return;
-    
+
+    // Always check authentication first
+    if (!isAuthenticated) {
+      openAuthModal({ type: 'add', productId: product.id });
+      return;
+    }
+
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: currentPrice || product.price,
-        originalPrice: product.originalPrice,
-        image: currentImage || product.image,
-        category: product.category,
-        rating: product.rating,
-        reviews: product.reviews,
-        inStock: (currentStock || product.stockCount) > 0,
-      });
+      addToWishlist(product.id);
     }
   };
 

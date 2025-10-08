@@ -1,14 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNewsletterStore } from "../../store/newsletter";
+import { useToast } from "../../context/ToastContext";
 
 export default function Newsletter() {
-  const [email, setEmail] = useState("");
+  const {
+    formData,
+    isSubmitting,
+    isSubmitted,
+    error,
+    validationErrors,
+    setFormData,
+    subscribeToNewsletter,
+    resetForm,
+  } = useNewsletterStore();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isSubmitted) {
+      showToast("Thank you for subscribing! You'll receive 10% off your first order.", "success");
+      resetForm();
+    }
+  }, [isSubmitted, showToast, resetForm]);
+
+  useEffect(() => {
+    if (error) {
+      showToast(error, "error");
+    }
+  }, [error, showToast]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEmail("");
-    alert("Thank you for subscribing! You'll receive 10% off your first order.");
+
+    if (!formData.email.trim() || isSubmitting) {
+      return;
+    }
+
+    const result = await subscribeToNewsletter(formData.email);
+    if (result.success) {
+      // Success is handled in the useEffect above
+    }
   };
 
   return (
@@ -21,19 +54,29 @@ export default function Newsletter() {
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={(e) => setFormData({ email: e.target.value })}
             placeholder="Enter your email"
             required
-            className="flex-1 px-4 py-3 rounded-full text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent"
+            className={`flex-1 px-4 py-3 rounded-full text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent ${
+              validationErrors.email ? 'border-red-500' : ''
+            }`}
           />
-          <button 
+          <button
             type="submit"
-            className="bg-[#C8102E] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#A00E26] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:ring-offset-2 focus:ring-offset-black"
+            disabled={isSubmitting || !formData.email.trim()}
+            className={`px-8 py-3 rounded-full font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:ring-offset-2 focus:ring-offset-black ${
+              isSubmitting || !formData.email.trim()
+                ? 'bg-[#C8102E]/50 text-white/70 cursor-not-allowed'
+                : 'bg-[#C8102E] text-white hover:bg-[#A00E26]'
+            }`}
           >
-            Subscribe
+            {isSubmitting ? 'Subscribing...' : 'Subscribe'}
           </button>
         </form>
+        {validationErrors.email && (
+          <p className="text-red-400 mt-2 text-sm">{validationErrors.email}</p>
+        )}
       </div>
     </section>
   );

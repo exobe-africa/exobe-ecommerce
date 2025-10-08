@@ -11,7 +11,8 @@ import {
 } from 'lucide-react';
 import { ProductFilter, ProductCard, Breadcrumb, SortDropdown, ViewModeToggle, PageHeader } from '../../../components/common';
 import { useCart } from '../../../context/CartContext';
-import { useWishlist } from '../../../context/WishlistContext';
+import { useWishlistStore } from '../../../store/wishlist';
+import { useAuthStore } from '../../../store/auth';
 
 const allProducts = [
   { id: '1', name: 'Premium Headphones', price: 1299.99, originalPrice: 1599.99, image: '🎧', category: 'electronics', brand: 'Sony', rating: 4.8, reviews: 124, inStock: true, isNew: true, isBestSeller: true, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
@@ -92,7 +93,13 @@ export default function CategoryPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { addItem } = useCart();
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    openAuthModal
+  } = useWishlistStore();
   
   // Use scroll position preservation for category pages
   const { clearScrollPosition } = useScrollPosition();
@@ -193,23 +200,16 @@ export default function CategoryPage() {
   };
 
   const handleWishlistToggle = (product: typeof allProducts[0]) => {
+    // Always check authentication first
+    if (!isAuthenticated) {
+      openAuthModal({ type: 'add', productId: product.id });
+      return;
+    }
+
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.image,
-        category: product.category,
-        rating: product.rating,
-        reviews: product.reviews,
-        inStock: product.inStock,
-        description: product.description,
-        variants: product.variants,
-        availableLocations: product.availableLocations,
-      });
+      addToWishlist(product.id);
     }
   };
 

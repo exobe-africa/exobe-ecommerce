@@ -3,12 +3,19 @@
 import Newsletter from "../components/common/Newsletter";
 import { HeroSection, FeaturesSection, CategoriesSection, FeaturedProductsSection } from "../components/pages/home";
 import { useCart } from "../context/CartContext";
-import { useWishlist } from "../context/WishlistContext";
+import { useWishlistStore } from "../store/wishlist";
+import { useAuthStore } from "../store/auth";
 import { useState } from "react";
 
 export default function Home() {
   const { addItem } = useCart();
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    openAuthModal
+  } = useWishlistStore();
 
   const products = [
     { 
@@ -190,23 +197,16 @@ export default function Home() {
   };
 
   const handleWishlistToggle = (product: typeof products[0]) => {
+    // Always check authentication first
+    if (!isAuthenticated) {
+      openAuthModal({ type: 'add', productId: product.id });
+      return;
+    }
+
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.image,
-        category: product.category,
-        rating: product.rating || 4.8,
-        reviews: product.reviews || 124,
-        inStock: true,
-        description: product.description,
-        variants: product.variants,
-        availableLocations: product.availableLocations,
-      });
+      addToWishlist(product.id);
     }
   };
   return (

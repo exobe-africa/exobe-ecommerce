@@ -17,8 +17,11 @@ import {
   WishlistGrid, 
   MobileFiltersModal 
 } from '../../components/pages/wishlist';
-import { useWishlist } from '../../context/WishlistContext';
+import { useWishlistStore } from '../../store/wishlist';
+import { useAuthStore } from '../../store/auth';
 import { useCart } from '../../context/CartContext';
+import { useRouter } from 'next/navigation';
+import WishlistAuthModal from '../../components/common/WishlistAuthModal';
 
 const sortOptions = [
   { value: 'newest', label: 'Recently Added', icon: Calendar },
@@ -39,12 +42,42 @@ const filterOptions = [
 ];
 
 export default function WishlistPage() {
-  const { state: wishlistState, removeItem, clearWishlist } = useWishlist();
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    wishlist,
+    isLoading,
+    error,
+    fetchWishlist,
+    removeFromWishlist,
+    totalItems,
+    isEmpty
+  } = useWishlistStore();
   const { addItem } = useCart();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('newest');
   const [filterBy, setFilterBy] = useState('all');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [hasTriedFetch, setHasTriedFetch] = useState(false);
+
+  // Check authentication and redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // Redirect back to where they came from (or home if no referrer)
+      const referrer = document.referrer || '/';
+      router.replace(referrer);
+      return;
+    }
+
+    // Fetch wishlist on component mount and check authentication
+    const loadWishlist = async () => {
+      setHasTriedFetch(true);
+      await fetchWishlist();
+    };
+    loadWishlist();
+  }, [isAuthenticated, router, fetchWishlist]);
+
+  // Remove modal logic since we redirect instead
   const [isClient, setIsClient] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -54,48 +87,49 @@ export default function WishlistPage() {
   }, []);
 
   // Sort and filter items
-  const sortedAndFilteredItems = [...wishlistState.items]
+  const sortedAndFilteredItems = (wishlist?.items || [])
     .filter(item => {
       if (filterBy === 'all') return true;
-      if (filterBy === 'in-stock') return item.inStock !== false;
-      if (filterBy === 'on-sale') return item.originalPrice && item.originalPrice > item.price;
-      return item.category === filterBy;
+      // For now, just return all items since we don't have category/stock info in the new structure
+      // This can be enhanced later when more product details are available
+      return true;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case 'newest':
-          return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         case 'oldest':
-          return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         case 'price-low':
-          return a.price - b.price;
+          return a.product_id.localeCompare(b.product_id); // TODO: Fix when product details are available
         case 'price-high':
-          return b.price - a.price;
+          return b.product_id.localeCompare(a.product_id); // TODO: Fix when product details are available
         case 'name':
-          return a.name.localeCompare(b.name);
+          return a.product_id.localeCompare(b.product_id); // TODO: Fix when product details are available
         default:
           return 0;
       }
     });
 
-  const handleAddToCart = (item: typeof wishlistState.items[0]) => {
+  const handleAddToCart = (item: NonNullable<typeof wishlist>['items'][0]) => {
+    // For now, we'll add a placeholder item since we don't have product details
+    // TODO: Fetch product details before adding to cart
     addItem({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      originalPrice: item.originalPrice,
-      image: item.image,
-      category: item.category,
+      id: item.product_id,
+      name: `Product ${item.product_id}`,
+      price: 0, // TODO: Get actual price
+      image: '',
+      category: '',
     });
   };
 
-  const handleRemoveFromWishlist = (item: typeof wishlistState.items[0]) => {
-    removeItem(item.id);
+  const handleRemoveFromWishlist = (item: NonNullable<typeof wishlist>['items'][0]) => {
+    removeFromWishlist(item.product_id, item.product_variant_id || undefined);
   };
 
   const handleAddAllToCart = () => {
-    const inStockItems = sortedAndFilteredItems.filter(item => item.inStock !== false);
-    inStockItems.forEach(item => handleAddToCart(item));
+    // For now, add all items since we don't have stock info in the new structure
+    sortedAndFilteredItems.forEach(item => handleAddToCart(item));
   };
 
   const handleClearWishlist = () => {
@@ -103,7 +137,10 @@ export default function WishlistPage() {
   };
 
   const confirmClearWishlist = () => {
-    clearWishlist();
+    // Clear all items from wishlist
+    sortedAndFilteredItems.forEach(item => {
+      removeFromWishlist(item.product_id, item.product_variant_id || undefined);
+    });
     setShowClearConfirm(false);
   };
 
@@ -166,12 +203,12 @@ export default function WishlistPage() {
 
           <PageHeader
             title="My Wishlist"
-            description={`${wishlistState.totalItems} ${wishlistState.totalItems === 1 ? 'item' : 'items'} saved for later`}
+            description={`${totalItems} ${totalItems === 1 ? 'item' : 'items'} saved for later`}
             iconComponent={Heart}
             variant="wishlist"
             size="large"
             actions={
-              wishlistState.totalItems > 0 ? (
+              totalItems > 0 ? (
                 <div className="hidden md:flex items-center space-x-3">
                   <button
                     onClick={handleAddAllToCart}
@@ -196,12 +233,12 @@ export default function WishlistPage() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {wishlistState.totalItems === 0 ? (
+        {isEmpty ? (
           <EmptyWishlistState />
         ) : (
           <>
             <WishlistToolbar
-              totalItems={wishlistState.totalItems}
+              totalItems={totalItems}
               filteredItemsCount={sortedAndFilteredItems.length}
               filterBy={filterBy}
               sortBy={sortBy}
@@ -219,7 +256,7 @@ export default function WishlistPage() {
             <WishlistGrid
               items={sortedAndFilteredItems}
               viewMode={viewMode}
-              totalItems={wishlistState.totalItems}
+              totalItems={totalItems}
               onAddToCart={handleAddToCart}
               onRemoveFromWishlist={handleRemoveFromWishlist}
               onClearFilters={() => {
@@ -257,6 +294,7 @@ export default function WishlistPage() {
         confirmButtonColor="bg-red-500"
         confirmButtonHoverColor="hover:bg-red-600"
       />
+
 
     </div>
   );

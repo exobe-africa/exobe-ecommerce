@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingCart, User, Menu, Heart, X, HelpCircle, ShoppingBag, Smartphone, Shirt, Home, Dumbbell, UserPlus, LogOut, Package } from "lucide-react";
 import { useCart } from "../../context/CartContext";
-import { useWishlist } from "../../context/WishlistContext";
+import { useWishlistStore } from "../../store/wishlist";
+import WishlistAuthModal from "./WishlistAuthModal";
 import { useAuthStore } from "../../store/auth";
 import { useUI } from "../../context/UIContext";
 import { useScrollDirection } from "../../hooks/useScrollDirection";
@@ -13,7 +14,12 @@ import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { state, toggleCart } = useCart();
-  const { state: wishlistState } = useWishlist();
+  const {
+    totalItems,
+    showAuthModal,
+    closeAuthModal,
+    openAuthModal
+  } = useWishlistStore();
   const { user, isAuthenticated, logout } = useAuthStore();
   const { isMobileMenuOpen, setMobileMenuOpen } = useUI();
   const { isVisible: isHeaderVisible } = useScrollDirection({ threshold: 10 });
@@ -340,16 +346,25 @@ export default function Navbar() {
           </div>
 
             <div className="flex items-center space-x-2">
-              <Link href="/wishlist">
-                <button className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
+              {isAuthenticated ? (
+                <Link href="/wishlist">
+                  <button className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
+                    <Heart className="h-6 w-6 text-[#4A4A4A]" />
+                    {totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
+                        {totalItems > 99 ? '99+' : totalItems}
+                      </span>
+                    )}
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  onClick={() => openAuthModal({ type: 'view' })}
+                  className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation"
+                >
                   <Heart className="h-6 w-6 text-[#4A4A4A]" />
-                  {wishlistState.totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
-                      {wishlistState.totalItems > 99 ? '99+' : wishlistState.totalItems}
-                    </span>
-                  )}
                 </button>
-              </Link>
+              )}
               {isAuthenticated ? (
                 <Link href="/dashboard">
                   <button className="p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation relative">
@@ -576,19 +591,32 @@ export default function Navbar() {
                 </div>
 
                 <div className="px-4 space-y-2">
-                  <Link
-                    href="/wishlist"
-                    onClick={closeMobileMenu}
-                    className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
-                  >
-                    <Heart className="h-6 w-6 mr-3" />
-                    <span className="flex-1">My Wishlist</span>
-                    {wishlistState.totalItems > 0 && (
-                      <span className="bg-[#C8102E] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {wishlistState.totalItems > 99 ? '99+' : wishlistState.totalItems}
-                      </span>
-                    )}
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link
+                      href="/wishlist"
+                      onClick={closeMobileMenu}
+                      className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                    >
+                      <Heart className="h-6 w-6 mr-3" />
+                      <span className="flex-1">My Wishlist</span>
+                      {totalItems > 0 && (
+                        <span className="bg-[#C8102E] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                          {totalItems > 99 ? '99+' : totalItems}
+                        </span>
+                      )}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        closeMobileMenu();
+                        openAuthModal({ type: 'view' });
+                      }}
+                      className="flex items-center py-3 px-4 text-[#4A4A4A] hover:bg-[#F6E2E0] hover:text-[#C8102E] rounded-lg transition-colors w-full touch-manipulation"
+                    >
+                      <Heart className="h-6 w-6 mr-3" />
+                      <span className="flex-1">My Wishlist</span>
+                    </button>
+                  )}
                   {isAuthenticated ? (
                     <>
                       <Link
@@ -676,6 +704,12 @@ export default function Navbar() {
           </div>
         </>
       )}
+
+      {/* Authentication Modal for Wishlist Access */}
+      <WishlistAuthModal
+        isOpen={showAuthModal}
+        onClose={closeAuthModal}
+      />
     </header>
   );
 }

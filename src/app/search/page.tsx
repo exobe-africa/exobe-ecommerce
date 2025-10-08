@@ -11,7 +11,9 @@ import {
   MobileFiltersModal
 } from '../../components/pages/search';
 import { useCart } from '../../context/CartContext';
-import { useWishlist } from '../../context/WishlistContext';
+import { useWishlistStore } from '../../store/wishlist';
+import { useAuthStore } from '../../store/auth';
+import WishlistAuthModal from '../../components/common/WishlistAuthModal';
 
 const allProducts = [
   { id: 1, name: "iPhone 15 Pro", category: "Electronics", price: 12999, originalPrice: 14999, image: "📱", brand: "Apple", rating: 4.8, reviews: 245, inStock: true, isNew: true, isBestSeller: false, availableLocations: ['Johannesburg', 'Cape Town', 'Durban'] },
@@ -69,7 +71,16 @@ function SearchContent() {
   const query = searchParams.get('q') || '';
   
   const { addItem } = useCart();
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated } = useAuthStore();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    showAuthModal,
+    closeAuthModal,
+    handleAuthSuccess,
+    openAuthModal
+  } = useWishlistStore();
   
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
@@ -190,20 +201,30 @@ function SearchContent() {
   };
 
   const handleWishlistToggle = (product: any) => {
+    // Always check authentication first
+    if (!isAuthenticated) {
+      openAuthModal({ type: 'add', productId: product.id });
+      return;
+    }
+
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.image,
-        category: product.category,
-        rating: product.rating,
-        reviews: product.reviews,
-        inStock: product.inStock
-      });
+      addToWishlist(product.id);
+    }
+  };
+
+  const handleWishlistToggleWithAuth = (product: any) => {
+    // Always check authentication first
+    if (!isAuthenticated) {
+      openAuthModal({ type: 'add', productId: product.id });
+      return;
+    }
+
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product.id);
     }
   };
 
@@ -310,7 +331,7 @@ function SearchContent() {
                 viewMode={viewMode}
                 onAddToCart={handleAddToCart}
                 onQuickViewAddToCart={handleQuickViewAddToCart}
-                onWishlistToggle={handleWishlistToggle}
+                onWishlistToggle={handleWishlistToggleWithAuth}
                 isInWishlist={(id) => isInWishlist(id.toString())}
               />
             )}
@@ -340,6 +361,13 @@ function SearchContent() {
         clearFilters={clearAllFilters}
         activeFiltersCount={activeFiltersCount}
         resultsCount={filteredResults.length}
+      />
+
+      {/* Authentication Modal for Wishlist Access */}
+      <WishlistAuthModal
+        isOpen={showAuthModal}
+        onClose={closeAuthModal}
+        onAuthSuccess={handleAuthSuccess}
       />
 
     </div>

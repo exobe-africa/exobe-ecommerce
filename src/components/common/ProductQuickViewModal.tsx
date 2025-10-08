@@ -221,7 +221,12 @@ export default function ProductQuickViewModal({
                 <div className="flex items-center justify-center space-x-3">
                   {onWishlistToggle && (
                     <button
-                      onClick={() => onWishlistToggle(product)}
+                      onClick={() => {
+                        // Close the quick view modal first
+                        onClose();
+                        // Then handle the wishlist toggle
+                        onWishlistToggle(product);
+                      }}
                       className={`p-3 rounded-full border-2 transition-all duration-200 ${
                         isInWishlist
                           ? 'border-pink-500 bg-pink-50 text-pink-500'
