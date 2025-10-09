@@ -116,15 +116,12 @@ const WishlistAuthModal: React.FC<WishlistAuthModalProps> = ({
 
     try {
       await login(loginData);
-
-      // Check if login was successful (no error in auth store)
-      if (!error) {
-        showSuccess('Welcome back!');
-        handleAuthSuccess();
-        onAuthSuccess?.();
-        onClose();
-        router.push('/wishlist');
-      }
+      
+      showSuccess('Welcome back!');
+      handleAuthSuccess();
+      onAuthSuccess?.();
+      onClose();
+      router.push('/wishlist');
     } catch (error: any) {
       showError(error?.message || 'Login failed. Please check your credentials.');
     } finally {
@@ -150,14 +147,12 @@ const WishlistAuthModal: React.FC<WishlistAuthModalProps> = ({
         subscribeNewsletter: false,
       });
 
-      // Check if registration was successful (no error in auth store)
-      if (!error) {
-        showSuccess('Account created successfully!');
-        handleAuthSuccess();
-        onAuthSuccess?.();
-        onClose();
-        router.push('/wishlist');
-      }
+      // If we reach here, registration was successful
+      showSuccess('Account created successfully!');
+      handleAuthSuccess();
+      onAuthSuccess?.();
+      onClose();
+      router.push('/wishlist');
     } catch (error: any) {
       showError(error?.message || 'Registration failed. Please try again.');
     } finally {

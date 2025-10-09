@@ -21,6 +21,7 @@ export const REGISTER_MUTATION = gql`
       name
       phone
       role
+      token
     }
   }
 `;
