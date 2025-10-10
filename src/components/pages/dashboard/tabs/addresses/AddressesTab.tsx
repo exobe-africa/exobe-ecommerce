@@ -2,16 +2,19 @@
 
 import { Edit3, Trash2 } from 'lucide-react';
 import { Address } from '../../shared/types';
+import { Spinner } from '../../../../common/Spinner';
 
 interface AddressesTabProps {
   addresses: Address[];
+  isLoading?: boolean;
   onAddressEdit: (address: Address) => void;
   onAddressDelete: (address: Address) => void;
   onAddNewAddress: () => void;
 }
 
 export default function AddressesTab({ 
-  addresses, 
+  addresses,
+  isLoading = false,
   onAddressEdit, 
   onAddressDelete, 
   onAddNewAddress 
@@ -33,6 +36,11 @@ export default function AddressesTab({
         </div>
       </div>
       <div className="p-6">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]"></div>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {addresses.map((address) => (
             <div key={address.id} className="border border-gray-200 rounded-xl p-6 relative">
@@ -70,6 +78,7 @@ export default function AddressesTab({
             </div>
           ))}
         </div>
+        )}
       </div>
     </div>
   );

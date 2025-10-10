@@ -34,7 +34,6 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
 
   useScrollLock(isOpen);
 
-  // Reset form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       setFormData(address || {

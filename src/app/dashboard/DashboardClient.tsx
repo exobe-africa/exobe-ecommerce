@@ -45,6 +45,7 @@ export default function DashboardClient() {
     addresses,
     selectedAddress,
     isCreating: isSavingAddress,
+    isLoading: isAddressesLoading,
     isDeleting: isDeletingAddress,
     setSelectedAddress,
     fetchAddresses,
@@ -174,6 +175,8 @@ export default function DashboardClient() {
       } else {
         result = await createAddress(addressData as any);
         if (result.success) {
+          // Immediately refetch addresses to reflect new data
+          if (userProfile?.id) await fetchAddresses(userProfile.id);
           showSuccess('Address added successfully');
         } else {
           showError(result.error || 'Failed to create address');
@@ -325,6 +328,7 @@ export default function DashboardClient() {
         return (
           <AddressesTab
             addresses={addresses}
+            isLoading={isAddressesLoading}
             onAddressEdit={handleAddressEdit}
             onAddressDelete={handleAddressDelete}
             onAddNewAddress={() => {

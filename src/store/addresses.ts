@@ -157,9 +157,6 @@ export const useAddressesStore = create<AddressesState>((set, get) => ({
         }
       });
       
-      const { fetchAddresses } = get();
-      await fetchAddresses('current-user');
-      
       set({ isCreating: false });
       return { success: true };
     } catch (error: any) {
