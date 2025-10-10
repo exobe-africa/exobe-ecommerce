@@ -10,7 +10,7 @@ import {
 } from "../lib/api/dashboard";
 
 export interface Address {
-  id: number;
+  id: string;
   type: string;
   name: string;
   street: string;
@@ -50,8 +50,8 @@ interface AddressesState {
   
   fetchAddresses: (userId: string) => Promise<{ success: boolean; error?: string }>;
   createAddress: (data: AddressFormData) => Promise<{ success: boolean; error?: string }>;
-  updateAddress: (id: number, data: AddressFormData) => Promise<{ success: boolean; error?: string }>;
-  deleteAddress: (id: number) => Promise<{ success: boolean; error?: string }>;
+  updateAddress: (id: string, data: AddressFormData) => Promise<{ success: boolean; error?: string }>;
+  deleteAddress: (id: string) => Promise<{ success: boolean; error?: string }>;
   
   validateAddress: (data: AddressFormData) => ValidationErrors;
 }
@@ -118,7 +118,7 @@ export const useAddressesStore = create<AddressesState>((set, get) => ({
       
       const rawAddresses = (data as any)?.getUserAddresses || [];
       const mappedAddresses: Address[] = rawAddresses.map((addr: any, idx: number) => ({
-        id: parseInt(addr.id),
+        id: String(addr.id),
         type: addr.type,
         name: addr.addressLine2 || addr.type,
         street: addr.addressLine1,

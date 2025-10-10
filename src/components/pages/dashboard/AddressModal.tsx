@@ -6,17 +6,7 @@ import { Checkbox } from '../../common';
 import { useScrollLock } from '../../../hooks/useScrollLock';
 import { Spinner } from '../../common/Spinner';
 import { useAddressesStore } from '../../../store/addresses';
-
-interface Address {
-  id?: number;
-  type: string;
-  name: string;
-  street: string;
-  city: string;
-  province: string;
-  postalCode: string;
-  isDefault: boolean;
-}
+import { Address } from './shared/types';
 
 interface AddressModalProps {
   isOpen: boolean;
@@ -31,6 +21,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
   
   const [formData, setFormData] = useState<Address>(
     address || {
+      id: '',
       type: '',
       name: '',
       street: '',
@@ -47,6 +38,7 @@ export default function AddressModal({ isOpen, onClose, address, onSave, isLoadi
   useEffect(() => {
     if (isOpen) {
       setFormData(address || {
+        id: '',
         type: '',
         name: '',
         street: '',
