@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from 'lucide-react';
 import { User } from '../../shared/types';
 import { PhoneInput } from '../../../../common';
 import { useToast } from '../../../../../context/ToastContext';
@@ -50,6 +51,11 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
   } = useUserSettingsStore();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Password visibility toggles
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Initialize profile data from user prop
   useEffect(() => {
@@ -290,17 +296,30 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               <label className="block text-sm font-medium text-[#000000] mb-2">
                 Current Password
               </label>
-              <input
-                type="password"
-                name="currentPassword"
-                value={passwordData.currentPassword}
-                onChange={handlePasswordInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
-                  validationErrors.currentPassword
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
-                }`}
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? "text" : "password"}
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                    validationErrors.currentPassword
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {showCurrentPassword ? (
+                    <EyeOff className="h-5 w-5 text-[#4A4A4A]" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-[#4A4A4A]" />
+                  )}
+                </button>
+              </div>
               {validationErrors.currentPassword && <p className="mt-1 text-sm text-red-600">{validationErrors.currentPassword}</p>}
             </div>
             
@@ -308,17 +327,30 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               <label className="block text-sm font-medium text-[#000000] mb-2">
                 New Password
               </label>
-              <input
-                type="password"
-                name="newPassword"
-                value={passwordData.newPassword}
-                onChange={handlePasswordInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
-                  validationErrors.newPassword
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
-                }`}
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                    validationErrors.newPassword
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {showNewPassword ? (
+                    <EyeOff className="h-5 w-5 text-[#4A4A4A]" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-[#4A4A4A]" />
+                  )}
+                </button>
+              </div>
               {validationErrors.newPassword && <p className="mt-1 text-sm text-red-600">{validationErrors.newPassword}</p>}
             </div>
 
@@ -326,17 +358,30 @@ export default function SettingsTab({ user, onPhoneChange, onDeleteAccount }: Se
               <label className="block text-sm font-medium text-[#000000] mb-2">
                 Confirm New Password
               </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordInputChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
-                  validationErrors.confirmPassword
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
-                }`}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 text-[#000000] placeholder-gray-500 ${
+                    validationErrors.confirmPassword
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 focus:ring-[#C8102E] focus:border-transparent'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5 text-[#4A4A4A]" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-[#4A4A4A]" />
+                  )}
+                </button>
+              </div>
               {validationErrors.confirmPassword && <p className="mt-1 text-sm text-red-600">{validationErrors.confirmPassword}</p>}
             </div>
 

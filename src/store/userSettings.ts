@@ -170,7 +170,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
 
   updatePassword: async (data) => {
     set({ isUpdatingPassword: true, validationErrors: {} });
-    
+
     try {
       const client = getApolloClient();
       await client.mutate({
@@ -182,7 +182,7 @@ export const useUserSettingsStore = create<UserSettingsState>((set, get) => ({
           }
         }
       });
-      
+
       set({ isUpdatingPassword: false });
       return { success: true };
     } catch (error: any) {

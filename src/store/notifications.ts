@@ -58,7 +58,6 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       await client.clearStore();
 
       const settingsData = (data as any)?.myNotificationSettings;
-      console.log('Fetched notification settings:', settingsData);
 
       set({
         settings: settingsData || null,
