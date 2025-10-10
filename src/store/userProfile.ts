@@ -64,7 +64,7 @@ export const useUserProfileStore = create<UserProfileState>((set, get) => ({
         lastName: me.lastName,
         phone: me.phone,
         dateOfBirth: me.dateOfBirth,
-        joinDate: me.created_at ? new Date(me.created_at).toLocaleDateString() : 'Unknown',
+        joinDate: me.created_at || new Date().toISOString(),
         avatar: me.avatar,
         totalOrders: me.totalOrders || 0,
         totalSpent: me.totalSpent || 0,

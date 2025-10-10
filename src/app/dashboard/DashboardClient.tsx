@@ -364,7 +364,7 @@ export default function DashboardClient() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <DashboardHeader user={user} />
+      <DashboardHeader user={user} isLoading={isProfileLoading} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -372,6 +372,7 @@ export default function DashboardClient() {
             user={user}
             activeTab={activeTab}
             onTabChange={handleTabChange}
+            isLoading={isProfileLoading}
           />
 
           <div className="lg:w-3/4">

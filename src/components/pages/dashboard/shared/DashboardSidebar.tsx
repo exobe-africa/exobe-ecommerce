@@ -9,6 +9,7 @@ interface DashboardSidebarProps {
   user: UserType;
   activeTab: string;
   onTabChange: (tabId: string) => void;
+  isLoading?: boolean;
 }
 
 const menuItems = [
@@ -21,7 +22,7 @@ const menuItems = [
   { id: 'settings', label: 'Account Settings', icon: Settings }
 ];
 
-export default function DashboardSidebar({ user, activeTab, onTabChange }: DashboardSidebarProps) {
+export default function DashboardSidebar({ user, activeTab, onTabChange, isLoading = false }: DashboardSidebarProps) {
   const { logout } = useAuthStore();
   const router = useRouter();
 
@@ -34,17 +35,27 @@ export default function DashboardSidebar({ user, activeTab, onTabChange }: Dashb
     <div className="lg:w-1/4">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden lg:sticky lg:top-8">
         <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-[#C8102E] rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">
-                {user.name.split(' ').map(n => n[0]).join('')}
-              </span>
+          {isLoading ? (
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="flex-1">
+                <div className="h-5 w-32 bg-gray-200 rounded animate-pulse mb-2"></div>
+                <div className="h-4 w-40 bg-gray-200 rounded animate-pulse"></div>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-[#000000]">{user.name}</h3>
-              <p className="text-sm text-[#4A4A4A]">{user.email}</p>
+          ) : (
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-[#C8102E] rounded-full flex items-center justify-center">
+                <span className="text-white font-semibold">
+                  {user.name.split(' ').map(n => n[0]).join('')}
+                </span>
+              </div>
+              <div>
+                <h3 className="font-semibold text-[#000000]">{user.name}</h3>
+                <p className="text-sm text-[#4A4A4A]">{user.email}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         
         <nav className="p-2">

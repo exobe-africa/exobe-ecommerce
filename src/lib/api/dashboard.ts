@@ -8,6 +8,7 @@ export const DASHBOARD_ME = gql`
       name
       phone
       role
+      created_at
     }
   }
 `;
