@@ -17,12 +17,14 @@ export const DASHBOARD_ADDRESSES = gql`
     getUserAddresses(userId: $userId) {
       id
       type
+      addressName
       addressLine1
       addressLine2
       city
       province
       country
       postalCode
+      defaultAddress
     }
   }
 `;
@@ -32,12 +34,14 @@ export const DASHBOARD_CREATE_ADDRESS = gql`
     createUserAddress(input: $input) {
       id
       type
+      addressName
       addressLine1
       addressLine2
       city
       province
       country
       postalCode
+      defaultAddress
     }
   }
 `;
@@ -47,12 +51,14 @@ export const DASHBOARD_UPDATE_ADDRESS = gql`
     updateUserAddress(id: $id, input: $input) {
       id
       type
+      addressName
       addressLine1
       addressLine2
       city
       province
       country
       postalCode
+      defaultAddress
     }
   }
 `;

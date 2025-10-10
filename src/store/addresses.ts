@@ -27,6 +27,7 @@ export interface AddressFormData {
   city: string;
   province: string;
   postalCode: string;
+  isDefault?: boolean;
 }
 
 export interface ValidationErrors {
@@ -120,12 +121,12 @@ export const useAddressesStore = create<AddressesState>((set, get) => ({
       const mappedAddresses: Address[] = rawAddresses.map((addr: any, idx: number) => ({
         id: String(addr.id),
         type: addr.type,
-        name: addr.addressLine2 || addr.type,
+        name: addr.addressName || addr.type,
         street: addr.addressLine1,
         city: addr.city,
         province: addr.province || '',
         postalCode: addr.postalCode,
-        isDefault: idx === 0
+        isDefault: !!addr.defaultAddress
       }));
       
       set({ addresses: mappedAddresses, isLoading: false });
@@ -147,12 +148,14 @@ export const useAddressesStore = create<AddressesState>((set, get) => ({
         variables: {
           input: {
             type: data.type,
+            addressName: data.name,
             addressLine1: data.street,
-            addressLine2: data.name || undefined,
+            addressLine2: undefined,
             city: data.city,
             province: data.province,
             country: 'South Africa',
             postalCode: data.postalCode,
+            defaultAddress: !!data.isDefault,
           }
         }
       });
@@ -177,11 +180,13 @@ export const useAddressesStore = create<AddressesState>((set, get) => ({
           id: String(id),
           input: {
             type: data.type,
+            addressName: data.name,
             addressLine1: data.street,
-            addressLine2: data.name || undefined,
+            addressLine2: undefined,
             city: data.city,
             province: data.province,
             postalCode: data.postalCode,
+            defaultAddress: !!data.isDefault,
           }
         }
       });
