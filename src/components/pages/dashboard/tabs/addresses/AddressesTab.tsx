@@ -2,7 +2,6 @@
 
 import { Edit3, Trash2 } from 'lucide-react';
 import { Address } from '../../shared/types';
-import { Spinner } from '../../../../common/Spinner';
 
 interface AddressesTabProps {
   addresses: Address[];
@@ -37,8 +36,27 @@ export default function AddressesTab({
       </div>
       <div className="p-6">
         {isLoading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C8102E]"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="border border-gray-200 rounded-xl p-6">
+                <div className="mb-4">
+                  <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-3"></div>
+                  <div className="space-y-2">
+                    <div className="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 w-40 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+                <div className="flex space-x-3">
+                  <div className="h-9 w-16 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-9 w-20 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : addresses.length === 0 ? (
+          <div className="text-center text-gray-500 py-10">
+            <p>No addresses found. Add your first address!</p>
           </div>
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
