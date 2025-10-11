@@ -13,6 +13,7 @@ import HelpChatWidget from "../components/common/HelpChatWidget";
 import ScrollToTop from "../components/common/ScrollToTop";
 import LayoutContent from "./LayoutContent";
 import AnalyticsProvider from "../components/providers/AnalyticsProvider";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,6 +64,7 @@ export default function RootLayout({
         <UserProvider>
         <CartProvider>
         <WishlistProvider>
+          <Suspense fallback={null}>
           <AnalyticsProvider>
           <AuthBootstrap />
           <ScrollToTop />
@@ -72,6 +74,7 @@ export default function RootLayout({
           <CartDrawer />
           <HelpChatWidget position="bottom-right" />
           </AnalyticsProvider>
+          </Suspense>
         </WishlistProvider>
         </CartProvider>
         </UserProvider>
