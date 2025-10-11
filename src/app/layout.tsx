@@ -12,6 +12,7 @@ import AuthBootstrap from "../components/providers/AuthBootstrap";
 import HelpChatWidget from "../components/common/HelpChatWidget";
 import ScrollToTop from "../components/common/ScrollToTop";
 import LayoutContent from "./LayoutContent";
+import AnalyticsProvider from "../components/providers/AnalyticsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,6 +63,7 @@ export default function RootLayout({
         <UserProvider>
         <CartProvider>
         <WishlistProvider>
+          <AnalyticsProvider>
           <AuthBootstrap />
           <ScrollToTop />
           <LayoutContent>
@@ -69,6 +71,7 @@ export default function RootLayout({
           </LayoutContent>
           <CartDrawer />
           <HelpChatWidget position="bottom-right" />
+          </AnalyticsProvider>
         </WishlistProvider>
         </CartProvider>
         </UserProvider>
