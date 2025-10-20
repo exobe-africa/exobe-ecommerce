@@ -26,23 +26,25 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, 
       {/* Product Title & Rating */}
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#000000] mb-2">{product.name}</h1>
-        <div className="flex items-center space-x-4 mb-4">
-          <div className="flex items-center">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className={`h-5 w-5 ${
-                  i < Math.floor(product.rating)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-gray-300'
-                }`}
-              />
-            ))}
-            <span className="ml-2 text-sm font-medium text-[#4A4A4A]">
-              {product.rating} ({product.reviews} reviews)
-            </span>
+        {product.reviews > 0 && (
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-5 w-5 ${
+                    i < Math.floor(product.rating)
+                      ? 'fill-yellow-400 text-yellow-400'
+                      : 'text-gray-300'
+                  }`}
+                />
+              ))}
+              <span className="ml-2 text-sm font-medium text-[#4A4A4A]">
+                {product.rating} ({product.reviews} reviews)
+              </span>
+            </div>
           </div>
-        </div>
+        )}
         <p className="text-[#4A4A4A] leading-relaxed">{product.description}</p>
       </div>
 

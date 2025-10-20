@@ -129,7 +129,6 @@ export const useProductsStore = create<ProductsState>()(
             ? p.variants.map((v: any) => ({ id: v.id, price: v.priceCents ? v.priceCents / 100 : undefined, stock: v.stockQuantity, attributes: v.attributes || {} }))
             : undefined,
           groupedVariantOptions: grouped,
-          // attach product-level stock to drive in-stock status
           ...(typeof p.stockQuantity === 'number' ? { stock: p.stockQuantity } as any : {}),
           bookDetails: p.bookDetails ? {
             isbn: p.bookDetails.isbn,
