@@ -271,6 +271,7 @@ export default function ProductPage() {
         originalPrice: product.originalPrice,
         image: currentImage || product.image,
         category: product.category,
+        stock: currentStock || product.stockCount,
         availableLocations: currentLocations,
       });
     }

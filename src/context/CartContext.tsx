@@ -10,6 +10,8 @@ export interface CartItem {
   image: string;
   quantity: number;
   category: string;
+  // Maximum available stock for this line (product or variant). When set, cart cannot exceed this amount.
+  stock?: number;
   variant?: {
     size?: string;
     color?: string;
@@ -57,14 +59,23 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       let newItems: CartItem[];
 
       if (existingItem) {
-        newItems = state.items.map(item =>
-          item.id === action.payload.id && 
-          JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+        newItems = state.items.map(item => {
+          if (
+            item.id === action.payload.id &&
+            JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
+          ) {
+            const max = item.stock ?? Number.POSITIVE_INFINITY;
+            const nextQty = Math.min(item.quantity + 1, max);
+            return { ...item, quantity: nextQty };
+          }
+          return item;
+        });
       } else {
-        newItems = [...state.items, { ...action.payload, quantity: 1, uniqueId }];
+        const initialQty = Math.min(1, action.payload.stock ?? 1);
+        if (initialQty <= 0) {
+          return state; // do not add when no stock
+        }
+        newItems = [...state.items, { ...action.payload, quantity: initialQty, uniqueId }];
       }
 
       const totalItems = newItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -95,12 +106,19 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
 
     case 'UPDATE_QUANTITY': {
-      const newItems = state.items.map(item =>
-        item.id === action.payload.id && 
-        JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
-          ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-          : item
-      ).filter(item => item.quantity > 0);
+      const newItems = state.items
+        .map(item => {
+          if (
+            item.id === action.payload.id &&
+            JSON.stringify(item.variant || {}) === JSON.stringify(action.payload.variant || {})
+          ) {
+            const max = item.stock ?? Number.POSITIVE_INFINITY;
+            const clamped = Math.max(0, Math.min(action.payload.quantity, max));
+            return { ...item, quantity: clamped };
+          }
+          return item;
+        })
+        .filter(item => item.quantity > 0);
 
       const totalItems = newItems.reduce((sum, item) => sum + item.quantity, 0);
       const totalPrice = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);

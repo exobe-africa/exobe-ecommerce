@@ -174,8 +174,19 @@ export default function CartDrawer() {
                   <div key={item.uniqueId || item.id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                     <div className="relative flex-shrink-0">
                       <Link href={`/product/${item.id}`} className="block touch-manipulation" onClick={closeCart}>
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
-                          <span className="text-xl sm:text-2xl">{item.image}</span>
+                        <div className="relative w-14 h-14 sm:w-16 sm:h-16 bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:scale-105 transition-transform">
+                          {typeof item.image === 'string' && (item.image.startsWith('http') || item.image.startsWith('/')) ? (
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              sizes="64px"
+                              className="object-cover"
+                              priority={false}
+                            />
+                          ) : (
+                            <span className="absolute inset-0 flex items-center justify-center text-xl sm:text-2xl">{item.image || '🛍️'}</span>
+                          )}
                         </div>
                       </Link>
                       <button
@@ -214,7 +225,7 @@ export default function CartDrawer() {
                         <span className="font-bold text-[#C8102E]">
                           R{item.price.toFixed(2)}
                         </span>
-                        {item.originalPrice && (
+                        {item.originalPrice && item.originalPrice > item.price && (
                           <span className="text-xs text-[#4A4A4A] line-through">
                             R{item.originalPrice.toFixed(2)}
                           </span>
