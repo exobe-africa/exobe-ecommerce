@@ -50,8 +50,6 @@ export default function WishlistPage() {
     error,
     fetchWishlist,
     removeFromWishlist,
-    totalItems,
-    isEmpty
   } = useWishlistStore();
   const { addItem } = useCart();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -87,7 +85,11 @@ export default function WishlistPage() {
   }, []);
 
   // Sort and filter items
-  const sortedAndFilteredItems = (wishlist?.items || [])
+  const items = wishlist?.items || [];
+  const totalItems = (typeof wishlist?.count === 'number') ? (wishlist?.count as number) : items.length;
+  const isEmpty = totalItems === 0;
+
+  const sortedAndFilteredItems = items
     .filter(item => {
       if (filterBy === 'all') return true;
       // For now, just return all items since we don't have category/stock info in the new structure
@@ -111,7 +113,7 @@ export default function WishlistPage() {
       }
     });
 
-  const handleAddToCart = (item: NonNullable<typeof wishlist>['items'][0]) => {
+  const handleAddToCart = (item: NonNullable<typeof items>[0]) => {
     // For now, we'll add a placeholder item since we don't have product details
     // TODO: Fetch product details before adding to cart
     addItem({
@@ -123,7 +125,7 @@ export default function WishlistPage() {
     });
   };
 
-  const handleRemoveFromWishlist = (item: NonNullable<typeof wishlist>['items'][0]) => {
+  const handleRemoveFromWishlist = (item: NonNullable<typeof items>[0]) => {
     removeFromWishlist(item.product_id, item.product_variant_id || undefined);
   };
 

@@ -288,10 +288,10 @@ export default function ProductPage() {
       return;
     }
 
-    if (isInWishlist(product.id)) {
+    if (isInWishlist(product.id, Object.values(selectedVariants)[0])) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist(product.id);
+      addToWishlist(product.id, Object.values(selectedVariants)[0]);
     }
   };
 

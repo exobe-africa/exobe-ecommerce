@@ -43,25 +43,43 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
       ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6' 
       : 'space-y-3 sm:space-y-4'
     }>
-      {items.map((item) => (
+      {items.map((item) => {
+        const p = (item as any).product;
+        const imageUrl = p?.media?.[0]?.url || '';
+        const price = typeof p?.priceInCents === 'number' ? p.priceInCents / 100 : 0;
+        const originalPrice = typeof p?.compareAtPriceInCents === 'number' ? p.compareAtPriceInCents / 100 : undefined;
+        const name = p?.title || `Product ${item.product_id}`;
+        const category = p?.category?.name || '';
+        const createdAtRaw = (item as any).created_at;
+        let addedDate: Date | undefined = undefined;
+        if (createdAtRaw !== undefined && createdAtRaw !== null) {
+          if (typeof createdAtRaw === 'number') {
+            addedDate = new Date(createdAtRaw);
+          } else if (typeof createdAtRaw === 'string' && /^\d+$/.test(createdAtRaw)) {
+            addedDate = new Date(Number(createdAtRaw));
+          } else if (typeof createdAtRaw === 'string') {
+            addedDate = new Date(createdAtRaw);
+          }
+        }
+        return (
         <ProductCard
           key={item.id}
           id={item.id}
-          name={`Product ${item.product_id}`}
-          price={0} // TODO: Add price when product details are available
-          originalPrice={undefined}
-          image={''} // TODO: Add image when product details are available
-          category={''} // TODO: Add category when available
+          name={name}
+          price={price}
+          originalPrice={originalPrice}
+          image={imageUrl}
+          category={category}
           brand={'eXobe'}
-          rating={0} // TODO: Add rating when available
-          reviews={0} // TODO: Add reviews when available
-          inStock={true} // TODO: Add stock info when available
-          addedAt={new Date(item.created_at)}
+          rating={0}
+          reviews={0}
+          inStock={true}
+          addedAt={addedDate}
           variant="wishlist"
           viewMode={viewMode}
-          description={''} // TODO: Add description when available
-          variants={[]} // TODO: Add variants when available
-          availableLocations={[]} // TODO: Add location info when available
+          description={p?.description || ''}
+          variants={[]}
+          availableLocations={p?.availableLocations || []}
           onAddToCart={onAddToCart}
           onQuickViewAddToCart={(product, selectedVariants, quantity, currentLocations) => {
             // TODO: Implement when product details are available
@@ -71,7 +89,7 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
           showWishlistDate={true}
           showQuickActions={true}
         />
-      ))}
+      )})}
     </div>
   );
 };

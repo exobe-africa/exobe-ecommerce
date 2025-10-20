@@ -15,11 +15,14 @@ import { useRouter } from 'next/navigation';
 export default function Navbar() {
   const { state, toggleCart } = useCart();
   const {
+    wishlist,
     totalItems,
     showAuthModal,
     closeAuthModal,
-    openAuthModal
+    openAuthModal,
+    fetchWishlist,
   } = useWishlistStore();
+  const wishlistCount = (typeof wishlist?.count === 'number') ? (wishlist?.count as number) : (wishlist?.items?.length || 0);
   const { user, isAuthenticated, logout } = useAuthStore();
   const { isMobileMenuOpen, setMobileMenuOpen } = useUI();
   const { isVisible: isHeaderVisible } = useScrollDirection({ threshold: 10 });
@@ -168,9 +171,15 @@ export default function Navbar() {
     };
   }, [showMobileMenu]);
 
+  // Bootstrap wishlist badge after auth hydration
+  useEffect(() => {
+    if (isAuthenticated) {
+      try { fetchWishlist(); } catch (_) {}
+    }
+  }, [isAuthenticated, fetchWishlist]);
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
-      {/* Top Black Header - Hidden on mobile scroll down */}
       <div className={`bg-[#000000] text-white py-2 transition-transform duration-300 ease-in-out md:transform-none ${
         isClient && !isHeaderVisible ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'
       }`}>
@@ -350,9 +359,9 @@ export default function Navbar() {
                 <Link href="/wishlist">
                   <button className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
                     <Heart className="h-6 w-6 text-[#4A4A4A]" />
-                    {isClient && totalItems > 0 && (
+                    {isClient && wishlistCount > 0 && (
                       <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
-                        {totalItems > 99 ? '99+' : totalItems}
+                        {wishlistCount > 99 ? '99+' : wishlistCount}
                       </span>
                     )}
                   </button>
@@ -599,9 +608,9 @@ export default function Navbar() {
                     >
                       <Heart className="h-6 w-6 mr-3" />
                       <span className="flex-1">My Wishlist</span>
-                      {totalItems > 0 && (
+                      {wishlistCount > 0 && (
                         <span className="bg-[#C8102E] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {totalItems > 99 ? '99+' : totalItems}
+                          {wishlistCount > 99 ? '99+' : wishlistCount}
                         </span>
                       )}
                     </Link>

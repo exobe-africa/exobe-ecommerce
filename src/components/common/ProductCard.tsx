@@ -122,9 +122,14 @@ const ProductCard = ({
       <>
       <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${className}`}>
         <Link href={`/product/${id}`}>
-          <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-32 sm:h-40 lg:h-48 flex items-center justify-center cursor-pointer group-hover:scale-105 transition-transform">
-            <span className="text-2xl sm:text-3xl lg:text-4xl">{image}</span>
-            
+          <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-32 sm:h-40 lg:h-48 flex items-center justify-center cursor-pointer group-hover:scale-105 transition-transform overflow-hidden">
+            {image && (image.startsWith('http') || image.startsWith('/')) ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={image} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-2xl sm:text-3xl lg:text-4xl">{image}</span>
+            )}
+
             {originalPrice && (
               <div className="absolute top-2 right-2 bg-[#C8102E] text-white px-2 py-1 rounded-full text-xs font-semibold">
                 -{Math.round(((originalPrice - price) / originalPrice) * 100)}%
@@ -304,8 +309,13 @@ const ProductCard = ({
       <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group p-4 ${className}`}>
         <div className="relative">
           <Link href={`/product/${id}`}>
-            <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform cursor-pointer">
-              <span className="text-6xl">{image}</span>
+            <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform cursor-pointer overflow-hidden">
+              {image && (image.startsWith('http') || image.startsWith('/')) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-6xl">{image}</span>
+              )}
             </div>
           </Link>
           
@@ -412,8 +422,13 @@ const ProductCard = ({
         <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 ${className}`}>
           <Link href={`/product/${id}`}>
             <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 relative cursor-pointer touch-manipulation">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                <span className="text-xl sm:text-2xl">{image}</span>
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+                {image && (image.startsWith('http') || image.startsWith('/')) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={image} alt={name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xl sm:text-2xl">{image}</span>
+                )}
               </div>
               
               {/* Badges */}
@@ -528,8 +543,13 @@ const ProductCard = ({
       <div className={`bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group ${className}`}>
         <Link href={`/product/${id}`}>
           <div className="relative cursor-pointer touch-manipulation">
-            <div className="h-32 sm:h-40 lg:h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <span className="text-2xl sm:text-3xl lg:text-4xl">{image}</span>
+            <div className="h-32 sm:h-40 lg:h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center overflow-hidden">
+              {image && (image.startsWith('http') || image.startsWith('/')) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-2xl sm:text-3xl lg:text-4xl">{image}</span>
+              )}
             </div>
             
             {/* Badges */}
@@ -736,8 +756,13 @@ const ProductCard = ({
     return (
       <>
       <div className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-gray-200 ${className}`}>
-        <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-48 flex items-center justify-center cursor-pointer" onClick={() => window.location.href = `/product/${id}`}>
-          <span className="text-4xl">{image}</span>
+        <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 h-48 flex items-center justify-center cursor-pointer overflow-hidden" onClick={() => window.location.href = `/product/${id}`}>
+          {image && (image.startsWith('http') || image.startsWith('/')) ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={image} alt={name} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-4xl">{image}</span>
+          )}
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">

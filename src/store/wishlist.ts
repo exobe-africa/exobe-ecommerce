@@ -15,6 +15,7 @@ export interface WishlistItem {
 
 export interface WishlistData {
   id: string;
+  count?: number;
   items: WishlistItem[];
 }
 
@@ -55,7 +56,9 @@ export const useWishlistStore = create<WishlistState>()(
     hasTriedFetch: false,
 
     get totalItems() {
-      return get().wishlist?.items.length || 0;
+      const wl = get().wishlist;
+      const result = (typeof wl?.count === 'number') ? wl!.count! : (wl?.items.length || 0);
+      return result;
     },
 
     get isEmpty() {
@@ -72,7 +75,9 @@ export const useWishlistStore = create<WishlistState>()(
         fetchPolicy: 'network-only',
       });
 
-      set({ wishlist: (data as any)?.myWishlist || null, isLoading: false });
+      const wishlistData = (data as any)?.myWishlist || null;
+      
+      set({ wishlist: wishlistData, isLoading: false });
     } catch (error: any) {
       console.error('Failed to fetch wishlist:', error);
       if (error?.message?.includes('Unauthorized') || error?.message?.includes('UNAUTHENTICATED')) {
@@ -137,16 +142,12 @@ export const useWishlistStore = create<WishlistState>()(
 
   isInWishlist: (productId, productVariantId) => {
     const { wishlist, isLoading, hasTriedFetch, error } = get();
-    // If still loading or haven't tried to fetch yet, assume not in wishlist
     if (isLoading || !hasTriedFetch) return false;
 
-    // If there's an error (like authentication error), assume not in wishlist
     if (error && (error.includes('Unauthorized') || error.includes('UNAUTHENTICATED'))) return false;
 
-    // If no wishlist data or empty wishlist, definitely not in wishlist
     if (!wishlist || !wishlist.items) return false;
 
-    // Additional safety check: if items array exists but is empty, not in wishlist
     if (wishlist.items.length === 0) return false;
 
     return wishlist.items.some(item =>
@@ -155,7 +156,6 @@ export const useWishlistStore = create<WishlistState>()(
     );
   },
 
-  // Helper function to clear wishlist state (useful for logout)
   clearWishlistState: () => {
     set({
       wishlist: null,

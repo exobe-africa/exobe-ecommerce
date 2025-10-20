@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getApolloClient } from "../lib/apollo/client";
+import { useWishlistStore } from "./wishlist";
 import { LOGIN_MUTATION, REGISTER_MUTATION, ME_QUERY } from "../lib/api/auth";
 
 export interface AuthUser {
@@ -74,6 +75,10 @@ export const useAuthStore = create<AuthState>()(
           });
           const user = (data as any)?.login ?? null;
           set({ user, isAuthenticated: !!user, isLoading: false });
+          if (user) {
+            // Fetch wishlist after login so UI badges and hearts update
+            try { useWishlistStore.getState().fetchWishlist(); } catch (_) {}
+          }
         } catch (err) {
           set({ error: extractApolloErrorMessage(err), isLoading: false });
           throw err;
@@ -89,6 +94,9 @@ export const useAuthStore = create<AuthState>()(
           });
           const user = (data as any)?.register ?? null;
           set({ user, isAuthenticated: !!user, isLoading: false });
+          if (user) {
+            try { useWishlistStore.getState().fetchWishlist(); } catch (_) {}
+          }
         } catch (err) {
           set({ error: extractApolloErrorMessage(err), isLoading: false });
           throw err;
@@ -100,6 +108,9 @@ export const useAuthStore = create<AuthState>()(
           const { data } = await client.query({ query: ME_QUERY, fetchPolicy: "no-cache" });
           const user = (data as any)?.me ?? null;
           set({ user, isAuthenticated: !!user });
+          if (user) {
+            try { useWishlistStore.getState().fetchWishlist(); } catch (_) {}
+          }
         } catch (err) {
           // Ignore if not authenticated
         }
@@ -114,6 +125,8 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (_) {}
         set({ user: null, isAuthenticated: false });
+        // Clear wishlist state on logout
+        try { useWishlistStore.getState().clearWishlistState(); } catch (_) {}
       },
       clearError() {
         set({ error: null });
