@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  OrderSuccessSection, 
   CheckoutHeader, 
   ShippingForm, 
   PaymentForm, 
@@ -16,6 +15,8 @@ import AddressSelectionModal from '../../components/pages/checkout/AddressSelect
 import { useCart } from '../../context/CartContext';
 import { useUser } from '../../context/UserContext';
 import { useAuthStore } from '../../store/auth';
+import { ShoppingBag, CheckCircle2, Loader2 } from 'lucide-react';
+import { useOrdersStore } from '../../store/orders';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -65,7 +66,6 @@ export default function CheckoutPage() {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isProcessing, setIsProcessing] = useState(false);
-  const [orderComplete, setOrderComplete] = useState(false);
   const [isLoadingUserData, setIsLoadingUserData] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [hasAutoFilledAddress, setHasAutoFilledAddress] = useState(false);
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
     if (!isLoggedIn && hasMounted && authHasHydrated && !showGuestModal && !hasDeclinedGuestModal && state.items.length > 0) {
       const timer = setTimeout(() => {
         setShowGuestModal(true);
-      }, 1000); // Show after 1 second
+      }, 1000);
       return () => clearTimeout(timer);
     }
     if (isLoggedIn) {
@@ -158,10 +158,10 @@ export default function CheckoutPage() {
   }, [isLoggedIn, showGuestModal, hasDeclinedGuestModal, state.items.length, hasMounted, authHasHydrated]);
 
   useEffect(() => {
-    if (state.items.length === 0 && !orderComplete) {
+    if (state.items.length === 0 && !isProcessing) {
       router.push('/');
     }
-  }, [state.items.length, router, orderComplete]);
+  }, [state.items.length, router, isProcessing]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -218,13 +218,6 @@ export default function CheckoutPage() {
       if (!formData.city.trim()) newErrors.city = 'City is required';
       if (!formData.province.trim()) newErrors.province = 'Province is required';
       if (!formData.postalCode.trim()) newErrors.postalCode = 'Postal code is required';
-    } else if (step === 2) {
-      if (formData.paymentMethod === 'card') {
-        if (!formData.cardNumber.trim()) newErrors.cardNumber = 'Card number is required';
-        if (!formData.expiryDate.trim()) newErrors.expiryDate = 'Expiry date is required';
-        if (!formData.cvv.trim()) newErrors.cvv = 'CVV is required';
-        if (!formData.cardholderName.trim()) newErrors.cardholderName = 'Cardholder name is required';
-      }
     }
     
     setErrors(newErrors);
@@ -246,11 +239,73 @@ export default function CheckoutPage() {
     
     setIsProcessing(true);
     
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setOrderComplete(true);
-    clearCart();
-    setIsProcessing(false);
+    try {
+      const orderItems = state.items.map(item => {
+        let variantId = item.variant?.key || null;
+        
+        if (!variantId && item.variant && Object.keys(item.variant).length > 0) {
+          variantId = item.uniqueId || item.id;
+        }
+        
+        return {
+          variant_id: variantId || item.id,
+          quantity: item.quantity
+        };
+      });
+
+      const shippingAddress = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address: formData.address,
+        apartment: formData.apartment || '',
+        city: formData.city,
+        province: formData.province,
+        postal_code: formData.postalCode,
+        country: formData.country,
+        phone: formData.phone
+      };
+
+      const billingAddress = formData.billingAddressSame
+        ? shippingAddress
+        : {
+            first_name: formData.billingFirstName || formData.firstName,
+            last_name: formData.billingLastName || formData.lastName,
+            address: formData.billingAddress || formData.address,
+            apartment: formData.billingApartment || formData.apartment || '',
+            city: formData.billingCity || formData.city,
+            province: formData.billingProvince || formData.province,
+            postal_code: formData.billingPostalCode || formData.postalCode,
+            country: formData.billingCountry || formData.country,
+            phone: formData.phone
+          };
+
+      const orderInput = {
+        userId: authUser?.id || undefined,
+        email: formData.email,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone,
+        mobile: formData.phone,
+        shippingAddress,
+        billingAddress,
+        items: orderItems
+      };
+
+      const { success, order, error } = await useOrdersStore.getState().placeOrder(orderInput);
+      if (success && order) {
+        clearCart();
+        // Navigate to success page with order number
+        router.push(`/order-success?orderNumber=${order.order_number || order.id}`);
+      } else {
+        throw new Error(error || 'Failed to place order');
+      }
+    } catch (error: any) {
+      console.error('Error creating order:', error);
+      // Navigate to failure page with error message
+      router.push(`/order-failed?error=${encodeURIComponent(error.message || 'Failed to place order. Please try again.')}`);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handlePhoneChange = (value: string) => {
@@ -273,16 +328,6 @@ export default function CheckoutPage() {
     'Limpopo', 'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape'
   ];
 
-  if (orderComplete) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <OrderSuccessSection />
-      </div>
-    );
-  }
-
-  // Prevent hydration mismatches by rendering a lightweight skeleton
-  // until the component has mounted on the client (cart/user state is ready)
   if (!hasMounted) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -401,6 +446,63 @@ export default function CheckoutPage() {
           router.push('/dashboard?tab=addresses');
         }}
       />
+
+      {isProcessing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 sm:p-12 flex flex-col items-center gap-6 min-w-[320px] sm:min-w-[400px] max-w-md mx-4 animate-in fade-in zoom-in duration-300">
+            <div className="relative">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 border-4 border-gray-200 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-20 h-20 sm:w-24 sm:h-24 border-4 border-[#C8102E] rounded-full border-t-transparent animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <ShoppingBag className="w-8 h-8 sm:w-10 sm:h-10 text-[#C8102E] animate-pulse" />
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <h3 className="text-xl sm:text-2xl font-bold text-[#000000]">
+                Processing Your Order
+              </h3>
+              <p className="text-sm sm:text-base text-[#4A4A4A] leading-relaxed">
+                Please wait while we securely process your order and update inventory. This may take a few moments.
+              </p>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                <p className="text-xs sm:text-sm text-amber-800 font-medium flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <span>Please do not refresh or close this page</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full space-y-2">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#4A4A4A]">
+                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <span>Validating order details</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-[#4A4A4A]">
+                <Loader2 className="w-4 h-4 text-[#C8102E] animate-spin flex-shrink-0" />
+                <span>Processing payment</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                <span>Updating inventory</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                <span>Sending confirmation</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t border-gray-200 w-full justify-center">
+              <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>Secured by SSL encryption</span>
+            </div>
+          </div>
+        </div>
+      )}
       
     </div>
   );

@@ -33,139 +33,49 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       </h2>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#000000] mb-3">Payment Method</label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-[#C8102E] transition-colors">
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="card"
-              checked={formData.paymentMethod === 'card'}
-              onChange={onInputChange}
-              className="w-4 h-4 text-[#C8102E] border-gray-300 focus:ring-[#C8102E]"
-            />
-            <div className="ml-3">
-              <div className="text-sm font-medium text-[#000000]">Credit Card</div>
-              <div className="text-xs text-[#4A4A4A]">Visa, Mastercard</div>
+        <label className="block text-sm font-medium text-[#000000] mb-3">Payment Gateway</label>
+        <div className="border-2 border-[#C8102E] bg-gradient-to-br from-white to-red-50/30 rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#C8102E] to-[#A00E26] rounded-lg flex items-center justify-center shadow-md">
+                <CreditCard className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <div className="text-lg font-bold text-[#000000]">PayGate</div>
+                <div className="text-xs text-[#4A4A4A]">Secure Payment Processing</div>
+              </div>
             </div>
-          </label>
+            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+              Active
+            </div>
+          </div>
           
-          <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-[#C8102E] transition-colors">
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="paypal"
-              checked={formData.paymentMethod === 'paypal'}
-              onChange={onInputChange}
-              className="w-4 h-4 text-[#C8102E] border-gray-300 focus:ring-[#C8102E]"
-            />
-            <div className="ml-3">
-              <div className="text-sm font-medium text-[#000000]">PayPal</div>
-              <div className="text-xs text-[#4A4A4A]">Pay with PayPal</div>
+          <div className="bg-white rounded-lg p-4 border border-gray-200">
+            <p className="text-sm text-[#4A4A4A] mb-3">
+              Your payment will be securely processed through PayGate, South Africa's leading payment gateway.
+            </p>
+            <div className="flex items-center space-x-2 text-xs text-[#4A4A4A]">
+              <svg className="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>256-bit SSL Encryption</span>
+              <span className="text-gray-300">•</span>
+              <span>PCI DSS Compliant</span>
+              <span className="text-gray-300">•</span>
+              <span>3D Secure</span>
             </div>
-          </label>
-          
-          <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-[#C8102E] transition-colors">
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="eft"
-              checked={formData.paymentMethod === 'eft'}
-              onChange={onInputChange}
-              className="w-4 h-4 text-[#C8102E] border-gray-300 focus:ring-[#C8102E]"
-            />
-            <div className="ml-3">
-              <div className="text-sm font-medium text-[#000000]">Bank Transfer</div>
-              <div className="text-xs text-[#4A4A4A]">EFT Payment</div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-center space-x-3 text-gray-400">
+            <span className="text-xs font-medium">Accepted Payment Methods:</span>
+            <div className="flex items-center space-x-2">
+              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">VISA</div>
+              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">MC</div>
+              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">AMEX</div>
             </div>
-          </label>
+          </div>
         </div>
       </div>
-
-      {formData.paymentMethod === 'card' && (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-[#000000] mb-2">Cardholder Name</label>
-            <input
-              type="text"
-              name="cardholderName"
-              value={formData.cardholderName}
-              onChange={onInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent bg-white text-[#000000] placeholder-gray-500 ${
-                errors.cardholderName ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder="John Doe"
-            />
-            {errors.cardholderName && <p className="text-red-500 text-sm mt-1">{errors.cardholderName}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[#000000] mb-2">Card Number</label>
-            <input
-              type="text"
-              name="cardNumber"
-              value={formData.cardNumber}
-              onChange={onInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent bg-white text-[#000000] placeholder-gray-500 ${
-                errors.cardNumber ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder="1234 5678 9012 3456"
-            />
-            {errors.cardNumber && <p className="text-red-500 text-sm mt-1">{errors.cardNumber}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-[#000000] mb-2">Expiry Date</label>
-              <input
-                type="text"
-                name="expiryDate"
-                value={formData.expiryDate}
-                onChange={onInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent bg-white text-[#000000] placeholder-gray-500 ${
-                  errors.expiryDate ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="MM/YY"
-              />
-              {errors.expiryDate && <p className="text-red-500 text-sm mt-1">{errors.expiryDate}</p>}
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-[#000000] mb-2">CVV</label>
-              <input
-                type="text"
-                name="cvv"
-                value={formData.cvv}
-                onChange={onInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent bg-white text-[#000000] placeholder-gray-500 ${
-                  errors.cvv ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="123"
-              />
-              {errors.cvv && <p className="text-red-500 text-sm mt-1">{errors.cvv}</p>}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {formData.paymentMethod === 'paypal' && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-800">
-            After clicking "Place Order", you will be redirected to PayPal to complete your payment securely.
-          </p>
-        </div>
-      )}
-
-      {formData.paymentMethod === 'eft' && (
-        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-          <p className="text-sm text-orange-800 mb-2">
-            Bank transfer details will be provided after order confirmation.
-          </p>
-          <p className="text-xs text-orange-700">
-            Your order will be processed once payment is received (usually within 24 hours).
-          </p>
-        </div>
-      )}
 
       <div className="mt-6">
         <div className="mb-4">

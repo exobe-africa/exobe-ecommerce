@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { getApolloClient } from "../lib/apollo/client";
 import { DASHBOARD_MY_ORDERS } from "../lib/api/dashboard";
+import { CREATE_ORDER } from "../lib/api/orders";
 
 export interface OrderItem {
   id: number;
@@ -36,9 +37,11 @@ export interface Order {
 interface OrdersState {
   // Data
   orders: Order[];
+  lastOrder?: any;
   
   // UI state
   isLoading: boolean;
+  isPlacing: boolean;
   error: string | null;
   
   // Actions
@@ -47,12 +50,15 @@ interface OrdersState {
   
   // GraphQL operations
   fetchOrders: () => Promise<{ success: boolean; error?: string }>;
+  placeOrder: (input: any) => Promise<{ success: boolean; order?: any; error?: string }>;
 }
 
 export const useOrdersStore = create<OrdersState>((set, get) => ({
   // Initial state
   orders: [],
+  lastOrder: undefined,
   isLoading: false,
+  isPlacing: false,
   error: null,
 
   // Setters
@@ -104,6 +110,26 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
     } catch (error: any) {
       const message = error?.message || 'Failed to fetch orders';
       set({ error: message, isLoading: false });
+      return { success: false, error: message };
+    }
+  },
+
+  // Create order (moved from component)
+  placeOrder: async (input: any) => {
+    set({ isPlacing: true, error: null });
+    try {
+      const client = getApolloClient();
+      const { data } = await client.mutate({
+        mutation: CREATE_ORDER,
+        variables: { input }
+      });
+      const order = (data as any)?.createOrder;
+      if (!order) throw new Error('Order not created');
+      set({ lastOrder: order, isPlacing: false });
+      return { success: true, order };
+    } catch (error: any) {
+      const message = error?.message || 'Failed to place order';
+      set({ error: message, isPlacing: false });
       return { success: false, error: message };
     }
   }
