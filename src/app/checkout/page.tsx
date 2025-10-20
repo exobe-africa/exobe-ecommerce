@@ -15,11 +15,15 @@ import GuestCheckoutModal from '../../components/pages/checkout/GuestCheckoutMod
 import AddressSelectionModal from '../../components/pages/checkout/AddressSelectionModal';
 import { useCart } from '../../context/CartContext';
 import { useUser } from '../../context/UserContext';
+import { useAuthStore } from '../../store/auth';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { state, clearCart } = useCart();
-  const { user, addresses, isLoggedIn } = useUser();
+  const { user: userCtx, addresses, isLoggedIn: isLoggedInCtx } = useUser();
+  const { user: authUser, isAuthenticated, hasHydrated: authHasHydrated } = useAuthStore();
+  const isLoggedIn = isAuthenticated || isLoggedInCtx;
+  const [uiAddresses, setUiAddresses] = useState<any[]>([]);
   
   const [currentStep, setCurrentStep] = useState(1);
   const [showGuestModal, setShowGuestModal] = useState(false);
@@ -62,45 +66,96 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
+  const [isLoadingUserData, setIsLoadingUserData] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+  const [hasAutoFilledAddress, setHasAutoFilledAddress] = useState(false);
+  useEffect(() => setHasMounted(true), []);
 
-  // Auto-populate form data for logged-in users
   useEffect(() => {
-    if (isLoggedIn && user) {
-      const [firstName, ...lastNameParts] = user.name.split(' ');
+    if (!isLoggedIn) {
+      setUiAddresses([]);
+      return;
+    }
+    if (addresses && addresses.length > 0) {
+      setUiAddresses(addresses);
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('exobeUserAddresses');
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) setUiAddresses(parsed);
+      } catch (_) {
+        setUiAddresses([]);
+      }
+    }
+  }, [isLoggedIn, addresses]);
+
+  useEffect(() => {
+    if (isLoggedIn && (authUser || userCtx)) {
+      setIsLoadingUserData(true);
+      
+      const fullName = (authUser?.name || userCtx?.name || '').trim();
+      const [firstName, ...lastNameParts] = fullName.split(' ');
       const lastName = lastNameParts.join(' ');
       
       setFormData(prev => ({
         ...prev,
         firstName: firstName || '',
         lastName: lastName || '',
-        email: user.email || '',
-        phone: user.phone || '',
+        email: (authUser?.email || (userCtx as any)?.email || ''),
+        phone: (authUser?.phone || (userCtx as any)?.phone || ''),
       }));
 
-      // Auto-select default address if available
-      const defaultAddress = addresses.find(addr => addr.isDefault);
+      const source = (uiAddresses && uiAddresses.length > 0) ? uiAddresses : (addresses || []);
+      const defaultAddress = source?.find((addr: any) => addr.isDefault) || source?.[0];
       if (defaultAddress) {
         setSelectedAddressId(defaultAddress.id);
         setFormData(prev => ({
           ...prev,
-          address: defaultAddress.street,
+          address: defaultAddress.street || defaultAddress.address || '',
           city: defaultAddress.city,
           province: defaultAddress.province,
           postalCode: defaultAddress.postalCode,
         }));
       }
+      
+      setTimeout(() => {
+        setIsLoadingUserData(false);
+      }, 500);
     }
-  }, [isLoggedIn, user, addresses]);
+  }, [isLoggedIn, authUser, userCtx]);
 
-  // Show guest modal for non-logged-in users (only if they haven't declined before)
   useEffect(() => {
-    if (!isLoggedIn && !showGuestModal && !hasDeclinedGuestModal && state.items.length > 0) {
+    if (!isLoggedIn) return;
+    const source = (uiAddresses && uiAddresses.length > 0) ? uiAddresses : (addresses || []);
+    if (!source || source.length === 0) return;
+    if (hasAutoFilledAddress) return;
+    const defaultAddress = source.find((a: any) => a.isDefault) || source[0];
+    if (!defaultAddress) return;
+    setSelectedAddressId(defaultAddress.id);
+    setFormData(prev => ({
+      ...prev,
+      address: defaultAddress.street || defaultAddress.address || '',
+      city: defaultAddress.city || '',
+      province: defaultAddress.province || '',
+      postalCode: defaultAddress.postalCode || '',
+    }));
+    setHasAutoFilledAddress(true);
+  }, [isLoggedIn, uiAddresses, addresses, hasAutoFilledAddress]);
+
+  useEffect(() => {
+    if (!isLoggedIn && hasMounted && authHasHydrated && !showGuestModal && !hasDeclinedGuestModal && state.items.length > 0) {
       const timer = setTimeout(() => {
         setShowGuestModal(true);
       }, 1000); // Show after 1 second
       return () => clearTimeout(timer);
     }
-  }, [isLoggedIn, showGuestModal, hasDeclinedGuestModal, state.items.length]);
+    if (isLoggedIn) {
+      setShowGuestModal(false);
+      setHasDeclinedGuestModal(true);
+    }
+  }, [isLoggedIn, showGuestModal, hasDeclinedGuestModal, state.items.length, hasMounted, authHasHydrated]);
 
   useEffect(() => {
     if (state.items.length === 0 && !orderComplete) {
@@ -130,11 +185,19 @@ export default function CheckoutPage() {
     setFormData(prev => ({
       ...prev,
       address: address.street,
-      apartment: '', // Reset apartment as it's not stored in saved addresses
+      apartment: '',
       city: address.city,
       province: address.province,
       postalCode: address.postalCode,
     }));
+  };
+
+  const handleAddressDropdownChange = (addressId: number) => {
+    const list = (uiAddresses && uiAddresses.length > 0) ? uiAddresses : (addresses || []);
+    const selectedAddress = list.find((addr: any) => addr.id === addressId);
+    if (selectedAddress) {
+      handleAddressSelect(selectedAddress);
+    }
   };
 
   const handleContinueAsGuest = () => {
@@ -218,6 +281,41 @@ export default function CheckoutPage() {
     );
   }
 
+  // Prevent hydration mismatches by rendering a lightweight skeleton
+  // until the component has mounted on the client (cart/user state is ready)
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div className="h-6 w-40 bg-gray-200 rounded mb-6 animate-pulse" />
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div className="h-12 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-12 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                ))}
+                <div className="h-24 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div className="h-6 w-32 bg-gray-200 rounded mb-4 animate-pulse" />
+                <div className="space-y-3">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-6 bg-gray-200 rounded animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       
@@ -235,9 +333,11 @@ export default function CheckoutPage() {
                 onPhoneChange={handlePhoneChange}
                 onCheckboxChange={handleCheckboxChange}
                 isLoggedIn={isLoggedIn}
-                userAddresses={addresses}
+                userAddresses={uiAddresses}
                 onSelectAddress={() => setShowAddressModal(true)}
+                onAddressDropdownChange={handleAddressDropdownChange}
                 showGuestPrompt={hasDeclinedGuestModal}
+                isLoadingData={isLoadingUserData}
               />
             )}
 
@@ -279,17 +379,17 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* Guest Checkout Modal */}
-      <GuestCheckoutModal
-        isOpen={showGuestModal}
-        onClose={() => {
-          setShowGuestModal(false);
-          setHasDeclinedGuestModal(true);
-        }}
-        onContinueAsGuest={handleContinueAsGuest}
-      />
+      {!isLoggedIn && (
+        <GuestCheckoutModal
+          isOpen={showGuestModal}
+          onClose={() => {
+            setShowGuestModal(false);
+            setHasDeclinedGuestModal(true);
+          }}
+          onContinueAsGuest={handleContinueAsGuest}
+        />
+      )}
 
-      {/* Address Selection Modal */}
       <AddressSelectionModal
         isOpen={showAddressModal}
         onClose={() => setShowAddressModal(false)}

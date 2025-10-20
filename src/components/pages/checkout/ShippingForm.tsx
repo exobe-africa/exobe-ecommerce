@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import { Truck, User, Mail, MapPin, ChevronDown, Star, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { Checkbox, PhoneInput } from '../../common/index';
@@ -41,7 +42,9 @@ interface ShippingFormProps {
   isLoggedIn?: boolean;
   userAddresses?: Address[];
   onSelectAddress?: () => void;
+  onAddressDropdownChange?: (addressId: number) => void;
   showGuestPrompt?: boolean;
+  isLoadingData?: boolean;
 }
 
 const ShippingForm: React.FC<ShippingFormProps> = ({
@@ -57,8 +60,76 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
   isLoggedIn = false,
   userAddresses = [],
   onSelectAddress,
+  onAddressDropdownChange,
   showGuestPrompt = false,
+  isLoadingData = false,
 }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  // Show skeleton loader if logged in and loading data
+  if (isLoggedIn && isLoadingData) {
+    return (
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="h-7 w-48 bg-gray-200 rounded animate-pulse" />
+          <div className="h-10 w-32 bg-gray-200 rounded-xl animate-pulse" />
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          {[1, 2].map((i) => (
+            <div key={i}>
+              <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse" />
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse" />
+            </div>
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          {[1, 2].map((i) => (
+            <div key={i}>
+              <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse" />
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse" />
+            </div>
+          ))}
+        </div>
+        
+        <div className="mb-6">
+          <div className="h-4 w-24 bg-gray-200 rounded mb-2 animate-pulse" />
+          <div className="h-12 bg-gray-200 rounded-lg animate-pulse" />
+        </div>
+        
+        <div className="mb-6">
+          <div className="h-4 w-40 bg-gray-200 rounded mb-2 animate-pulse" />
+          <div className="h-12 bg-gray-200 rounded-lg animate-pulse" />
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i}>
+              <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse" />
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse" />
+            </div>
+          ))}
+        </div>
+        
+        <div className="mb-6">
+          <div className="h-4 w-40 bg-gray-200 rounded mb-2 animate-pulse" />
+          <div className="h-24 bg-gray-200 rounded-lg animate-pulse" />
+        </div>
+        
+        <div className="space-y-3">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex items-center">
+              <div className="h-5 w-5 bg-gray-200 rounded animate-pulse mr-3" />
+              <div className="h-4 w-48 bg-gray-200 rounded animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -66,29 +137,40 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
           <Truck className="h-6 w-6 mr-2 text-[#C8102E]" />
           Shipping Information
         </h2>
-        
-        {/* Address Selection Button for Logged In Users */}
-        {isLoggedIn && userAddresses.length > 0 && onSelectAddress && (
-          <button
-            type="button"
-            onClick={onSelectAddress}
-            className="flex items-center space-x-2 px-4 py-2 bg-[#F6E2E0] text-[#C8102E] rounded-xl font-medium hover:bg-[#C8102E] hover:text-white transition-colors"
-          >
-            <MapPin className="h-4 w-4" />
-            <span>Choose Address</span>
-            <ChevronDown className="h-4 w-4" />
-          </button>
-        )}
       </div>
 
-      {/* Guest User Prompt */}
+      {mounted && userAddresses.length > 0 && onAddressDropdownChange && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-[#000000] mb-2">
+            Saved Addresses
+          </label>
+          <div className="relative">
+            <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-[#4A4A4A]" />
+            <select
+              onChange={(e) => onAddressDropdownChange(Number(e.target.value))}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-transparent bg-white text-[#000000] appearance-none cursor-pointer"
+              defaultValue={userAddresses.find(addr => addr.isDefault)?.id || userAddresses[0]?.id}
+            >
+              {userAddresses.map((address) => (
+                <option key={address.id} value={address.id}>
+                  {address.name} - {address.street}, {address.city}
+                  {address.isDefault && ' (Default)'}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-3.5 h-5 w-5 text-[#4A4A4A] pointer-events-none" />
+          </div>
+          <p className="text-xs text-[#4A4A4A] mt-1">
+            Select a saved address or modify the details below
+          </p>
+        </div>
+      )}
+
       {!isLoggedIn && showGuestPrompt && (
         <div className="mb-6 relative overflow-hidden">
-          {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl"></div>
           <div className="absolute inset-0 bg-white/40 rounded-2xl"></div>
           
-          {/* Content */}
           <div className="relative p-5 sm:p-6 border border-blue-100 rounded-2xl backdrop-blur-sm">
             <div className="text-center mb-4">
               <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-3 shadow-lg">
@@ -102,7 +184,6 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
               </p>
             </div>
 
-            {/* Benefits */}
             <div className="grid grid-cols-3 gap-3 mb-5">
               <div className="text-center">
                 <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-2">
@@ -124,7 +205,6 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="space-y-3">
               <Link href="/auth/register" className="block">
                 <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]">
@@ -138,7 +218,6 @@ const ShippingForm: React.FC<ShippingFormProps> = ({
               </Link>
             </div>
 
-            {/* Trust indicators */}
             <div className="mt-4 pt-4 border-t border-blue-100">
               <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
                 <span className="flex items-center">
