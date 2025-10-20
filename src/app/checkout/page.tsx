@@ -203,8 +203,7 @@ export default function CheckoutPage() {
 
   const subtotal = state.totalPrice;
   const shipping = subtotal >= 499 ? 0 : 99;
-  const tax = subtotal * 0.15;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + shipping;
 
   const provinces = [
     'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 
@@ -274,7 +273,6 @@ export default function CheckoutPage() {
               items={state.items}
               subtotal={subtotal}
               shipping={shipping}
-              tax={tax}
               total={total}
             />
           </div>

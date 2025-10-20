@@ -70,8 +70,13 @@ const CartItemsList: React.FC<CartItemsListProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
               <div className="relative flex-shrink-0">
                 <Link href={`/product/${item.id}`} className="block">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
-                    <span className="text-2xl sm:text-3xl">{item.image}</span>
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform overflow-hidden">
+                    {item.image && (item.image.startsWith('http') || item.image.startsWith('/')) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-2xl sm:text-3xl">{item.image}</span>
+                    )}
                   </div>
                 </Link>
                 <button

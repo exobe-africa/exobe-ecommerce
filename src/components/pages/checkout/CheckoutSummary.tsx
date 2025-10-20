@@ -36,7 +36,6 @@ interface CheckoutSummaryProps {
   items: CartItem[];
   subtotal: number;
   shipping: number;
-  tax: number;
   total: number;
   freeShippingThreshold?: number;
 }
@@ -45,7 +44,6 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
   items,
   subtotal,
   shipping,
-  tax,
   total,
   freeShippingThreshold = 499,
 }) => {
@@ -59,8 +57,13 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
       <div className="space-y-5 mb-6">
         {items.map((item) => (
           <div key={item.uniqueId || item.id} className="flex items-start space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">{item.image}</span>
+            <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+              {item.image && (item.image.startsWith('http') || item.image.startsWith('/')) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-2xl">{item.image}</span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-[#000000] leading-tight mb-1">{item.name}</h4>
@@ -106,10 +109,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
           </span>
         </div>
         
-        <div className="flex justify-between text-sm">
-          <span className="text-[#4A4A4A]">VAT (15%)</span>
-          <span className="text-[#000000]">R{tax.toFixed(2)}</span>
-        </div>
+        
         
         <div className="border-t border-gray-200 pt-2">
           <div className="flex justify-between text-lg font-semibold">

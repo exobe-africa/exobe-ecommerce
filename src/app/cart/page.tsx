@@ -37,8 +37,7 @@ export default function CartPage() {
 
   const subtotal = state.totalPrice;
   const shipping = subtotal >= 499 ? 0 : 99;
-  const tax = subtotal * 0.15;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + shipping;
 
   const suggestedProducts = [
     { id: 101, name: "Wireless Earbuds", price: 899, image: "🎧", category: "Electronics" },
@@ -73,14 +72,13 @@ export default function CartPage() {
               onClearCart={() => setShowClearConfirm(true)}
             />
 
-            <SuggestedProducts products={suggestedProducts} />
+            {/* <SuggestedProducts products={suggestedProducts} /> */}
           </div>
 
           <div className="lg:col-span-1">
             <OrderSummary
               subtotal={subtotal}
               shipping={shipping}
-              tax={tax}
               total={total}
               totalItems={state.totalItems}
             />

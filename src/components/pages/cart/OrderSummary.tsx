@@ -6,7 +6,6 @@ import { ArrowRight, ArrowLeft, Tag, Shield, Truck, Clock } from 'lucide-react';
 interface OrderSummaryProps {
   subtotal: number;
   shipping: number;
-  tax: number;
   total: number;
   totalItems: number;
 }
@@ -14,7 +13,6 @@ interface OrderSummaryProps {
 const OrderSummary: React.FC<OrderSummaryProps> = ({
   subtotal,
   shipping,
-  tax,
   total,
   totalItems,
 }) => {
@@ -36,11 +34,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           <span className={`font-medium ${shipping === 0 ? 'text-green-600' : 'text-[#000000]'}`}>
             {shipping === 0 ? 'FREE' : `R${shipping.toFixed(2)}`}
           </span>
-        </div>
-        
-        <div className="flex justify-between text-sm">
-          <span className="text-[#4A4A4A]">VAT (15%)</span>
-          <span className="text-[#000000] font-medium">R{tax.toFixed(2)}</span>
         </div>
         
         <div className="border-t border-gray-200 pt-4">
