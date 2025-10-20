@@ -24,7 +24,6 @@ interface ProductDetailsProps {
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, currentLocations }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Determine if description is long (more than 300 characters)
   const isLongDescription = product.description && product.description.length > 300;
   const displayDescription = isLongDescription && !isExpanded 
     ? product.description.slice(0, 300) + '...' 
@@ -32,7 +31,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, 
 
   return (
     <div className="space-y-6">
-      {/* Product Title & Rating */}
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold text-[#000000] mb-2">{product.name}</h1>
         {product.reviews > 0 && (

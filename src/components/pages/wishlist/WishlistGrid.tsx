@@ -64,7 +64,7 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
         return (
         <ProductCard
           key={item.id}
-          id={item.id}
+          id={item.product_id}
           name={name}
           price={price}
           originalPrice={originalPrice}

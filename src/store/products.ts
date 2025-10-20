@@ -103,7 +103,6 @@ export const useProductsStore = create<ProductsState>()(
           return null;
         }
 
-        // Group variant options for the UI VariantSelector
         let grouped: Record<string, Array<{ name: string; value: string; price?: number; stock?: number }>> | undefined;
         if (Array.isArray(p.options) && p.options.length > 0) {
           grouped = {};
@@ -155,5 +154,3 @@ export const useProductsStore = create<ProductsState>()(
     },
   }))
 );
-
-

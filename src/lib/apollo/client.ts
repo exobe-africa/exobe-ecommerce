@@ -43,8 +43,6 @@ function createApolloClient() {
 
   const authLink = setContext((_, { headers }) => {
     const token = useAuthStore.getState().user?.token;
-    console.log('Apollo authLink - token:', token);
-    console.log('Apollo authLink - user:', useAuthStore.getState().user);
     return {
       headers: {
         ...headers,

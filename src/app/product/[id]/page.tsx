@@ -88,7 +88,7 @@ export default function ProductPage() {
           return count > 0;
         })(),
         stockCount: ((apiProduct as any)?.stock ?? (apiProduct as any)?.stockQuantity ?? apiProduct?.variants?.[0]?.stock ?? 0) as number,
-        rating: 4.8,
+        rating: 0,
         reviews: 0,
         description: apiProduct?.description || '',
         features: [],
@@ -96,6 +96,7 @@ export default function ProductPage() {
         variants: apiProduct?.groupedVariantOptions as unknown as ProductVariants | undefined,
       }
     : undefined as any;
+
 
   useEffect(() => {
     if (typeof params.id === 'string') {
@@ -148,7 +149,7 @@ export default function ProductPage() {
 
     if (apiProduct.groupedVariantOptions && Object.keys(apiProduct.groupedVariantOptions).length > 0) {
       const initialVariants: Record<string, string> = {};
-      let basePrice = apiProduct.price || 0;
+      let basePrice = apiProduct.variants?.[0]?.price || apiProduct.price || 0;
       let baseStock = (((apiProduct as any)?.stock ?? (apiProduct as any)?.stockQuantity) ?? apiProduct.variants?.[0]?.stock ?? 0) as number;
       let baseImage = apiProduct.media?.[0] || '';
 
@@ -175,7 +176,9 @@ export default function ProductPage() {
       setCurrentLocations(calculateCurrentLocations(initialVariants));
     } else if (apiProduct) {
       setCurrentImage(apiProduct.media?.[0] || '');
-      setCurrentPrice(apiProduct.price || 0);
+      // Use the correct price from the API product - check variants first, then product level
+      const correctPrice = apiProduct.variants?.[0]?.price || apiProduct.price || 0;
+      setCurrentPrice(correctPrice);
       setCurrentStock((((apiProduct as any)?.stock ?? (apiProduct as any)?.stockQuantity) ?? apiProduct.variants?.[0]?.stock ?? 0) as number);
       setCurrentLocations(apiProduct.availableLocations || []);
     }
@@ -215,23 +218,21 @@ export default function ProductPage() {
       
       setCurrentPrice(newPrice);
       
-      // Update stock
       if (variantOption.stock !== undefined) {
         setCurrentStock(variantOption.stock);
       }
     }
     
-    // Update current locations based on all selected variants
     setCurrentLocations(calculateCurrentLocations(newVariants));
   };
 
-  // Don't show anything until we have at least attempted to load
   if (!isLoadingProduct && !product) {
     return (
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-[#000000] mb-4">Product Not Found</h1>
           <p className="text-[#4A4A4A]">The product you're looking for doesn't exist.</p>
+          <p className="text-sm text-gray-500 mt-2">Product ID: {params.id}</p>
         </div>
       </div>
     );
@@ -277,19 +278,17 @@ export default function ProductPage() {
       });
     }
     
-    // Toast removed - cart drawer opens automatically
   };
 
   const handleWishlistToggle = async () => {
     if (!product) return;
 
-    // Always check authentication first
     if (!isAuthenticated) {
       openAuthModal({ type: 'add', productId: product.id });
       return;
     }
 
-    const variantId = undefined; // product-level wishlist by default
+    const variantId = undefined;
     setIsWishlistLoading(true);
     try {
       if (isInWishlist(product.id, variantId)) {
@@ -329,8 +328,6 @@ export default function ProductPage() {
 
   const sampleReviews: any[] = [];
 
-
-  // Review functions
   const handleWriteReview = () => {
     if (!isLoggedIn) {
       console.log('Redirecting to login...');
@@ -355,7 +352,6 @@ export default function ProductPage() {
     router.push('/auth/login');
   };
 
-  // Show skeleton loader while loading
   if (isLoadingProduct) {
     return (
       <div className="min-h-screen bg-white">
@@ -380,36 +376,28 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Product Details Skeleton */}
             <div className="space-y-6">
-              {/* Title */}
               <div className="h-8 bg-gray-200 rounded w-3/4 animate-pulse" />
               
-              {/* Rating */}
               <div className="flex items-center gap-2">
                 <div className="h-5 w-32 bg-gray-200 rounded animate-pulse" />
                 <div className="h-5 w-24 bg-gray-200 rounded animate-pulse" />
               </div>
 
-              {/* Price */}
               <div className="h-10 w-40 bg-gray-200 rounded animate-pulse" />
 
-              {/* Stock Status */}
               <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
 
-              {/* Quantity */}
               <div>
                 <div className="h-4 w-20 bg-gray-200 rounded mb-2 animate-pulse" />
                 <div className="h-12 w-40 bg-gray-200 rounded animate-pulse" />
               </div>
 
-              {/* Buttons */}
               <div className="space-y-3">
                 <div className="h-14 bg-gray-200 rounded-full animate-pulse" />
                 <div className="h-14 bg-gray-200 rounded-full animate-pulse" />
               </div>
 
-              {/* Trust Badges */}
               <div className="grid grid-cols-3 gap-4 pt-6">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} className="flex flex-col items-center gap-2">

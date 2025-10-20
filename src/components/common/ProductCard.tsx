@@ -207,8 +207,13 @@ const ProductCard = ({
         <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group flex items-center p-4 ${className}`}>
           <div className="flex-shrink-0 mr-4">
             <Link href={`/product/${id}`}>
-              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer">
-                <span className="text-3xl">{image}</span>
+              <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer overflow-hidden">
+                {image && (image.startsWith('http') || image.startsWith('/')) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={image} alt={name} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-3xl">{image}</span>
+                )}
               </div>
             </Link>
           </div>
@@ -665,8 +670,13 @@ const ProductCard = ({
         <>
         <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-lg transition-all duration-300 ${className}`}>
           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <div className="relative w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer" onClick={() => window.location.href = `/product/${id}`}>
-              <span className="text-2xl">{image}</span>
+            <div className="relative w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer overflow-hidden" onClick={() => window.location.href = `/product/${id}`}>
+              {image && (image.startsWith('http') || image.startsWith('/')) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-2xl">{image}</span>
+              )}
               {!inStock && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
                   <span className="text-white text-xs font-semibold">Out of Stock</span>
@@ -681,14 +691,16 @@ const ProductCard = ({
                 </h3>
               </Link>
               
-              <div className="flex items-center mb-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-                <span className="text-sm text-[#4A4A4A] ml-2">
-                  ({reviews} reviews)
-                </span>
-              </div>
+              {reviews > 0 && (
+                <div className="flex items-center mb-2">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                  <span className="text-sm text-[#4A4A4A] ml-2">
+                    ({reviews} reviews)
+                  </span>
+                </div>
+              )}
               
               <div className="flex items-center space-x-4 mb-2">
                 <div>
@@ -812,14 +824,16 @@ const ProductCard = ({
             </h3>
           </Link>
           
-          <div className="flex items-center mb-2 sm:mb-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-            ))}
-            <span className="text-xs sm:text-sm text-[#4A4A4A] ml-1 sm:ml-2">
-              ({reviews || 0})
-            </span>
-          </div>
+          {reviews > 0 && (
+            <div className="flex items-center mb-2 sm:mb-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+              ))}
+              <span className="text-xs sm:text-sm text-[#4A4A4A] ml-1 sm:ml-2">
+                ({reviews || 0})
+              </span>
+            </div>
+          )}
           
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div>
