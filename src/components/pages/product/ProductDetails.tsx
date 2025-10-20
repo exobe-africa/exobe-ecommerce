@@ -1,7 +1,8 @@
 "use client";
 
-import { Star } from 'lucide-react';
+import { Star, ChevronDown, ChevronUp } from 'lucide-react';
 import LocationChips from '../../common/LocationChips';
+import { useState } from 'react';
 
 interface Product {
   id: string;
@@ -21,6 +22,14 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, currentLocations }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Determine if description is long (more than 300 characters)
+  const isLongDescription = product.description && product.description.length > 300;
+  const displayDescription = isLongDescription && !isExpanded 
+    ? product.description.slice(0, 300) + '...' 
+    : product.description;
+
   return (
     <div className="space-y-6">
       {/* Product Title & Rating */}
@@ -45,7 +54,27 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, 
             </div>
           </div>
         )}
-        <p className="text-[#4A4A4A] leading-relaxed">{product.description}</p>
+        <div className="space-y-2">
+          <p className="text-[#4A4A4A] leading-relaxed">{displayDescription}</p>
+          {isLongDescription && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex items-center text-[#C8102E] hover:text-[#A00E26] font-medium text-sm transition-colors"
+            >
+              {isExpanded ? (
+                <>
+                  <span>Read Less</span>
+                  <ChevronUp className="h-4 w-4 ml-1" />
+                </>
+              ) : (
+                <>
+                  <span>Read More</span>
+                  <ChevronDown className="h-4 w-4 ml-1" />
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Location Availability */}
