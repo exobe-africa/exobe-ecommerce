@@ -9,12 +9,13 @@ import {
   TrackingInstructions,
   SupportSection,
   Order,
-  mockOrders
+  
 } from '@/components/pages/track-order';
 
 export default function TrackOrderPage() {
   const [foundOrder, setFoundOrder] = useState<Order | null>(null);
   const [showAccountBenefits, setShowAccountBenefits] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOrderFound = (order: Order) => {
     setFoundOrder(order);
@@ -34,10 +35,30 @@ export default function TrackOrderPage() {
         <OrderSearchForm 
           onOrderFound={handleOrderFound}
           onError={handleError}
-          mockOrders={mockOrders}
+          onLoadingChange={setIsLoading}
         />
 
-        {foundOrder && <OrderResults order={foundOrder} />}
+        {isLoading && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mb-8">
+            <div className="p-6 sm:p-8 border-b border-gray-200">
+              <div className="h-6 w-48 bg-gray-200 rounded mb-2 animate-pulse" />
+              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+            </div>
+            <div className="p-6 sm:p-8 border-b border-gray-200">
+              <div className="h-4 w-24 bg-gray-200 rounded mb-4 animate-pulse" />
+              <div className="space-y-2">
+                <div className="h-3 w-full bg-gray-200 rounded animate-pulse" />
+                <div className="h-3 w-5/6 bg-gray-200 rounded animate-pulse" />
+                <div className="h-3 w-4/6 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+            <div className="p-6 sm:p-8">
+              <div className="h-10 bg-gray-200 rounded animate-pulse" />
+            </div>
+          </div>
+        )}
+
+        {foundOrder && !isLoading && <OrderResults order={foundOrder} />}
 
         {showAccountBenefits && <AccountBenefits />}
 

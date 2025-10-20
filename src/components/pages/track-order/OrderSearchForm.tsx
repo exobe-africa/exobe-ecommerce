@@ -3,14 +3,16 @@
 import { useState } from 'react';
 import { Search, AlertCircle } from 'lucide-react';
 import { Order } from './types';
+import { getApolloClient } from '@/lib/apollo/client';
+import { TRACK_ORDER } from '@/lib/api/orders';
 
 interface OrderSearchFormProps {
   onOrderFound: (order: Order) => void;
   onError: (error: string) => void;
-  mockOrders: Order[];
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
-export default function OrderSearchForm({ onOrderFound, onError, mockOrders }: OrderSearchFormProps) {
+export default function OrderSearchForm({ onOrderFound, onError, onLoadingChange }: OrderSearchFormProps) {
   const [orderNumber, setOrderNumber] = useState('');
   const [email, setEmail] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -19,25 +21,54 @@ export default function OrderSearchForm({ onOrderFound, onError, mockOrders }: O
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSearching(true);
+    onLoadingChange?.(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      const order = mockOrders.find(o => 
-        o.id.toLowerCase() === orderNumber.toLowerCase() ||
-        o.trackingNumber?.toLowerCase() === orderNumber.toLowerCase()
-      );
-
-      if (order) {
-        onOrderFound(order);
-        setError('');
-      } else {
-        const errorMessage = 'Order not found. Please check your order number and email address.';
-        setError(errorMessage);
-        onError(errorMessage);
-      }
+    try {
+      const client = getApolloClient();
+      const { data } = await client.query({
+        query: TRACK_ORDER,
+        variables: { orderNumber, email },
+        fetchPolicy: 'network-only'
+      });
+      const o = (data as any)?.trackOrder;
+      if (!o) throw new Error('Order not found. Please check your order number and email address.');
+      const order: Order = {
+        id: o.order_number || o.id,
+        date: o.created_at ? new Date(o.created_at).toISOString() : new Date().toISOString(),
+        status: (o.status || 'processing').toLowerCase(),
+        total: (o.total_cents ?? 0) / 100,
+        items: (o.items || []).map((it: any, idx: number) => ({
+          id: idx + 1,
+          name: it.title,
+          imageUrl: it.product?.media?.[0]?.url || '',
+          price: (it.price_cents ?? 0) / 100,
+          quantity: it.quantity ?? 1,
+          variant: it.attributes ? Object.values(it.attributes).join(', ') : undefined,
+        })),
+        trackingNumber: o.tracking_number ?? null,
+        shippingAddress: {
+          name: `${o.shipping_address?.first_name ?? ''} ${o.shipping_address?.last_name ?? ''}`.trim() || 'N/A',
+          street: o.shipping_address?.address ?? o.shipping_address?.address_line_1 ?? 'N/A',
+          city: o.shipping_address?.city ?? 'N/A',
+          province: o.shipping_address?.province ?? 'N/A',
+          postalCode: o.shipping_address?.postal_code ?? 'N/A',
+        },
+        paymentMethod: '—',
+        subtotal: (o.subtotal_cents ?? 0) / 100,
+        shipping: (o.shipping_cents ?? 0) / 100,
+        tax: (o.vat_cents ?? 0) / 100,
+        estimatedDelivery: undefined,
+      };
+      onOrderFound(order);
+    } catch (err: any) {
+      const msg = err?.message || 'Failed to fetch order. Please try again.';
+      setError(msg);
+      onError(msg);
+    } finally {
       setIsSearching(false);
-    }, 1000);
+      onLoadingChange?.(false);
+    }
   };
 
   return (

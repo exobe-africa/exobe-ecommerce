@@ -1,6 +1,7 @@
 "use client";
 
 import { Package } from 'lucide-react';
+import Image from 'next/image';
 import { Order } from './types';
 import { formatCurrency } from './utils';
 
@@ -15,8 +16,18 @@ export default function OrderItems({ order }: OrderItemsProps) {
       <div className="space-y-4">
         {order.items.map((item) => (
           <div key={item.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-              <Package className="h-8 w-8 text-gray-400" />
+            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+              {item.imageUrl ? (
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Package className="h-8 w-8 text-gray-400" />
+              )}
             </div>
             <div className="flex-1">
               <h4 className="font-medium text-[#000000]">{item.name}</h4>
