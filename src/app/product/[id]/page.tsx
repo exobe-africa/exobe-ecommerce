@@ -288,10 +288,15 @@ export default function ProductPage() {
       return;
     }
 
-    if (isInWishlist(product.id, Object.values(selectedVariants)[0])) {
-      removeFromWishlist(product.id);
+    const variantId = (() => {
+      // If backend variant IDs are not present, fall back to undefined (product-level)
+      return undefined;
+    })();
+
+    if (isInWishlist(product.id, variantId)) {
+      removeFromWishlist(product.id, variantId);
     } else {
-      addToWishlist(product.id, Object.values(selectedVariants)[0]);
+      addToWishlist(product.id, variantId);
     }
   };
 

@@ -146,14 +146,16 @@ export const useWishlistStore = create<WishlistState>()(
 
     if (error && (error.includes('Unauthorized') || error.includes('UNAUTHENTICATED'))) return false;
 
-    if (!wishlist || !wishlist.items) return false;
+    if (!wishlist || !wishlist.items || wishlist.items.length === 0) return false;
 
-    if (wishlist.items.length === 0) return false;
+    if (typeof productVariantId === 'string') {
+      return wishlist.items.some(item =>
+        item.product_id === productId &&
+        (item.product_variant_id ?? null) === (productVariantId ?? null)
+      );
+    }
 
-    return wishlist.items.some(item =>
-      item.product_id === productId &&
-      item.product_variant_id === productVariantId
-    );
+    return wishlist.items.some(item => item.product_id === productId);
   },
 
   clearWishlistState: () => {
