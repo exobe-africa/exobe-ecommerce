@@ -43,7 +43,7 @@ const filterOptions = [
 
 export default function WishlistPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, hasHydrated } = useAuthStore();
   const {
     wishlist,
     isLoading,
@@ -60,10 +60,12 @@ export default function WishlistPage() {
 
   // Check authentication and redirect if not authenticated
   useEffect(() => {
+    // Wait for hydration to complete before checking authentication
+    if (!hasHydrated) return;
+    
     if (!isAuthenticated) {
-      // Redirect back to where they came from (or home if no referrer)
-      const referrer = document.referrer || '/';
-      router.replace(referrer);
+      // Redirect to home page with a message
+      router.push('/');
       return;
     }
 
@@ -73,7 +75,7 @@ export default function WishlistPage() {
       await fetchWishlist();
     };
     loadWishlist();
-  }, [isAuthenticated, router, fetchWishlist]);
+  }, [hasHydrated, isAuthenticated, router, fetchWishlist]);
 
   // Remove modal logic since we redirect instead
   const [isClient, setIsClient] = useState(false);
@@ -159,30 +161,75 @@ export default function WishlistPage() {
     }
   };
 
-  // Show loading state during hydration
-  if (!isClient) {
+  // Show loading state during hydration or data fetch
+  if (!isClient || !hasHydrated || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
+        {/* Header Skeleton */}
+        <section className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Breadcrumb Skeleton */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+            </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/6 mb-8"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white rounded-2xl p-4 h-96">
-                  <div className="bg-gray-200 rounded-xl h-48 mb-4"></div>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                  </div>
+            {/* Page Header Skeleton */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-2xl animate-pulse" />
+                <div>
+                  <div className="h-8 w-48 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
                 </div>
-              ))}
+              </div>
+              <div className="hidden md:flex gap-3">
+                <div className="h-12 w-40 bg-gray-200 rounded-full animate-pulse" />
+                <div className="h-12 w-32 bg-gray-200 rounded-full animate-pulse" />
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
+        {/* Content Skeleton */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Toolbar Skeleton */}
+          <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow-sm">
+            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
+            <div className="flex gap-3">
+              <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
+              <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
+              <div className="h-10 w-24 bg-gray-200 rounded animate-pulse" />
+            </div>
+          </div>
+
+          {/* Grid Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200">
+                <div className="bg-gray-200 h-48 animate-pulse" />
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 bg-gray-200 rounded-full animate-pulse" />
+                    <div className="h-3 w-3 bg-gray-200 rounded-full animate-pulse" />
+                    <div className="h-3 w-3 bg-gray-200 rounded-full animate-pulse" />
+                    <div className="h-3 w-3 bg-gray-200 rounded-full animate-pulse" />
+                    <div className="h-3 w-3 bg-gray-200 rounded-full animate-pulse" />
+                  </div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2 animate-pulse" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3 animate-pulse" />
+                  <div className="flex gap-2 pt-2">
+                    <div className="h-10 flex-1 bg-gray-200 rounded-lg animate-pulse" />
+                    <div className="h-10 w-10 bg-gray-200 rounded-lg animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
