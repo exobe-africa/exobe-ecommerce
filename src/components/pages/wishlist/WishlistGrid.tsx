@@ -10,6 +10,7 @@ interface WishlistGridProps {
   totalItems: number;
   onAddToCart: (item: WishlistItem) => void;
   onRemoveFromWishlist: (item: WishlistItem) => void;
+  removingItemId?: string | null;
   onClearFilters: () => void;
 }
 
@@ -19,9 +20,9 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
   totalItems,
   onAddToCart,
   onRemoveFromWishlist,
+  removingItemId,
   onClearFilters
 }) => {
-  // Show no results message if filtered items is empty but total items exist
   if (items.length === 0 && totalItems > 0) {
     return (
       <div className="text-center py-12">
@@ -61,34 +62,38 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({
             addedDate = new Date(createdAtRaw);
           }
         }
+        const isRemoving = removingItemId === item.id;
         return (
-        <ProductCard
+        <div 
           key={item.id}
-          id={item.product_id}
-          name={name}
-          price={price}
-          originalPrice={originalPrice}
-          image={imageUrl}
-          category={category}
-          brand={'eXobe'}
-          rating={0}
-          reviews={0}
-          inStock={true}
-          addedAt={addedDate}
-          variant="wishlist"
-          viewMode={viewMode}
-          description={p?.description || ''}
-          variants={[]}
-          availableLocations={p?.availableLocations || []}
-          onAddToCart={onAddToCart}
-          onQuickViewAddToCart={(product, selectedVariants, quantity, currentLocations) => {
-            // TODO: Implement when product details are available
-            console.log('Quick view add to cart not implemented yet');
-          }}
-          onRemoveFromWishlist={onRemoveFromWishlist}
-          showWishlistDate={true}
-          showQuickActions={true}
-        />
+          className={`transition-opacity duration-200 ${isRemoving ? 'opacity-50 pointer-events-none' : ''}`}
+        >
+          <ProductCard
+            id={item.product_id}
+            name={name}
+            price={0}
+            originalPrice={undefined}
+            image={imageUrl}
+            category={category}
+            brand={'eXobe'}
+            rating={0}
+            reviews={0}
+            inStock={true}
+            addedAt={addedDate}
+            variant="wishlist"
+            viewMode={viewMode}
+            description={p?.description || ''}
+            variants={[]}
+            availableLocations={p?.availableLocations || []}
+            onAddToCart={onAddToCart}
+            onQuickViewAddToCart={(product, selectedVariants, quantity, currentLocations) => {
+              onAddToCart(item);
+            }}
+            onRemoveFromWishlist={() => onRemoveFromWishlist(item)}
+            showWishlistDate={true}
+            showQuickActions={true}
+          />
+        </div>
       )})}
     </div>
   );

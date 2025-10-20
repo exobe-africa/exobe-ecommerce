@@ -57,19 +57,16 @@ export default function WishlistPage() {
   const [filterBy, setFilterBy] = useState('all');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [hasTriedFetch, setHasTriedFetch] = useState(false);
+  const [removingItemId, setRemovingItemId] = useState<string | null>(null);
 
-  // Check authentication and redirect if not authenticated
   useEffect(() => {
-    // Wait for hydration to complete before checking authentication
     if (!hasHydrated) return;
     
     if (!isAuthenticated) {
-      // Redirect to home page with a message
       router.push('/');
       return;
     }
 
-    // Fetch wishlist on component mount and check authentication
     const loadWishlist = async () => {
       setHasTriedFetch(true);
       await fetchWishlist();
@@ -77,16 +74,13 @@ export default function WishlistPage() {
     loadWishlist();
   }, [hasHydrated, isAuthenticated, router, fetchWishlist]);
 
-  // Remove modal logic since we redirect instead
   const [isClient, setIsClient] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  // Ensure client-side rendering to prevent hydration mismatch
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Sort and filter items
   const items = wishlist?.items || [];
   const totalItems = (typeof wishlist?.count === 'number') ? (wishlist?.count as number) : items.length;
   const isEmpty = totalItems === 0;
@@ -94,8 +88,6 @@ export default function WishlistPage() {
   const sortedAndFilteredItems = items
     .filter(item => {
       if (filterBy === 'all') return true;
-      // For now, just return all items since we don't have category/stock info in the new structure
-      // This can be enhanced later when more product details are available
       return true;
     })
     .sort((a, b) => {
@@ -116,7 +108,6 @@ export default function WishlistPage() {
     });
 
   const handleAddToCart = (item: NonNullable<typeof items>[0]) => {
-    // Build a proper cart item from wishlist item's embedded product data
     const p: any = (item as any).product || {};
     const price = typeof p?.priceInCents === 'number'
       ? p.priceInCents / 100
@@ -134,7 +125,6 @@ export default function WishlistPage() {
     const name = p?.title || `Product ${item.product_id}`;
     const category = p?.category?.name || '';
 
-    // Respect stock: reducer will clamp quantity and avoid adding when stock is 0
     addItem({
       id: item.product_id,
       name,
@@ -155,8 +145,15 @@ export default function WishlistPage() {
     });
   };
 
-  const handleRemoveFromWishlist = (item: NonNullable<typeof items>[0]) => {
-    removeFromWishlist(item.product_id, item.product_variant_id || undefined);
+  const handleRemoveFromWishlist = async (item: NonNullable<typeof items>[0]) => {
+    setRemovingItemId(item.id);
+    try {
+      await removeFromWishlist(item.product_id, item.product_variant_id || undefined);
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    } finally {
+      setRemovingItemId(null);
+    }
   };
 
   const handleAddAllToCart = () => {
@@ -169,41 +166,23 @@ export default function WishlistPage() {
   };
 
   const confirmClearWishlist = () => {
-    // Clear all items from wishlist
     sortedAndFilteredItems.forEach(item => {
       removeFromWishlist(item.product_id, item.product_variant_id || undefined);
     });
     setShowClearConfirm(false);
   };
 
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-    } catch (error) {
-      return 'Recently added';
-    }
-  };
-
-  // Show loading state during hydration or data fetch
   if (!isClient || !hasHydrated || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Header Skeleton */}
         <section className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Breadcrumb Skeleton */}
             <div className="flex items-center gap-2 mb-6">
               <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
               <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
               <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
             </div>
 
-            {/* Page Header Skeleton */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-gray-200 rounded-2xl animate-pulse" />
@@ -220,9 +199,7 @@ export default function WishlistPage() {
           </div>
         </section>
 
-        {/* Content Skeleton */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Toolbar Skeleton */}
           <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow-sm">
             <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
             <div className="flex gap-3">
@@ -232,7 +209,6 @@ export default function WishlistPage() {
             </div>
           </div>
 
-          {/* Grid Skeleton */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200">
@@ -266,10 +242,8 @@ export default function WishlistPage() {
     <div className="min-h-screen bg-gray-50">
 
       
-      {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Breadcrumb */}
           <Breadcrumb 
             items={[
               { label: 'Home', href: '/' },
@@ -308,7 +282,6 @@ export default function WishlistPage() {
         </div>
       </section>
 
-      {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {isEmpty ? (
           <EmptyWishlistState />
@@ -336,6 +309,7 @@ export default function WishlistPage() {
               totalItems={totalItems}
               onAddToCart={handleAddToCart}
               onRemoveFromWishlist={handleRemoveFromWishlist}
+              removingItemId={removingItemId}
               onClearFilters={() => {
                 setFilterBy('all');
                 setSortBy('newest');
@@ -356,7 +330,6 @@ export default function WishlistPage() {
         onSortChange={setSortBy}
       />
 
-      {/* Clear Wishlist Confirmation Modal */}
       <ConfirmationModal
         isOpen={showClearConfirm}
         onClose={() => setShowClearConfirm(false)}
@@ -372,7 +345,19 @@ export default function WishlistPage() {
         confirmButtonHoverColor="hover:bg-red-600"
       />
 
-
+      {/* Loading Overlay for Removing Item */}
+      {removingItemId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl p-8 flex flex-col items-center gap-4 min-w-[300px]">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-red-600 rounded-full border-t-transparent animate-spin"></div>
+            </div>
+            <p className="text-lg font-medium text-gray-900">Removing from wishlist...</p>
+            <p className="text-sm text-gray-500">Please wait</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

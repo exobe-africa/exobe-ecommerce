@@ -26,7 +26,7 @@ export interface ProductCardProps {
   onAddToCart?: (product: any) => void;
   onQuickViewAddToCart?: (product: any, selectedVariants: Record<string, string>, quantity: number, currentLocations: string[]) => void;
   onWishlistToggle?: (product: any) => void;
-  onRemoveFromWishlist?: (product: any) => void;
+  onRemoveFromWishlist?: () => void;
   isInWishlist?: boolean;
   
   // Product details for quick view
@@ -113,7 +113,7 @@ const ProductCard = ({
     e.preventDefault();
     e.stopPropagation();
     if (onRemoveFromWishlist) {
-      onRemoveFromWishlist(product);
+      onRemoveFromWishlist();
     }
   };
 
@@ -704,16 +704,18 @@ const ProductCard = ({
               
               <div className="flex items-center space-x-4 mb-2">
                 <div>
-                  <span className="text-xl font-bold text-[#C8102E]">
-                    R{price.toFixed(2)}
-                  </span>
-                  {originalPrice && (
+                  {price > 0 && (
+                    <span className="text-xl font-bold text-[#C8102E]">
+                      R{price.toFixed(2)}
+                    </span>
+                  )}
+                  {originalPrice && originalPrice > 0 && (
                     <span className="text-sm text-[#4A4A4A] line-through ml-2">
                       R{originalPrice.toFixed(2)}
                     </span>
                   )}
                 </div>
-                {originalPrice && originalPrice > price && (
+                {originalPrice && originalPrice > price && price > 0 && (
                   <span className="bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full font-semibold">
                     Save R{(originalPrice - price).toFixed(2)}
                   </span>
@@ -778,7 +780,7 @@ const ProductCard = ({
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
-            {originalPrice && originalPrice > price && (
+            {originalPrice && originalPrice > price && price > 0 && (
               <span className="bg-[#C8102E] text-white text-xs px-2 py-1 rounded-full font-semibold">
                 -{Math.round(((originalPrice - price) / originalPrice) * 100)}%
               </span>
@@ -837,10 +839,12 @@ const ProductCard = ({
           
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div>
-              <span className="text-base sm:text-lg font-bold text-[#C8102E]">
-                R{price.toFixed(2)}
-              </span>
-              {originalPrice && (
+              {price > 0 && (
+                <span className="text-base sm:text-lg font-bold text-[#C8102E]">
+                  R{price.toFixed(2)}
+                </span>
+              )}
+              {originalPrice && originalPrice > 0 && (
                 <span className="text-xs sm:text-sm text-[#4A4A4A] line-through ml-1 sm:ml-2">
                   R{originalPrice.toFixed(2)}
                 </span>
