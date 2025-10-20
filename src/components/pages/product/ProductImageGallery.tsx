@@ -62,17 +62,26 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   };
 
   const displayImage = images && images.length > 0 ? images[selectedImageIndex] : currentImage;
+  const isUrl = displayImage && (displayImage.startsWith('http') || displayImage.startsWith('/'));
 
   return (
     <div className="space-y-4">
       {/* Main Image */}
       <div 
-        className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl aspect-square flex items-center justify-center group touch-pan-y"
+        className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl aspect-square flex items-center justify-center group touch-pan-y overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <span className="text-8xl lg:text-9xl">{displayImage}</span>
+        {isUrl ? (
+          <img 
+            src={displayImage} 
+            alt={productName}
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          <span className="text-8xl lg:text-9xl">{displayImage}</span>
+        )}
         
         {/* Image Navigation */}
         {images && images.length > 1 && (
@@ -117,19 +126,30 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       {/* Thumbnail Images */}
       {images && images.length > 1 && (
         <div className="grid grid-cols-4 gap-2">
-          {images.map((img, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedImageIndex(index)}
-              className={`aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-2xl transition-all ${
-                selectedImageIndex === index 
-                  ? 'ring-2 ring-[#C8102E] scale-105' 
-                  : 'hover:scale-105 opacity-70 hover:opacity-100'
-              }`}
-            >
-              {img}
-            </button>
-          ))}
+          {images.map((img, index) => {
+            const isThumbUrl = img && (img.startsWith('http') || img.startsWith('/'));
+            return (
+              <button
+                key={index}
+                onClick={() => setSelectedImageIndex(index)}
+                className={`aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden transition-all ${
+                  selectedImageIndex === index 
+                    ? 'ring-2 ring-[#C8102E] scale-105' 
+                    : 'hover:scale-105 opacity-70 hover:opacity-100'
+                }`}
+              >
+                {isThumbUrl ? (
+                  <img 
+                    src={img} 
+                    alt={`${productName} thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-2xl">{img}</span>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

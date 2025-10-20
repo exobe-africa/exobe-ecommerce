@@ -350,7 +350,7 @@ export default function Navbar() {
                 <Link href="/wishlist">
                   <button className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation">
                     <Heart className="h-6 w-6 text-[#4A4A4A]" />
-                    {totalItems > 0 && (
+                    {isClient && totalItems > 0 && (
                       <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
                         {totalItems > 99 ? '99+' : totalItems}
                       </span>
@@ -384,7 +384,7 @@ export default function Navbar() {
                 className="relative p-3 rounded-full hover:bg-[#F6E2E0] transition-colors touch-manipulation"
               >
                 <ShoppingCart className="h-6 w-6 text-[#4A4A4A]" />
-                {state.totalItems > 0 && (
+                {isClient && state.totalItems > 0 && (
                   <span className="absolute -top-1 -right-1 bg-[#C8102E] text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium">
                     {state.totalItems > 99 ? '99+' : state.totalItems}
                   </span>

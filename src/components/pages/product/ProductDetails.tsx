@@ -61,15 +61,15 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, currentPrice, 
           R{currentPrice.toFixed(2)}
         </span>
         <div className="flex items-center gap-2 sm:gap-4">
-          {product.originalPrice && (
-            <span className="text-lg sm:text-xl text-[#4A4A4A] line-through">
-              R{product.originalPrice.toFixed(2)}
-            </span>
-          )}
-          {product.originalPrice && (
-            <span className="bg-[#C8102E] text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap">
-              Save R{(product.originalPrice - currentPrice).toFixed(2)}
-            </span>
+          {product.originalPrice && product.originalPrice > currentPrice && (
+            <>
+              <span className="text-lg sm:text-xl text-[#4A4A4A] line-through">
+                R{product.originalPrice.toFixed(2)}
+              </span>
+              <span className="bg-[#C8102E] text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap">
+                Save R{(product.originalPrice - currentPrice).toFixed(2)}
+              </span>
+            </>
           )}
         </div>
       </div>

@@ -6,3 +6,4 @@ export { default as ProductFeatures } from './ProductFeatures';
 export { default as TrustBadges } from './TrustBadges';
 export { default as ReviewsSection } from './ReviewsSection';
 export { default as ReviewForm } from './ReviewForm';
+export { default as BookDetails } from './BookDetails';
