@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* config options here */
   eslint: {
+    // Allow production builds to successfully complete even if
+    // there are ESLint errors. This unblocks Vercel deployment.
     ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [
@@ -14,10 +14,6 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'qwibvekuarmprbhlsiwn.supabase.co', pathname: '/storage/v1/object/public/**' },
     ],
   },
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
-  },
 };
 
 export default nextConfig;
- 
