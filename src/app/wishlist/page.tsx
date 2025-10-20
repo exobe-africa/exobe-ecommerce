@@ -116,14 +116,42 @@ export default function WishlistPage() {
     });
 
   const handleAddToCart = (item: NonNullable<typeof items>[0]) => {
-    // For now, we'll add a placeholder item since we don't have product details
-    // TODO: Fetch product details before adding to cart
+    // Build a proper cart item from wishlist item's embedded product data
+    const p: any = (item as any).product || {};
+    const price = typeof p?.priceInCents === 'number'
+      ? p.priceInCents / 100
+      : (Array.isArray(p?.variants) && p.variants[0]?.priceCents)
+      ? p.variants[0].priceCents / 100
+      : 0;
+
+    const stock = typeof p?.stockQuantity === 'number'
+      ? p.stockQuantity
+      : (Array.isArray(p?.variants) && typeof p.variants[0]?.stockQuantity === 'number')
+      ? p.variants[0].stockQuantity
+      : undefined;
+
+    const image = p?.media?.[0]?.url || '';
+    const name = p?.title || `Product ${item.product_id}`;
+    const category = p?.category?.name || '';
+
+    // Respect stock: reducer will clamp quantity and avoid adding when stock is 0
     addItem({
       id: item.product_id,
-      name: `Product ${item.product_id}`,
-      price: 0, // TODO: Get actual price
-      image: '',
-      category: '',
+      name,
+      price,
+      originalPrice: (typeof p?.compareAtPriceInCents === 'number')
+        ? p.compareAtPriceInCents / 100
+        : (Array.isArray(p?.variants) && p.variants[0]?.compareAtPriceCents)
+        ? p.variants[0].compareAtPriceCents / 100
+        : undefined,
+      image,
+      category,
+      stock,
+      // If wishlist item is tied to a variant, capture its attributes as the cart variant descriptor
+      variant: (item as any).product_variant_id && p?.variants
+        ? (p.variants.find((v: any) => v.id === (item as any).product_variant_id)?.attributes || {})
+        : undefined,
+      availableLocations: p?.availableLocations || [],
     });
   };
 
