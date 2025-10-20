@@ -472,6 +472,7 @@ export default function ProductPage() {
               currentStock={currentStock || product?.stockCount || 0}
               inStock={product?.inStock && (currentStock || product?.stockCount || 0) > 0}
               isInWishlist={isInWishlist(product?.id || '')}
+              isWishlistLoading={isWishlistLoading}
               onAddToCart={handleAddToCart}
               onWishlistToggle={handleWishlistToggle}
             />

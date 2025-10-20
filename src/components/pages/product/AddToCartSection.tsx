@@ -10,6 +10,7 @@ interface AddToCartSectionProps {
   isInWishlist: boolean;
   onAddToCart: () => void;
   onWishlistToggle: () => void;
+  isWishlistLoading?: boolean;
 }
 
 const AddToCartSection: React.FC<AddToCartSectionProps> = ({
@@ -20,6 +21,7 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({
   isInWishlist,
   onAddToCart,
   onWishlistToggle,
+  isWishlistLoading = false,
 }) => {
   return (
     <div className="space-y-6">
@@ -70,14 +72,24 @@ const AddToCartSection: React.FC<AddToCartSectionProps> = ({
 
         <button
           onClick={onWishlistToggle}
+          disabled={isWishlistLoading}
           className={`w-full py-3 rounded-full border-2 font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
             isInWishlist
               ? 'border-pink-500 bg-pink-500 text-white hover:bg-pink-600 hover:border-pink-600'
               : 'border-gray-300 text-gray-600 hover:border-pink-500 hover:text-pink-500'
-          }`}
+          } ${isWishlistLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
         >
-          <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-current' : ''}`} />
-          <span>{isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+          {isWishlistLoading ? (
+            <>
+              <span className="block w-5 h-5 rounded-full border-2 border-current border-t-transparent animate-spin" />
+              <span>Processing...</span>
+            </>
+          ) : (
+            <>
+              <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-current' : ''}`} />
+              <span>{isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+            </>
+          )}
         </button>
       </div>
     </div>

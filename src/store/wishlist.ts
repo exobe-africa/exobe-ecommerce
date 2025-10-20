@@ -36,6 +36,7 @@ interface WishlistState {
   addToWishlist: (productId: string, productVariantId?: string) => Promise<{ success: boolean; error?: string }>;
   removeFromWishlist: (productId: string, productVariantId?: string) => Promise<{ success: boolean; error?: string }>;
   isInWishlist: (productId: string, productVariantId?: string) => boolean;
+  clearWishlistState: () => void;
 
   openAuthModal: (action: { type: 'add' | 'view'; productId?: string; productVariantId?: string }) => void;
   closeAuthModal: () => void;
