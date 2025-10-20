@@ -11,6 +11,7 @@ interface ProductImageGalleryProps {
   isInWishlist: boolean;
   onWishlistToggle: () => void;
   onShare: () => void;
+  isWishlistLoading?: boolean;
 }
 
 const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
@@ -21,6 +22,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   isInWishlist,
   onWishlistToggle,
   onShare,
+  isWishlistLoading = false,
 }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -104,13 +106,18 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
         {/* Wishlist Button */}
         <button
           onClick={onWishlistToggle}
-          className="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all"
+          className="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all min-w-[48px] min-h-[48px] flex items-center justify-center"
+          disabled={isWishlistLoading}
         >
-          <Heart className={`h-6 w-6 transition-colors ${
-            isInWishlist 
-              ? 'fill-[#C8102E] text-[#C8102E]' 
-              : 'text-[#4A4A4A] hover:text-[#C8102E]'
-          }`} />
+          {isWishlistLoading ? (
+            <span className="block w-5 h-5 rounded-full border-2 border-[#C8102E]/60 border-t-transparent animate-spin" />
+          ) : (
+            <Heart className={`h-6 w-6 transition-colors ${
+              isInWishlist 
+                ? 'fill-[#C8102E] text-[#C8102E]' 
+                : 'text-[#4A4A4A] hover:text-[#C8102E]'
+            }`} />
+          )}
         </button>
 
         {/* Share Button */}

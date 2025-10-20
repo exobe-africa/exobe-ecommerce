@@ -58,6 +58,7 @@ export default function ProductPage() {
   const [currentPrice, setCurrentPrice] = useState(0);
   const [currentStock, setCurrentStock] = useState(0);
   const [currentLocations, setCurrentLocations] = useState<string[]>([]);
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
   // Review states
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -279,7 +280,7 @@ export default function ProductPage() {
     // Toast removed - cart drawer opens automatically
   };
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = async () => {
     if (!product) return;
 
     // Always check authentication first
@@ -288,15 +289,16 @@ export default function ProductPage() {
       return;
     }
 
-    const variantId = (() => {
-      // If backend variant IDs are not present, fall back to undefined (product-level)
-      return undefined;
-    })();
-
-    if (isInWishlist(product.id, variantId)) {
-      removeFromWishlist(product.id, variantId);
-    } else {
-      addToWishlist(product.id, variantId);
+    const variantId = undefined; // product-level wishlist by default
+    setIsWishlistLoading(true);
+    try {
+      if (isInWishlist(product.id, variantId)) {
+        await removeFromWishlist(product.id, variantId);
+      } else {
+        await addToWishlist(product.id, variantId);
+      }
+    } finally {
+      setIsWishlistLoading(false);
     }
   };
 
@@ -444,6 +446,7 @@ export default function ProductPage() {
             productName={product?.name || ''}
             productId={product?.id || ''}
             isInWishlist={isInWishlist(product?.id || '')}
+            isWishlistLoading={isWishlistLoading}
             onWishlistToggle={handleWishlistToggle}
             onShare={handleShare}
           />
