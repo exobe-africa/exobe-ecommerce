@@ -265,9 +265,12 @@ export default function ProductPage() {
       }
     }
 
+    // Store the canonical product id for navigation; keep variant attributes
+    const productId = product.id;
+    const variantKey = Object.values(selectedVariants).join('-');
     for (let i = 0; i < quantity; i++) {
       addItem({
-        id: `${product.id}-${Object.values(selectedVariants).join('-')}`,
+        id: productId, // use product id so links navigate correctly
         name: variantName,
         price: currentPrice || product.price,
         originalPrice: product.originalPrice,
@@ -275,6 +278,7 @@ export default function ProductPage() {
         category: product.category,
         stock: currentStock || product.stockCount,
         availableLocations: currentLocations,
+        variant: Object.keys(selectedVariants).length > 0 ? { key: variantKey, ...selectedVariants } : undefined,
       });
     }
     
