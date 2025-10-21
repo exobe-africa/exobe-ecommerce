@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '../../store/auth';
 import { useAddressesStore } from '../../store/addresses';
@@ -40,7 +40,6 @@ export default function DashboardClient() {
   const { showError, showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   
-  // Address store
   const {
     addresses,
     selectedAddress,
@@ -54,18 +53,18 @@ export default function DashboardClient() {
     deleteAddress
   } = useAddressesStore();
 
-  // User profile store
   const {
     profile: userProfile,
     isLoading: isProfileLoading,
     fetchProfile
   } = useUserProfileStore();
 
-  // Orders store
   const {
     orders,
     isLoading: isOrdersLoading,
-    fetchOrders
+    fetchOrders,
+    // @ts-ignore expose cooldown to drive retry logic
+    cooldownUntil,
   } = useOrdersStore();
   
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -101,7 +100,6 @@ export default function DashboardClient() {
     }
   ]);
 
-  // Convert store profile to User interface
   const user: User = useMemo(() => {
     if (!userProfile) {
       return {
@@ -128,8 +126,6 @@ export default function DashboardClient() {
     };
   }, [userProfile]);
 
-  // Orders are now managed by the store
-
   const handleAddressEdit = (address: Address) => {
     setSelectedAddress(address);
     setShowAddressModal(true);
@@ -146,15 +142,19 @@ export default function DashboardClient() {
     setShowDeleteConfirmModal(true);
   };
 
-  // Fetch profile and orders when component mounts
+  // Ensure we trigger an orders fetch once after auth hydration
+  const hasFetchedOrdersOnce = useRef(false);
+
   useEffect(() => {
     if (hasHydrated && isAuthenticated) {
       fetchProfile();
-      fetchOrders();
+      if (!hasFetchedOrdersOnce.current) {
+        fetchOrders();
+        hasFetchedOrdersOnce.current = true;
+      }
     }
   }, [hasHydrated, isAuthenticated, fetchProfile, fetchOrders]);
 
-  // Fetch addresses when profile is loaded
   useEffect(() => {
     if (userProfile?.id) {
       fetchAddresses(userProfile.id);
@@ -175,7 +175,6 @@ export default function DashboardClient() {
       } else {
         result = await createAddress(addressData as any);
         if (result.success) {
-          // Immediately refetch addresses to reflect new data
           if (userProfile?.id) await fetchAddresses(userProfile.id);
           showSuccess('Address added successfully');
         } else {
@@ -289,6 +288,27 @@ export default function DashboardClient() {
     }
   }, [searchParams]);
 
+  // Automatically retry after store cooldown expires (e.g., after a 429 rate limit)
+  useEffect(() => {
+    if (activeTab !== 'orders') return;
+    if (!cooldownUntil) return;
+    const now = Date.now();
+    if (now >= cooldownUntil) {
+      fetchOrders(true);
+      return;
+    }
+    const timeoutMs = Math.max(0, cooldownUntil - now) + 100;
+    const t = setTimeout(() => fetchOrders(true), timeoutMs);
+    return () => clearTimeout(t);
+  }, [activeTab, cooldownUntil, fetchOrders]);
+
+  // When Orders tab becomes active, ensure data is fetched if empty/not loading
+  useEffect(() => {
+    if (activeTab === 'orders' && hasHydrated && isAuthenticated && !isOrdersLoading && orders.length === 0) {
+      fetchOrders();
+    }
+  }, [activeTab, hasHydrated, isAuthenticated, isOrdersLoading, orders.length, fetchOrders]);
+
   useEffect(() => {
     if (!hasHydrated) return;
     if (!isAuthenticated) {
@@ -301,6 +321,11 @@ export default function DashboardClient() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tabId);
     router.push(`/dashboard?${params.toString()}`, { scroll: false });
+
+    // If user navigates to Orders tab and we have no orders yet, ensure a fetch kicks off
+    if (tabId === 'orders' && !isOrdersLoading && orders.length === 0) {
+      fetchOrders();
+    }
   };
 
   const renderActiveTab = () => {
@@ -318,6 +343,7 @@ export default function DashboardClient() {
         return (
           <OrdersTab
             orders={orders}
+            isLoading={isOrdersLoading}
             onOrderView={handleOrderView}
             onLeaveReview={handleLeaveReview}
             onTrackPackage={handleTrackPackage}

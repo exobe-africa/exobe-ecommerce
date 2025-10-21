@@ -7,6 +7,7 @@ import { getStatusColor, formatCurrency, formatDate } from '../../shared/utils';
 
 interface OrdersTabProps {
   orders: Order[];
+  isLoading?: boolean;
   onOrderView: (order: Order) => void;
   onLeaveReview: (order: Order) => void;
   onTrackPackage: (order: Order) => void;
@@ -35,6 +36,7 @@ const sortOptions = [
 
 export default function OrdersTab({ 
   orders, 
+  isLoading = false,
   onOrderView, 
   onLeaveReview, 
   onTrackPackage, 
@@ -44,7 +46,6 @@ export default function OrdersTab({
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -77,6 +78,29 @@ export default function OrdersTab({
   };
 
   const sortedOrders = sortOrders(orders, sortBy);
+
+  const OrderSkeleton = () => (
+    <div className="border border-gray-200 rounded-xl p-6 animate-pulse">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div className="flex items-center space-x-4 mb-4 sm:mb-0">
+          <div className="h-8 w-24 bg-gray-200 rounded-full"></div>
+          <div>
+            <div className="h-5 w-32 bg-gray-200 rounded mb-2"></div>
+            <div className="h-4 w-40 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="h-8 w-24 bg-gray-200 rounded mb-1"></div>
+          <div className="h-4 w-16 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1 h-12 bg-gray-200 rounded-xl"></div>
+        <div className="flex-1 h-12 bg-gray-200 rounded-xl"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
       <div className="p-6 border-b border-gray-100">
@@ -86,17 +110,17 @@ export default function OrdersTab({
             <p className="text-[#4A4A4A] mt-1">Track and manage your orders</p>
           </div>
           
-          {/* Sort Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowSortDropdown(!showSortDropdown)}
               className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-sm font-medium text-[#4A4A4A] transition-colors"
+              disabled={isLoading}
             >
               <span>Sort by: {sortOptions.find(option => option.value === sortBy)?.label}</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
             </button>
             
-            {showSortDropdown && (
+            {showSortDropdown && !isLoading && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10">
                 <div className="py-2">
                   {sortOptions.map((option) => (
@@ -121,15 +145,31 @@ export default function OrdersTab({
           </div>
         </div>
         
-        {/* Order Count and Sort Info */}
-        <div className="mt-4 flex items-center justify-between text-sm text-[#4A4A4A]">
-          <span>{orders.length} {orders.length === 1 ? 'order' : 'orders'} found</span>
-          <span>Sorted by {sortOptions.find(option => option.value === sortBy)?.label.toLowerCase()}</span>
-        </div>
+        {!isLoading && (
+          <div className="mt-4 flex items-center justify-between text-sm text-[#4A4A4A]">
+            <span>{orders.length} {orders.length === 1 ? 'order' : 'orders'} found</span>
+            <span>Sorted by {sortOptions.find(option => option.value === sortBy)?.label.toLowerCase()}</span>
+          </div>
+        )}
       </div>
       <div className="p-6">
         <div className="space-y-6">
-          {sortedOrders.map((order) => (
+          {isLoading ? (
+            <>
+              <OrderSkeleton />
+              <OrderSkeleton />
+              <OrderSkeleton />
+            </>
+          ) : orders.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-[#000000] mb-2">No Orders Yet</h3>
+              <p className="text-[#4A4A4A] mb-6">Start shopping to see your orders here</p>
+            </div>
+          ) : (
+            sortedOrders.map((order) => (
             <div key={order.id} className="border border-gray-200 rounded-xl p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                 <div className="flex items-center space-x-4 mb-4 sm:mb-0">
@@ -191,7 +231,8 @@ export default function OrdersTab({
                 )}
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
       </div>
     </div>

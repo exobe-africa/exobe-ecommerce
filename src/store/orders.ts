@@ -35,39 +35,47 @@ export interface Order {
 }
 
 interface OrdersState {
-  // Data
   orders: Order[];
   lastOrder?: any;
   
-  // UI state
   isLoading: boolean;
   isPlacing: boolean;
   error: string | null;
+  hasFetched: boolean;
+  lastFetchedAt?: number | null;
+  cooldownUntil?: number | null;
   
-  // Actions
   setOrders: (orders: Order[]) => void;
   setError: (error: string | null) => void;
   
-  // GraphQL operations
-  fetchOrders: () => Promise<{ success: boolean; error?: string }>;
+  fetchOrders: (force?: boolean) => Promise<{ success: boolean; error?: string }>;
   placeOrder: (input: any) => Promise<{ success: boolean; order?: any; error?: string }>;
 }
 
 export const useOrdersStore = create<OrdersState>((set, get) => ({
-  // Initial state
   orders: [],
   lastOrder: undefined,
   isLoading: false,
   isPlacing: false,
   error: null,
+  hasFetched: false,
+  lastFetchedAt: null,
+  cooldownUntil: null,
 
-  // Setters
   setOrders: (orders) => set({ orders }),
 
   setError: (error) => set({ error }),
 
-  // GraphQL operations
-  fetchOrders: async () => {
+  fetchOrders: async (force?: boolean) => {
+    const state = get();
+    const now = Date.now();
+    if (!force) {
+      if (state.isLoading) return { success: true };
+      if (state.hasFetched && state.orders.length > 0) return { success: true };
+      if (state.cooldownUntil && now < state.cooldownUntil) return { success: true };
+      if (state.lastFetchedAt && now - state.lastFetchedAt < 3000) return { success: true };
+    }
+
     set({ isLoading: true, error: null });
     
     try {
@@ -105,16 +113,18 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
         tax: (o.vat_cents ?? 0) / 100,
       }));
       
-      set({ orders, isLoading: false });
+      set({ orders, isLoading: false, hasFetched: true, lastFetchedAt: now, cooldownUntil: null });
       return { success: true };
     } catch (error: any) {
       const message = error?.message || 'Failed to fetch orders';
-      set({ error: message, isLoading: false });
+      const msgLower = (message || '').toLowerCase();
+      const isRateLimited = msgLower.includes('429') || msgLower.includes('rate limit');
+      const cooldown = isRateLimited ? now + 30000 : null; // 30s cooldown on 429
+      set({ error: message, isLoading: false, cooldownUntil: cooldown, lastFetchedAt: now });
       return { success: false, error: message };
     }
   },
 
-  // Create order (moved from component)
   placeOrder: async (input: any) => {
     set({ isPlacing: true, error: null });
     try {
