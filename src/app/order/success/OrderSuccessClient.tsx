@@ -18,16 +18,118 @@ export default function OrderSuccessClient() {
   const [orderNumber, setOrderNumber] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [orderTotal, setOrderTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const orderNum = searchParams.get('order') || `EXO${Date.now().toString().slice(-6)}`;
-    const email = searchParams.get('email') || 'customer@example.com';
-    const total = parseFloat(searchParams.get('total') || '0');
-    
-    setOrderNumber(orderNum);
-    setCustomerEmail(email);
-    setOrderTotal(total);
+    const init = async () => {
+      setIsLoading(true);
+      try {
+        const orderNum =
+          searchParams.get('orderNumber') ||
+          searchParams.get('order') ||
+          '';
+        const emailParam = searchParams.get('email') || '';
+        setOrderNumber(orderNum);
+
+        if (orderNum) {
+          const apiUrlRaw = process.env.NEXT_PUBLIC_API_URL || '';
+          const graphqlUrl = /\/graphql\/?$/i.test(apiUrlRaw)
+            ? apiUrlRaw.replace(/\/$/, '')
+            : `${apiUrlRaw.replace(/\/$/, '')}/graphql`;
+
+          const query = `query TrackOrder($orderNumber: String!, $email: String) {\n            trackOrder(orderNumber: $orderNumber, email: $email) {\n              order_number\n              email\n              total_cents\n              payment_status\n            }\n          }`;
+
+          const res = await fetch(graphqlUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              query,
+              variables: { orderNumber: orderNum, email: emailParam || null },
+            }),
+          });
+
+          if (res.ok) {
+            const body = await res.json();
+            const data = body?.data?.trackOrder;
+            if (data) {
+              setOrderNumber(data.order_number || orderNum);
+              setCustomerEmail(data.email || emailParam);
+              setOrderTotal((data.total_cents || 0) / 100);
+              setPaymentStatus(data.payment_status);
+              setIsLoading(false);
+              return;
+            }
+          }
+
+          // fallback to query params if fetch fails
+          const totalFromParams = parseFloat(searchParams.get('total') || '0');
+          setCustomerEmail(emailParam || '');
+          setOrderTotal(totalFromParams);
+        }
+      } catch (_) {
+        const totalFromParams = parseFloat(searchParams.get('total') || '0');
+        setCustomerEmail(searchParams.get('email') || '');
+        setOrderTotal(totalFromParams);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    init();
   }, [searchParams]);
+
+  // Poll until payment is marked PAID (to ensure DB updates completed)
+  useEffect(() => {
+    if (!orderNumber) return;
+    if (paymentStatus === 'PAID') return;
+
+    let cancelled = false;
+    let attempts = 0;
+
+    const poll = async () => {
+      attempts += 1;
+      try {
+        const apiUrlRaw = process.env.NEXT_PUBLIC_API_URL || '';
+        const graphqlUrl = /\/graphql\/?$/i.test(apiUrlRaw)
+          ? apiUrlRaw.replace(/\/$/, '')
+          : `${apiUrlRaw.replace(/\/$/, '')}/graphql`;
+        const query = `query TrackOrder($orderNumber: String!) {\n          trackOrder(orderNumber: $orderNumber, email: null) {\n            payment_status\n            total_cents\n            email\n          }\n        }`;
+        const res = await fetch(graphqlUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ query, variables: { orderNumber } }),
+        });
+        if (!cancelled && res.ok) {
+          const body = await res.json();
+          const data = body?.data?.trackOrder;
+          if (data) {
+            setPaymentStatus(data.payment_status);
+            if (typeof data.total_cents === 'number') {
+              setOrderTotal(data.total_cents / 100);
+            }
+            if (typeof data.email === 'string') {
+              setCustomerEmail(data.email);
+            }
+          }
+        }
+      } catch (_) {
+        // ignore
+      } finally {
+        if (!cancelled && paymentStatus !== 'PAID' && attempts < 30) {
+          setTimeout(poll, 1000);
+        }
+      }
+    };
+
+    const timer = setTimeout(poll, 1000);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [orderNumber, paymentStatus]);
 
   const handleShare = async () => {
     const shareData = {
@@ -63,7 +165,7 @@ export default function OrderSuccessClient() {
               onShare={handleShare}
             />
             
-            <DeliveryInformation estimatedDelivery={estimatedDelivery} />
+            {!isLoading && <DeliveryInformation estimatedDelivery={estimatedDelivery} />}
             
             <NextStepsCard />
           </div>
@@ -76,7 +178,7 @@ export default function OrderSuccessClient() {
         </div>
 
         <div className="mt-12">
-          <EmailConfirmationNotice customerEmail={customerEmail} />
+          {!isLoading && <EmailConfirmationNotice customerEmail={customerEmail} />}
         </div>
       </div>
     </div>

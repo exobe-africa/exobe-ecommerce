@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>();
   const [hasDeclinedGuestModal, setHasDeclinedGuestModal] = useState(false);
+  const [selectedGateway, setSelectedGateway] = useState('paygate');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -234,9 +235,7 @@ export default function CheckoutPage() {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const handlePlaceOrder = async () => {
-    if (!validateStep(2)) return;
-    
+  const handleMakePayment = async () => {
     setIsProcessing(true);
     
     try {
@@ -293,18 +292,65 @@ export default function CheckoutPage() {
 
       const { success, order, error } = await useOrdersStore.getState().placeOrder(orderInput);
       if (success && order) {
-        clearCart();
-        // Navigate to success page with order number
-        router.push(`/order-success?orderNumber=${order.order_number || order.id}`);
+        await startPayment(order, selectedGateway);
+        return;
       } else {
         throw new Error(error || 'Failed to place order');
       }
     } catch (error: any) {
       console.error('Error creating order:', error);
-      // Navigate to failure page with error message
       router.push(`/order-failed?error=${encodeURIComponent(error.message || 'Failed to place order. Please try again.')}`);
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const startPayment = async (order: any, gateway: string) => {
+    try {
+      const apiUrlRaw = process.env.NEXT_PUBLIC_API_URL || '';
+      let apiBase = apiUrlRaw.replace(/\/?graphql\/?$/i, '');
+      if (apiBase.endsWith('/')) apiBase = apiBase.slice(0, -1);
+      const baseUrl = window.location.origin;
+      const webSuccess = `${baseUrl}/order/success?orderNumber=${order.order_number || order.id}`;
+      const webFailure = `${baseUrl}/order-failed`;
+      const webError = `${baseUrl}/order-failed`;
+
+      const endpointMap: Record<string, string> = {
+        paygate: '/payment/checkoutPayGate',
+        payfast: '/payment/checkoutPayfast',
+        ozow: '/payment/checkoutOzow',
+      };
+
+      const endpoint = endpointMap[gateway] || endpointMap.paygate;
+
+      const res = await fetch(`${apiBase}${endpoint}?orderId=${order.id}` , {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ webSuccess, webFailure, webError, trxFrom: 'WEB' }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Failed to initiate ${gateway} payment`);
+      }
+      const data = await res.json();
+      const html = data?.result?.file || '';
+      if (!html) throw new Error('Invalid payment response');
+
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.left = '-9999px';
+      container.innerHTML = html;
+      document.body.appendChild(container);
+
+      const form = container.querySelector('form') as HTMLFormElement | null;
+      if (!form) throw new Error('Payment form not found');
+
+      form.submit();
+    } catch (err: any) {
+      console.error('Payment checkout error:', err);
+      router.push(`/order-failed?error=${encodeURIComponent('Unable to start payment. Please try again.')}`);
     }
   };
 
@@ -386,20 +432,21 @@ export default function CheckoutPage() {
               />
             )}
 
-            {currentStep === 2 && (
+      {currentStep === 2 && (
+        <OrderReview
+          formData={formData}
+          onEditShipping={() => setCurrentStep(1)}
+        />
+      )}
+
+            {currentStep === 3 && (
               <PaymentForm
                 formData={formData}
                 errors={errors}
                 onInputChange={handleInputChange}
                 onCheckboxChange={handleCheckboxChange}
-              />
-            )}
-
-            {currentStep === 3 && (
-              <OrderReview
-                formData={formData}
-                onEditShipping={() => setCurrentStep(1)}
-                onEditPayment={() => setCurrentStep(2)}
+                onPaymentGatewayChange={setSelectedGateway}
+                selectedGateway={selectedGateway}
               />
             )}
 
@@ -409,7 +456,7 @@ export default function CheckoutPage() {
               isProcessing={isProcessing}
               onPrevStep={handlePrevStep}
               onNextStep={handleNextStep}
-              onPlaceOrder={handlePlaceOrder}
+              onMakePayment={handleMakePayment}
             />
           </div>
 
@@ -460,10 +507,10 @@ export default function CheckoutPage() {
 
             <div className="text-center space-y-3">
               <h3 className="text-xl sm:text-2xl font-bold text-[#000000]">
-                Processing Your Order
+                Initiating Payment
               </h3>
               <p className="text-sm sm:text-base text-[#4A4A4A] leading-relaxed">
-                Please wait while we securely process your order and update inventory. This may take a few moments.
+                Please wait while we prepare your order and redirect you to the secure payment page. This may take a few moments.
               </p>
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
                 <p className="text-xs sm:text-sm text-amber-800 font-medium flex items-center justify-center gap-2">
@@ -478,19 +525,15 @@ export default function CheckoutPage() {
             <div className="w-full space-y-2">
               <div className="flex items-center gap-2 text-xs sm:text-sm text-[#4A4A4A]">
                 <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                <span>Validating order details</span>
+                <span>Creating your order</span>
               </div>
               <div className="flex items-center gap-2 text-xs sm:text-sm text-[#4A4A4A]">
                 <Loader2 className="w-4 h-4 text-[#C8102E] animate-spin flex-shrink-0" />
-                <span>Processing payment</span>
+                <span>Initiating payment gateway</span>
               </div>
               <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
                 <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
-                <span>Updating inventory</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
-                <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
-                <span>Sending confirmation</span>
+                <span>Redirecting to secure payment page</span>
               </div>
             </div>
 

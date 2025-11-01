@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard } from 'lucide-react';
+import { CreditCard, Wallet, Building2 } from 'lucide-react';
 import { Checkbox } from '../../common/index';
 
 interface PaymentFormData {
@@ -17,6 +17,8 @@ interface PaymentFormProps {
   errors: Record<string, string>;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCheckboxChange: (name: string, checked: boolean) => void;
+  onPaymentGatewayChange: (gateway: string) => void;
+  selectedGateway: string;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
@@ -24,7 +26,42 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   errors,
   onInputChange,
   onCheckboxChange,
+  onPaymentGatewayChange,
+  selectedGateway,
 }) => {
+  const gateways = [
+    {
+      id: 'paygate',
+      name: 'PayGate',
+      description: 'Secure Payment Processing',
+      icon: CreditCard,
+      badge: 'Recommended',
+      badgeColor: 'bg-green-100 text-green-800',
+      features: ['256-bit SSL', 'PCI DSS', '3D Secure'],
+      methods: ['VISA', 'MC', 'AMEX'],
+    },
+    {
+      id: 'payfast',
+      name: 'PayFast',
+      description: 'Instant EFT & Cards',
+      icon: Wallet,
+      badge: 'Popular',
+      badgeColor: 'bg-blue-100 text-blue-800',
+      features: ['Instant EFT', 'Card Payments', 'Secure'],
+      methods: ['VISA', 'MC', 'EFT'],
+    },
+    {
+      id: 'ozow',
+      name: 'Ozow',
+      description: 'Instant EFT Payments',
+      icon: Building2,
+      badge: 'Fast',
+      badgeColor: 'bg-purple-100 text-purple-800',
+      features: ['Real-time', 'All Banks', 'No Card'],
+      methods: ['EFT'],
+    },
+  ];
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
       <h2 className="text-xl font-semibold text-[#000000] mb-6 flex items-center">
@@ -33,47 +70,67 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       </h2>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#000000] mb-3">Payment Gateway</label>
-        <div className="border-2 border-[#C8102E] bg-gradient-to-br from-white to-red-50/30 rounded-xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#C8102E] to-[#A00E26] rounded-lg flex items-center justify-center shadow-md">
-                <CreditCard className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <div className="text-lg font-bold text-[#000000]">PayGate</div>
-                <div className="text-xs text-[#4A4A4A]">Secure Payment Processing</div>
-              </div>
-            </div>
-            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-              Active
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <p className="text-sm text-[#4A4A4A] mb-3">
-              Your payment will be securely processed through PayGate, South Africa's leading payment gateway.
-            </p>
-            <div className="flex items-center space-x-2 text-xs text-[#4A4A4A]">
-              <svg className="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span>256-bit SSL Encryption</span>
-              <span className="text-gray-300">•</span>
-              <span>PCI DSS Compliant</span>
-              <span className="text-gray-300">•</span>
-              <span>3D Secure</span>
-            </div>
-          </div>
-
-          <div className="mt-4 flex items-center justify-center space-x-3 text-gray-400">
-            <span className="text-xs font-medium">Accepted Payment Methods:</span>
-            <div className="flex items-center space-x-2">
-              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">VISA</div>
-              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">MC</div>
-              <div className="bg-white rounded px-2 py-1 text-xs font-bold border border-gray-200">AMEX</div>
-            </div>
-          </div>
+        <label className="block text-sm font-medium text-[#000000] mb-3">
+          Select Payment Gateway
+        </label>
+        <div className="space-y-3">
+          {gateways.map((gateway) => {
+            const Icon = gateway.icon;
+            const isSelected = selectedGateway === gateway.id;
+            return (
+              <button
+                key={gateway.id}
+                type="button"
+                onClick={() => onPaymentGatewayChange(gateway.id)}
+                className={`w-full border-2 rounded-xl p-4 transition-all ${
+                  isSelected
+                    ? 'border-[#C8102E] bg-gradient-to-br from-white to-red-50/30 shadow-md'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-3">
+                    <div
+                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                        isSelected
+                          ? 'bg-gradient-to-br from-[#C8102E] to-[#A00E26] shadow-md'
+                          : 'bg-gray-100'
+                      }`}
+                    >
+                      <Icon className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <div className="text-base font-bold text-[#000000]">{gateway.name}</div>
+                        <div className={`${gateway.badgeColor} px-2 py-0.5 rounded-full text-xs font-semibold`}>
+                          {gateway.badge}
+                        </div>
+                      </div>
+                      <div className="text-xs text-[#4A4A4A] mb-2">{gateway.description}</div>
+                      <div className="flex items-center space-x-2 text-xs text-[#4A4A4A]">
+                        {gateway.features.map((feat, idx) => (
+                          <span key={idx} className="flex items-center">
+                            {idx > 0 && <span className="text-gray-300 mx-1">•</span>}
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-1 ml-2">
+                    {gateway.methods.map((method, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-white rounded px-1.5 py-0.5 text-[10px] font-bold border border-gray-200"
+                      >
+                        {method}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 

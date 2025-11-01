@@ -8,7 +8,7 @@ interface CheckoutNavigationProps {
   isProcessing?: boolean;
   onPrevStep: () => void;
   onNextStep: () => void;
-  onPlaceOrder: () => void;
+  onMakePayment: () => void;
 }
 
 const CheckoutNavigation: React.FC<CheckoutNavigationProps> = ({
@@ -17,7 +17,7 @@ const CheckoutNavigation: React.FC<CheckoutNavigationProps> = ({
   isProcessing = false,
   onPrevStep,
   onNextStep,
-  onPlaceOrder,
+  onMakePayment,
 }) => {
   return (
     <div className="flex justify-between">
@@ -40,7 +40,7 @@ const CheckoutNavigation: React.FC<CheckoutNavigationProps> = ({
         </button>
       ) : (
         <button
-          onClick={onPlaceOrder}
+          onClick={onMakePayment}
           disabled={isProcessing}
           className="px-8 py-3 bg-[#C8102E] text-white rounded-lg font-medium hover:bg-[#A00E26] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
         >
@@ -52,7 +52,7 @@ const CheckoutNavigation: React.FC<CheckoutNavigationProps> = ({
           ) : (
             <>
               <Lock className="h-4 w-4 mr-2" />
-              Place Order
+              Make Payment
             </>
           )}
         </button>

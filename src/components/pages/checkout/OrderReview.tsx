@@ -20,13 +20,11 @@ interface OrderReviewData {
 interface OrderReviewProps {
   formData: OrderReviewData;
   onEditShipping: () => void;
-  onEditPayment: () => void;
 }
 
 const OrderReview: React.FC<OrderReviewProps> = ({
   formData,
   onEditShipping,
-  onEditPayment,
 }) => {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -54,26 +52,6 @@ const OrderReview: React.FC<OrderReviewProps> = ({
           <p>{formData.country}</p>
           <p className="mt-2">{formData.email}</p>
           <p>{formData.phone}</p>
-        </div>
-      </div>
-
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium text-[#000000]">Payment Method</h3>
-          <button 
-            onClick={onEditPayment}
-            className="text-[#C8102E] hover:text-[#A00E26] text-sm font-medium flex items-center"
-          >
-            <Edit2 className="h-4 w-4 mr-1" />
-            Edit
-          </button>
-        </div>
-        <div className="text-sm text-[#4A4A4A]">
-          {formData.paymentMethod === 'card' && (
-            <p>Credit Card ending in {formData.cardNumber.slice(-4)}</p>
-          )}
-          {formData.paymentMethod === 'paypal' && <p>PayPal</p>}
-          {formData.paymentMethod === 'eft' && <p>Bank Transfer (EFT)</p>}
         </div>
       </div>
 

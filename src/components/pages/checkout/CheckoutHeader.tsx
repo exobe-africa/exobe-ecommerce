@@ -19,8 +19,8 @@ const CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
   currentStep, 
   steps = [
     { id: 1, name: 'Shipping', icon: Truck },
-    { id: 2, name: 'Payment', icon: CreditCard },
-    { id: 3, name: 'Review', icon: Check }
+    { id: 2, name: 'Review', icon: Check },
+    { id: 3, name: 'Payment', icon: CreditCard }
   ]
 }) => {
   return (
